@@ -1,13 +1,38 @@
-<!DOCTYPE html>
-<html lang="pt-br">
+<!doctype html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Alertas do TradingView</title>
+  <meta charset="utf-8"/>
+  <title>Trading Alerts</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <style>
+    body{font-family:system-ui,Segoe UI,Roboto,Arial,sans-serif;margin:2rem;}
+    h1{margin:0 0 1rem}
+    li{margin:.25rem 0}
+    small{opacity:.7}
+  </style>
 </head>
 <body>
-  <h1>Alertas do TradingView</h1>
-  <ul>
-    <li><strong> BUY</strong> -  AMZN a  189.50 em  2025-10-24T22:45:00Z</li>
-  </ul>
+  <h1>Trading Alerts</h1>
+  <ul id="alerts"></ul>
+
+  <script>
+    // ⬇️ replace with your Worker URL
+    const API = "https://shiny-sea-44d3.rafaelnm.workers.dev";
+
+    async function loadAlerts(){
+      const res = await fetch(API + "/alerts");
+      const data = await res.json();
+      const ul = document.getElementById("alerts");
+      ul.innerHTML = "";
+      data.forEach(a => {
+        const li = document.createElement("li");
+        li.innerHTML = `<strong>${(a.type||"").toUpperCase()}</strong> — ${a.symbol} @ ${a.price} <small>${a.time}</small>`;
+        ul.appendChild(li);
+      });
+    }
+    loadAlerts();
+    // Optional: refresh every 15s
+    // setInterval(loadAlerts, 15000);
+  </script>
 </body>
 </html>
