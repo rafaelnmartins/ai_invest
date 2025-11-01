@@ -89,6 +89,7 @@
       </section>
     </div>
 
+    <!-- Ticker único -->
     <section class="card" style="margin-top:16px">
       <h2 data-i18n="ticker_title">Ticker de Cotações</h2>
       <div class="tradingview-widget-container">
@@ -113,8 +114,318 @@
       </div>
     </section>
 
-    <!-- Minhas posições -->
-    <!-- rest of content remains unchanged -->
+    <!-- Minhas posições (públicas + locais) -->
+    <section class="card" style="margin-top:16px">
+      <div style="display:flex;align-items:center;gap:8px;justify-content:space-between;flex-wrap:wrap">
+        <h2 data-i18n="positions_title">Minhas posições</h2>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <span class="badge" title="Visitantes veem essas posições">🌐 Público</span>
+          <button id="loadPublicBtn" class="btn">Atualizar públicas</button>
+          <button id="publishBtn" class="btn" title="Enviar posições locais para o servidor (admin)">Publicar minhas posições (admin)</button>
+        </div>
+      </div>
+
+      <div class="grid" style="grid-template-columns:repeat(12,1fr);gap:10px;margin:8px 0 12px 0">
+        <input id="posSymbol" placeholder="Ex.: NASDAQ:NVDA ou BMFBOVESPA:PETR4" style="grid-column:span 6" />
+        <input id="posAvg" type="number" inputmode="decimal" step="0.01" placeholder="Preço médio" style="grid-column:span 3" />
+        <input id="posNote" placeholder="Observação (opcional)" style="grid-column:span 3" />
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <button id="addPosBtn" class="btn" data-i18n="add_position">Adicionar posição (local)</button>
+        <button id="refreshBtn" class="btn" data-i18n="refresh">Atualizar preços</button>
+        <button id="clearAllBtn" class="btn" data-i18n="clear_all">Limpar locais</button>
+        <button id="exportBtn" class="btn" data-i18n="export_csv">Exportar CSV (locais)</button>
+      </div>
+      <p class="status" id="quoteStatus"></p>
+      <div style="overflow:auto;margin-top:12px">
+        <table id="posTable" aria-label="positions">
+          <thead>
+            <tr>
+              <th data-i18n="th_symbol">Símbolo</th>
+              <th data-i18n="th_avg">Preço médio</th>
+              <th data-i18n="th_last">Preço atual</th>
+              <th data-i18n="th_pl">P/L %</th>
+              <th data-i18n="th_note">Obs.</th>
+              <th data-i18n="th_actions">Ações</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <p id="totals" class="status" style="margin-top:10px"></p>
+      <p id="lastRefresh" class="status"></p>
+    </section>
+
+    <footer>© <span id="y"></span> • <span data-i18n="disclaimer">Site educacional, não é recomendação de investimento.</span></footer>
   </div>
+
+  <script src="https://s3.tradingview.com/tv.js"></script>
+  <script>
+  // ===================== CONFIG =====================
+  const API_BASE = "https://shiny-sea-44d3.rafaelnm.workers.dev";
+  const QUOTE_API = API_BASE + "/quotes";
+  const POS_API   = API_BASE + "/positions";
+
+  // ===================== I18N =====================
+  const I18N = {
+    pt:{ title:"Dicas AI Investimentos para familia e amigos", quick_tips:"Dicas rápidas",
+      tip1:"Defina <strong>entrada, stop e alvo</strong> antes de executar.",
+      tip2:"Use <strong>gestão de risco</strong> por posição e por carteira.",
+      tip3:"Combine <strong>fundamental + técnico</strong> para decisões mais sólidas.",
+      chart_title:"Gráfico (TradingView)", alerts_title:"Alertas (janela interna)",
+      ticker_title:"Ticker de Cotações", positions_title:"Minhas posições",
+      add_position:"Adicionar posição", clear_all:"Limpar tudo", export_csv:"Exportar CSV",
+      th_symbol:"Símbolo", th_avg:"Preço médio", th_last:"Preço atual", th_pl:"P/L %",
+      th_note:"Obs.", th_actions:"Ações", disclaimer:"Site educacional, não é recomendação de investimento.",
+      edit:"Editar", del:"Excluir", totals:"Total de posições: {n}", refresh:"Atualizar preços",
+      set_symbol:"Carregar símbolo", add_from_chart:"Adicionar à lista", open_tv:"Abrir no TradingView"
+    },
+    en:{ title:"Dicas AI Investimentos para familia e amigos", quick_tips:"Quick tips",
+      tip1:"Define <strong>entry, stop and target</strong> before executing.",
+      tip2:"Use <strong>risk management</strong> per position and portfolio.",
+      tip3:"Combine <strong>fundamental + technical</strong> for stronger decisions.",
+      chart_title:"Chart (TradingView)", alerts_title:"Alerts (embedded window)",
+      ticker_title:"Quotes Ticker", positions_title:"My positions", add_position:"Add position",
+      clear_all:"Clear all", export_csv:"Export CSV", th_symbol:"Symbol", th_avg:"Avg. price",
+      th_last:"Last price", th_pl:"P/L %", th_note:"Note", th_actions:"Actions",
+      disclaimer:"Educational site, not investment advice.", edit:"Edit", del:"Delete",
+      totals:"Total positions: {n}", refresh:"Refresh prices", set_symbol:"Load symbol",
+      add_from_chart:"Add from chart", open_tv:"Open on TradingView"
+    }
+  };
+
+  document.addEventListener('DOMContentLoaded', () => {
+    // ===== idioma =====
+    function detectLang(){ const nav = navigator.language || 'pt-BR'; return String(nav).toLowerCase().startsWith('en') ? 'en' : 'pt'; }
+    let currentLang = (localStorage.getItem('lang') || detectLang());
+    const langLabel = document.getElementById('langLabel');
+    function applyI18n(){
+      const dict = I18N[currentLang] || I18N.pt;
+      document.documentElement.lang = currentLang === 'en' ? 'en' : 'pt-br';
+      document.querySelectorAll('[data-i18n]').forEach(el=>{
+        const key = el.getAttribute('data-i18n');
+        if(dict[key]) el.innerHTML = dict[key];
+      });
+      langLabel.textContent = currentLang.toUpperCase();
+      loadChart(getCurrentSymbol(), currentLang === 'en' ? 'en' : 'br');
+      renderPositions(latestQuotesMap);
+    }
+    document.getElementById('langToggle').addEventListener('click', ()=>{
+      currentLang = currentLang === 'en' ? 'pt' : 'en'; localStorage.setItem('lang', currentLang); applyI18n();
+    });
+
+    // ===================== TradingView =====================
+    const DEFAULT_SYMBOL = 'NASDAQ:AAPL';
+    let tvWidgetInstance;
+    function getCurrentSymbol(){ return window.__CURRENT_SYMBOL || DEFAULT_SYMBOL; }
+    function setCurrentSymbol(s){ window.__CURRENT_SYMBOL = s; }
+    function loadChart(symbol, locale){
+      const tvStatus = document.getElementById('tvStatus');
+      try{
+        const loc = locale || (currentLang === 'en' ? 'en' : 'br');
+        const s = (symbol || DEFAULT_SYMBOL).trim();
+        setCurrentSymbol(s);
+        if(tvWidgetInstance && typeof tvWidgetInstance.remove === 'function'){ tvWidgetInstance.remove(); }
+        tvWidgetInstance = new TradingView.widget({
+          autosize:true, symbol:s, interval:"60", timezone:"Etc/UTC", theme:"light", style:"1", locale:loc,
+          enable_publishing:false, container_id:"tradingview_chart", withdateranges:true, allow_symbol_change:true
+        });
+        document.getElementById('openTV').href = `https://www.tradingview.com/chart/?symbol=${encodeURIComponent(s)}`;
+        const input = document.getElementById('chartSymbolInput'); if(input && !input.value) input.value = s;
+        tvStatus.textContent = '';
+      }catch(e){ tvStatus.textContent = (currentLang==='en'?'Could not load chart now.':'Não foi possível carregar o gráfico agora.'); console.error(e); }
+    }
+    document.getElementById('setChartBtn').addEventListener('click', ()=>{
+      const s = document.getElementById('chartSymbolInput').value.trim(); if(!s){ alert(currentLang==='en'?'Enter a symbol':'Informe um símbolo'); return; } loadChart(s);
+    });
+    document.getElementById('addFromChartBtn').addEventListener('click', ()=>{
+      document.getElementById('posSymbol').value = getCurrentSymbol(); document.getElementById('posAvg').focus();
+    });
+
+    // ===================== Posições: público + local =====================
+    const posKeyLocal = 'positions_v4_pl_only_autorefresh';
+    const cacheKey = 'positions_last_prices_cache_v1';
+    const $tbody = document.querySelector('#posTable tbody');
+    const $totals = document.getElementById('totals');
+    const quoteStatus = document.getElementById('quoteStatus');
+    const lastRefreshEl = document.getElementById('lastRefresh');
+
+    let publicPositions = [];
+    function readPositionsLocal(){ try{ return JSON.parse(localStorage.getItem(posKeyLocal)) || []; }catch{ return []; } }
+    function writePositionsLocal(data){ localStorage.setItem(posKeyLocal, JSON.stringify(data)); }
+    function readCache(){ try{ return JSON.parse(localStorage.getItem(cacheKey)) || {}; }catch{ return {}; } }
+    function writeCache(obj){ localStorage.setItem(cacheKey, JSON.stringify(obj||{})); }
+    function number(v){ return isNaN(parseFloat(v)) ? 0 : parseFloat(v); }
+    function fmt(n, d=2){ if(n===null||n===undefined||isNaN(n)) return '-'; return Number(n).toFixed(d); }
+    function fmtPct(n){ if(n===null||n===undefined||isNaN(n)) return '-'; return (n>=0?'+':'')+Number(n).toFixed(2)+'%'; }
+
+    function getAllPositions(){
+      const locals = readPositionsLocal();
+      return [...publicPositions.map(p => ({...p, __public:true})), ...locals.map(p => ({...p, __public:false}))];
+    }
+
+    let latestQuotesMap = {};
+    function renderPositions(quotesMap={}){
+      latestQuotesMap = quotesMap;
+      const dict = I18N[currentLang] || I18N.pt;
+      const data = getAllPositions();
+      $tbody.innerHTML = '';
+      data.forEach((row, idx)=>{
+        const last = (typeof quotesMap[row.symbol] === 'number') ? quotesMap[row.symbol] : null;
+        const pl = (last && row.avg>0) ? ((last/row.avg-1)*100) : null;
+        const badge = row.__public ? ' <span class="badge" title="Visível para todos">🌐</span>' : '';
+        const actions = row.__public
+          ? '<span class="status">—</span>'
+          : `<button class="btn" data-act="edit" data-idx="${idx}">${dict.edit}</button>
+             <button class="btn" data-act="del" data-idx="${idx}">${dict.del}</button>`;
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><button class="btn" data-act="show" data-idx="${idx}" title="Mostrar no gráfico">${row.symbol}</button>${badge}</td>
+          <td>${fmt(row.avg)}</td>
+          <td>${last===null?'-':fmt(last)}</td>
+          <td style="font-weight:700; color:${pl===null?'#334155':(pl>=0?'#15803d':'#b91c1c')}">${pl===null?'-':fmtPct(pl)}</td>
+          <td>${row.note||''}</td>
+          <td class="actions">${actions}</td>`;
+        $tbody.appendChild(tr);
+      });
+      $totals.textContent = (dict.totals||'').replace('{n}', data.length);
+    }
+
+    async function loadPublicPositions(){
+      try{
+        const r = await fetch(POS_API, { cache:'no-store' });
+        if(!r.ok) throw new Error('HTTP '+r.status);
+        const j = await r.json();
+        publicPositions = Array.isArray(j.positions) ? j.positions : [];
+      }catch(e){
+        console.error('loadPublicPositions', e);
+        publicPositions = [];
+      }
+      await refreshPrices();
+    }
+
+    function addPositionLocal(){
+      const symbol = document.getElementById('posSymbol').value.trim() || getCurrentSymbol();
+      const avg = number(document.getElementById('posAvg').value);
+      const note = document.getElementById('posNote').value.trim();
+      if(!symbol || avg<=0){
+        alert(document.documentElement.lang==='en' ? 'Please fill symbol and avg. price.' : 'Preencha símbolo e preço médio.');
+        return;
+      }
+      const data = readPositionsLocal();
+      data.push({symbol, avg, note});
+      writePositionsLocal(data);
+      document.getElementById('posSymbol').value='';
+      document.getElementById('posAvg').value='';
+      document.getElementById('posNote').value='';
+      refreshPrices();
+    }
+
+    async function publishLocalPositions(){
+      const token = localStorage.getItem('admin_token') || prompt('Admin token (Bearer):');
+      if(!token){ return; }
+      localStorage.setItem('admin_token', token);
+      const list = readPositionsLocal();
+      try{
+        const r = await fetch(POS_API, {
+          method:'POST',
+          headers:{ 'content-type':'application/json', 'authorization':'Bearer '+token },
+          body: JSON.stringify({ positions: list })
+        });
+        if(!r.ok){
+          const t = await r.text().catch(()=> '');
+          throw new Error(`HTTP ${r.status} ${t}`);
+        }
+        alert('Posições publicadas com sucesso!');
+        await loadPublicPositions();
+      }catch(e){
+        console.error('publishLocalPositions', e);
+        alert('Falha ao publicar. Verifique o token em ADMIN_TOKEN no Worker.');
+      }
+    }
+
+    document.getElementById('addPosBtn').addEventListener('click', addPositionLocal);
+    document.getElementById('publishBtn').addEventListener('click', publishLocalPositions);
+    document.getElementById('loadPublicBtn').addEventListener('click', loadPublicPositions);
+
+    document.getElementById('clearAllBtn').addEventListener('click', ()=>{
+      if(confirm(document.documentElement.lang==='en' ? 'Clear all LOCAL positions?' : 'Limpar as posições LOCAIS?')){
+        writePositionsLocal([]); renderPositions(latestQuotesMap);
+      }
+    });
+    document.getElementById('exportBtn').addEventListener('click', ()=>{
+      const rows = readPositionsLocal();
+      const header = ['symbol','avg','note'];
+      const csv = [header.join(',')].concat(rows.map(r=> `${r.symbol},${r.avg},"${(r.note||'').replace(/"/g,'""')}"`)).join('\n');
+      const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a'); a.href = url; a.download = 'positions_local.csv'; a.click();
+      URL.revokeObjectURL(url);
+    });
+
+    document.querySelector('#posTable tbody').addEventListener('click', (e)=>{
+      const btn = e.target.closest('button'); if(!btn) return;
+      const act = btn.getAttribute('data-act');
+      const idx = parseInt(btn.getAttribute('data-idx'),10);
+      const data = getAllPositions();
+      const row = data[idx];
+      if(act==='del'){
+        if(row.__public){ alert('Posição pública não pode ser apagada por aqui. Use o botão "Publicar..." para sobrescrever.'); return; }
+        const locals = readPositionsLocal();
+        const found = locals.findIndex(x=> x.symbol===row.symbol && x.avg===row.avg && x.note===row.note);
+        if(found>-1){ locals.splice(found,1); writePositionsLocal(locals); refreshPrices(); }
+      }else if(act==='edit'){
+        if(row.__public){ alert('Posição pública não pode ser editada por aqui. Edite local e publique.'); return; }
+        const locals = readPositionsLocal();
+        const found = locals.findIndex(x=> x.symbol===row.symbol && x.avg===row.avg && x.note===row.note);
+        if(found===-1) return;
+        const symbol = prompt(document.documentElement.lang==='en'?'Symbol:':'Símbolo:', row.symbol) || row.symbol;
+        const avg = parseFloat(prompt(document.documentElement.lang==='en'?'Avg. price:':'Preço médio:', row.avg)) || row.avg;
+        const note = prompt(document.documentElement.lang==='en'?'Note:':'Observação:', row.note||'') || row.note;
+        locals[found] = {symbol, avg, note};
+        writePositionsLocal(locals); refreshPrices();
+      }else if(act==='show'){
+        document.getElementById('chartSymbolInput').value = row.symbol; loadChart(row.symbol);
+      }
+    });
+
+    // ===================== Preços via Worker =====================
+    async function refreshPrices(){
+      const rows = getAllPositions();
+      const symbols = [...new Set(rows.map(r => (r.symbol||'').trim()).filter(Boolean))];
+      if (symbols.length === 0) {
+        renderPositions({}); quoteStatus.textContent = (document.documentElement.lang==='en' ? 'No positions.' : 'Sem posições.');
+        lastRefreshEl.textContent = ''; return;
+      }
+      quoteStatus.textContent = (document.documentElement.lang==='en' ? 'Updating prices…' : 'Atualizando preços…');
+      try{
+        const url = QUOTE_API + "?symbols=" + encodeURIComponent(symbols.join(','));
+        const resp = await fetch(url, { cache: 'no-store' });
+        if(!resp.ok) throw new Error('HTTP ' + resp.status);
+        const json = await resp.json();
+        const map = json?.prices || {};
+        const out = {};
+        rows.forEach(r => { const v = map[r.symbol]; out[r.symbol] = (typeof v === 'number') ? v : null; });
+        renderPositions(out);
+        quoteStatus.textContent = '';
+        lastRefreshEl.textContent = (document.documentElement.lang==='en' ? 'Last update: ' : 'Última atualização: ') +
+          new Date().toLocaleString(document.documentElement.lang==='en'?'en-US':'pt-BR', {hour12:false});
+        writeCache(out);
+      }catch(e){
+        console.error('quotes error', e);
+        renderPositions(readCache());
+        quoteStatus.textContent = (document.documentElement.lang==='en' ? 'Could not update quotes.' : 'Não foi possível atualizar as cotações.');
+      }
+    }
+
+    // ===================== Inicialização =====================
+    document.getElementById('y').textContent = new Date().getFullYear();
+    applyI18n();
+    loadChart('NASDAQ:AAPL');
+    loadPublicPositions();
+    document.getElementById('refreshBtn').addEventListener('click', refreshPrices);
+    setInterval(refreshPrices, 120000);
+  });
+  </script>
 </body>
 </html>
