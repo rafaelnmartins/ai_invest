@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>AI Investimentos  - TIPs for family and friends</title>
+  <title>Dicas AI Investimentos para familia e amigos</title>
   <meta name="description" content="Site com dicas, gráfico TradingView, alertas embutidos e minhas posições com P/L %." />
   <link rel="preconnect" href="https://s3.tradingview.com" crossorigin>
   <style>
@@ -114,6 +114,18 @@
       </div>
     </section>
 
+    <!-- Opinião da AI (Técnico + Analistas) -->
+    <section class="card" id="ai-opinion" style="margin-top:16px">
+      <h2 id="aiTitle">Opinião da AI (Técnico + Analistas)</h2>
+      <div class="grid" style="grid-template-columns:repeat(12,1fr);gap:10px;margin:8px 0 12px 0">
+        <input id="aiSymbolInput" placeholder="Ex.: NASDAQ:AMZN ou AMZN" style="grid-column:span 6" />
+        <button id="aiAnalyzeBtn" class="btn" style="grid-column:span 3">Analisar</button>
+        <button id="aiUseChartBtn" class="btn" style="grid-column:span 3">Usar símbolo do gráfico</button>
+      </div>
+      <div id="aiResult" class="card" style="background:#f8fafc;border:1px dashed rgba(0,0,0,.1);min-height:90px"></div>
+      <p class="status" id="aiStatus"></p>
+    </section>
+
     <!-- Minhas posições (públicas + locais) -->
     <section class="card" style="margin-top:16px">
       <div style="display:flex;align-items:center;gap:8px;justify-content:space-between;flex-wrap:wrap">
@@ -178,7 +190,10 @@
       th_symbol:"Símbolo", th_avg:"Preço médio", th_last:"Preço atual", th_pl:"P/L %",
       th_note:"Obs.", th_actions:"Ações", disclaimer:"Site educacional, não é recomendação de investimento.",
       edit:"Editar", del:"Excluir", totals:"Total de posições: {n}", refresh:"Atualizar preços",
-      set_symbol:"Carregar símbolo", add_from_chart:"Adicionar à lista", open_tv:"Abrir no TradingView"
+      set_symbol:"Carregar símbolo", add_from_chart:"Adicionar à lista", open_tv:"Abrir no TradingView",
+      ai_title:"Opinião da AI (Técnico + Analistas)", ai_analyze:"Analisar", ai_use_chart:"Usar símbolo do gráfico",
+      ai_decision:"Decisão", ai_score:"Score", ai_reasons:"Motivos", ai_technicals:"Técnicos", ai_analysts:"Analistas",
+      ai_buy:"Comprar", ai_hold:"Manter", ai_sell:"Vender", ai_last_update:"Última análise"
     },
     en:{ title:"Dicas AI Investimentos para familia e amigos", quick_tips:"Quick tips",
       tip1:"Define <strong>entry, stop and target</strong> before executing.",
@@ -190,7 +205,10 @@
       th_last:"Last price", th_pl:"P/L %", th_note:"Note", th_actions:"Actions",
       disclaimer:"Educational site, not investment advice.", edit:"Edit", del:"Delete",
       totals:"Total positions: {n}", refresh:"Refresh prices", set_symbol:"Load symbol",
-      add_from_chart:"Add from chart", open_tv:"Open on TradingView"
+      add_from_chart:"Add from chart", open_tv:"Open on TradingView",
+      ai_title:"AI Opinion (Technical + Analysts)", ai_analyze:"Analyze", ai_use_chart:"Use chart symbol",
+      ai_decision:"Decision", ai_score:"Score", ai_reasons:"Reasons", ai_technicals:"Technicals", ai_analysts:"Analysts",
+      ai_buy:"Buy", ai_hold:"Hold", ai_sell:"Sell", ai_last_update:"Last analysis"
     }
   };
 
@@ -241,6 +259,77 @@
     document.getElementById('addFromChartBtn').addEventListener('click', ()=>{
       document.getElementById('posSymbol').value = getCurrentSymbol(); document.getElementById('posAvg').focus();
     });
+    // ===================== Opinião da AI =====================
+    const AI_API = API_BASE + "/analyze"; // requer endpoint no Worker
+    function aiDict(){ return (document.documentElement.lang==='en') ? I18N.en : I18N.pt; }
+    function renderAIResult(payload){
+      const d = aiDict();
+      const box = document.getElementById('aiResult');
+      if(!payload || typeof payload !== 'object'){ box.innerHTML = '<p class="status">'+(d.ai_last_update+': —')+'</p>'; return; }
+      const dec = String(payload.decision||'').toUpperCase();
+      const mapLabel = { BUY:d.ai_buy, HOLD:d.ai_hold, SELL:d.ai_sell };
+      const color = dec==='BUY' ? '#15803d' : (dec==='SELL' ? '#b91c1c' : '#334155');
+      const score = (typeof payload.score==='number') ? Math.round(payload.score) : null;
+      const tech = payload.technicals||{}; const an = payload.analysts||{}; const reasons = payload.reasons||[];
+      box.innerHTML = `
+        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+          <span class="badge" style="background:#f1f5f9;border-color:#e2e8f0;color:${color}"><strong>${d.ai_decision}:</strong> ${mapLabel[dec]||dec}</span>
+          ${score!==null?`<span class="badge"><strong>${d.ai_score}:</strong> ${score}/100</span>`:''}
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(12,1fr);gap:12px;margin-top:10px">
+          <div class="card" style="grid-column:span 6">
+            <h3 style="margin:0 0 6px 0">${d.ai_technicals}</h3>
+            <ul style="margin:0;padding-left:18px">
+              <li>SMA50: <strong>${tech.sma50??'-'}</strong> · SMA200: <strong>${tech.sma200??'-'}</strong></li>
+              <li>RSI14: <strong>${tech.rsi??'-'}</strong></li>
+              <li>MACD: <strong>${tech.macd?.macd??'-'}</strong> · Signal: <strong>${tech.macd?.signal??'-'}</strong></li>
+            </ul>
+          </div>
+          <div class="card" style="grid-column:span 6">
+            <h3 style="margin:0 0 6px 0">${d.ai_analysts}</h3>
+            <ul style="margin:0;padding-left:18px">
+              <li>Mean: <strong>${an.mean??'-'}</strong></li>
+              <li>Trend: ${an.trend ? `<strong>buy ${an.trend.buy||0}</strong> · hold ${an.trend.hold||0} · sell ${an.trend.sell||0}` : '-'}</li>
+            </ul>
+          </div>
+        </div>
+        ${reasons.length?`<div style="margin-top:8px"><strong>${d.ai_reasons}:</strong><ul style="margin:6px 0;padding-left:18px">${reasons.map(r=>`<li>${r}</li>`).join('')}</ul></div>`:''}
+      `;
+    }
+    async function runAIAnalysis(symbol){
+      const d = aiDict();
+      const aiStatus = document.getElementById('aiStatus');
+      aiStatus.textContent = d.refresh+"…";
+      try{
+        const resp = await fetch(AI_API + "?symbol=" + encodeURIComponent(symbol), { cache:'no-store' });
+        if(!resp.ok) throw new Error('HTTP '+resp.status);
+        const json = await resp.json();
+        renderAIResult(json);
+        aiStatus.textContent = d.ai_last_update+': '+new Date().toLocaleString(document.documentElement.lang==='en'?'en-US':'pt-BR',{hour12:false});
+      }catch(e){
+        console.error('AI analyze error', e);
+        aiStatus.textContent = (document.documentElement.lang==='en'?'Could not analyze now.':'Não foi possível analisar agora.');
+      }
+    }
+    document.getElementById('aiAnalyzeBtn').addEventListener('click', ()=>{
+      const s = document.getElementById('aiSymbolInput').value.trim() || getCurrentSymbol();
+      if(!s) return; runAIAnalysis(s);
+    });
+    document.getElementById('aiUseChartBtn').addEventListener('click', ()=>{
+      const s = getCurrentSymbol();
+      document.getElementById('aiSymbolInput').value = s;
+    });
+
+    // Ajusta textos da seção ao trocar idioma
+    const oldApplyI18n = applyI18n; // keep ref if exists
+    applyI18n = function(){
+      // chama a versão original
+      oldApplyI18n();
+      const d = aiDict();
+      const titleEl = document.getElementById('aiTitle'); if(titleEl) titleEl.textContent = d.ai_title;
+      const b1 = document.getElementById('aiAnalyzeBtn'); if(b1) b1.textContent = d.ai_analyze;
+      const b2 = document.getElementById('aiUseChartBtn'); if(b2) b2.textContent = d.ai_use_chart;
+    };
 
     // ===================== Posições: público + local =====================
     const posKeyLocal = 'positions_v4_pl_only_autorefresh';
