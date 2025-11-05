@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Dicas AI Investimentos para familia e amigos</title>
+  <title>AI Investimentos - Dicas para familia e amigos</title>
   <meta name="description" content="Site com dicas, gráfico TradingView, alertas embutidos e minhas posições com P/L %." />
   <link rel="preconnect" href="https://s3.tradingview.com" crossorigin>
   <style>
@@ -39,7 +39,7 @@
     <header>
       <div class="brand">
         <div class="logo" aria-hidden="true"></div>
-        <h1 data-i18n="title" id="siteTitle">Dicas AI Investimentos para familia e amigos</h1>
+        <h1 data-i18n="title" id="siteTitle">AI Investimentos - Dicas para familia e amigos</h1>
       </div>
       <div style="display:flex;gap:8px;align-items:center">
         <button id="langToggle" class="btn" title="Switch language">🇧🇷/🇺🇸 <span id="langLabel">PT</span></button>
@@ -73,10 +73,9 @@
       <section class="card" style="grid-column: span 4">
         <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
           <h2 data-i18n="alerts_title">Alertas (janela interna)</h2>
-          <span class="badge">⚡ webhook</span>
         </div>
         <iframe
-          src="https://shiny-sea-44d3.rafaelnm.workers.dev/"
+          src="https://shiny-sea-44d3.rafaelnm.workers.dev/?embed=1&hideBanner=1"
           id="alertsFrame"
           title="Alertas – Cloudflare Worker"
           loading="lazy"
@@ -90,7 +89,7 @@
     </div>
 <!-- Opinião da AI (Técnico + Analistas) -->
     <section class="card" id="ai-opinion" style="margin-top:16px">
-      <h2 id="aiTitle">Opinião da AI (Técnico + Analistas)</h2>
+      <h2 id="aiTitle">Opinião (Técnico + Analistas) - Tire sua dúvida</h2>
       <div class="grid" style="grid-template-columns:repeat(12,1fr);gap:10px;margin:8px 0 12px 0">
         <input id="aiSymbolInput" placeholder="Ex.: NASDAQ:AMZN ou AMZN" style="grid-column:span 6" />
         <button id="aiAnalyzeBtn" class="btn" style="grid-column:span 3">Analisar</button>
@@ -103,7 +102,7 @@
     <!-- Minhas posições (públicas + locais) -->
     <section class="card" style="margin-top:16px">
       <div style="display:flex;align-items:center;gap:8px;justify-content:space-between;flex-wrap:wrap">
-        <h2 data-i18n="positions_title">Minhas posições</h2>
+        <h2 data-i18n="positions_title">Minhas Posicoes. Você pode adicionar as suas também</h2>
         <div style="display:flex;gap:8px;flex-wrap:wrap">
           <span class="badge" title="Visitantes veem essas posições">🌐 Público</span>
           <button id="loadPublicBtn" class="btn">Atualizar públicas</button>
@@ -151,8 +150,8 @@
           {
             "symbols": [
               {"proName": "FOREXCOM:US30",  "title": "Dow Jones"},
-              {"proName": "FOREXCOM:US100", "title": "Nasdaq 100"},
-              {"proName": "FOREXCOM:US500", "title": "S&P 500"},
+              {"proName": "NASDAQ:IXIC", "title": "Nasdaq Composite"},
+              {"proName": "SP:SPX", "title": "S&P 500"},
               {"proName": "BMFBOVESPA:IBOV", "title": "Ibovespa"},
               {"proName": "FOREXCOM:EU50",  "title": "Euro Stoxx 50"},
               {"proName": "FOREXCOM:UK100", "title": "FTSE 100"},
