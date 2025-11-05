@@ -152,7 +152,6 @@
             "symbols": [
               {"proName": "FOREXCOM:US30",  "title": "Dow Jones"},
               {"proName": "NASDAQ:IXIC", "title": "Nasdaq 100"},
-              {"proName": "SP:SPCFD", "title": "S&P 500"},
               {"proName": "BMFBOVESPA:IBOV", "title": "Ibovespa"},
               {"proName": "FOREXCOM:EU50",  "title": "Euro Stoxx 50"},
               {"proName": "FOREXCOM:UK100", "title": "FTSE 100"},
@@ -186,7 +185,7 @@
 
   // ===================== I18N =====================
   const I18N = {
-    pt:{ title:"AI Invest - Dicas para familia e amigos", quick_tips:"Dicas rápidas",
+    pt:{ title:"AI Invest - Dicas de Ações para familia e amigos", quick_tips:"Dicas rápidas",
       tip1:"Defina <strong>entrada, stop e alvo</strong> antes de executar.",
       tip2:"Use <strong>gestão de risco</strong> por posição e por carteira.",
       tip3:"Combine <strong>fundamental + técnico</strong> para decisões mais sólidas.",
@@ -201,7 +200,7 @@
       ai_decision:"Decisão", ai_score:"Score", ai_reasons:"Motivos", ai_technicals:"Técnicos", ai_analysts:"Analistas",
       ai_buy:"Comprar", ai_hold:"Manter", ai_sell:"Vender", ai_last_update:"Última análise"
     },
-    en:{ title:"AI Invest - TIP for Family and Friends", quick_tips:"Quick tips",
+    en:{ title:"AI Invest - Stock TIPs for Family and Friends", quick_tips:"Quick tips",
       tip1:"Define <strong>entry, stop and target</strong> before executing.",
       tip2:"Use <strong>risk management</strong> per position and portfolio.",
       tip3:"Combine <strong>fundamental + technical</strong> for stronger decisions.",
@@ -239,7 +238,7 @@
     });
 
     // ===================== TradingView =====================
-    const DEFAULT_SYMBOL = 'NASDAQ:AAPL';
+    const DEFAULT_SYMBOL = 'NASDAQ:NVDA';
     let tvWidgetInstance;
     function getCurrentSymbol(){ return window.__CURRENT_SYMBOL || DEFAULT_SYMBOL; }
     function setCurrentSymbol(s){ window.__CURRENT_SYMBOL = s; }
