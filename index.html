@@ -49,9 +49,9 @@
     <section class="card">
       <h2 data-i18n="quick_tips">Dicas rápidas</h2>
       <ul class="tips">
-        <li data-i18n="tip1">Defina <strong>entrada, stop e alvo</strong> antes de executar.</li>
-        <li data-i18n="tip2">Use <strong>gestão de risco</strong> por posição e por carteira.</li>
-        <li data-i18n="tip3">Combine <strong>fundamental + técnico</strong> para decisões mais sólidas.</li>
+        <li>Todos os dias o <strong>Agente</strong> enviará os alertas <strong>após o fechamento</strong> da bolsa de Wall Street.</li>
+        <li>Alertas de <strong>compra (curto prazo)</strong> buscam ganho de <strong>5%</strong>; de <strong>longo prazo</strong> buscam <strong>10%</strong>.</li>
+        <li>Fique ligado aos <strong>alertas de venda</strong>.</li>
       </ul>
     </section>
 
@@ -88,33 +88,7 @@
         </details>
       </section>
     </div>
-
-    <!-- Ticker único -->
-    <section class="card" style="margin-top:16px">
-      <h2 data-i18n="ticker_title">Ticker de Cotações</h2>
-      <div class="tradingview-widget-container">
-        <div class="tradingview-widget-container__widget"></div>
-        <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
-          {
-            "symbols": [
-              {"proName": "NASDAQ:NVDA", "title": "NVIDIA"},
-              {"proName": "NASDAQ:AAPL", "title": "Apple"},
-              {"proName": "NASDAQ:AMZN", "title": "Amazon"},
-              {"proName": "NASDAQ:ARM",  "title": "ARM"},
-              {"proName": "NASDAQ:TSLA", "title": "Tesla"},
-              {"proName": "BMFBOVESPA:PETR4", "title": "Petrobras PN"},
-              {"proName": "BMFBOVESPA:VALE3", "title": "Vale ON"}
-            ],
-            "showSymbolLogo": true,
-            "isTransparent": false,
-            "displayMode": "adaptive",
-            "colorTheme": "light"
-          }
-        </script>
-      </div>
-    </section>
-
-    <!-- Opinião da AI (Técnico + Analistas) -->
+<!-- Opinião da AI (Técnico + Analistas) -->
     <section class="card" id="ai-opinion" style="margin-top:16px">
       <h2 id="aiTitle">Opinião da AI (Técnico + Analistas)</h2>
       <div class="grid" style="grid-template-columns:repeat(12,1fr);gap:10px;margin:8px 0 12px 0">
@@ -166,6 +140,38 @@
       </div>
       <p id="totals" class="status" style="margin-top:10px"></p>
       <p id="lastRefresh" class="status"></p>
+    </section>
+
+    <!-- Ticker global no final da página -->
+    <section class="card" style="margin-top:16px">
+      <h2>Mercados Globais &amp; Magnificent 7</h2>
+      <div class="tradingview-widget-container">
+        <div class="tradingview-widget-container__widget"></div>
+        <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
+          {
+            "symbols": [
+              {"proName": "FOREXCOM:US30",  "title": "Dow Jones"},
+              {"proName": "FOREXCOM:US100", "title": "Nasdaq 100"},
+              {"proName": "FOREXCOM:US500", "title": "S&P 500"},
+              {"proName": "BMFBOVESPA:IBOV", "title": "Ibovespa"},
+              {"proName": "FOREXCOM:EU50",  "title": "Euro Stoxx 50"},
+              {"proName": "FOREXCOM:UK100", "title": "FTSE 100"},
+
+              {"proName": "NASDAQ:AAPL",  "title": "Apple"},
+              {"proName": "NASDAQ:MSFT",  "title": "Microsoft"},
+              {"proName": "NASDAQ:GOOGL", "title": "Alphabet"},
+              {"proName": "NASDAQ:AMZN",  "title": "Amazon"},
+              {"proName": "NASDAQ:NVDA",  "title": "NVIDIA"},
+              {"proName": "NASDAQ:META",  "title": "Meta"},
+              {"proName": "NASDAQ:TSLA",  "title": "Tesla"}
+            ],
+            "showSymbolLogo": true,
+            "isTransparent": false,
+            "displayMode": "adaptive",
+            "colorTheme": "light"
+          }
+        </script>
+      </div>
     </section>
 
     <footer>© <span id="y"></span> • <span data-i18n="disclaimer">Site educacional, não é recomendação de investimento.</span></footer>
