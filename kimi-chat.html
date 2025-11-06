@@ -1,0 +1,63 @@
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>KIMI Chat – versão gratuita (via OpenRouter)</title>
+<meta name="description" content="Página simples para conversar com Kimi (K2) usando API gratuita via OpenRouter e proxy no Cloudflare Worker." />
+<style>
+:root{ --bg:#0b1220; --panel:#111827; --ink:#e5e7eb; --muted:#94a3b8; --acc:#22d3ee; --line:#1f2937; }
+*{ box-sizing:border-box }
+html,body{ height:100% }
+body{ margin:0; font-family:ui-sans-serif,system-ui,Segoe UI,Roboto,Arial; background:var(--bg); color:var(--ink); }
+.wrap{ max-width:900px; margin:0 auto; padding:24px; }
+header{ display:flex; gap:12px; align-items:center; justify-content:space-between; margin-bottom:14px }
+.brand{ display:flex; gap:10px; align-items:center }
+.logo{ width:36px; height:36px; border-radius:10px; background:conic-gradient(from 210deg,#22d3ee,#6366f1,#22d3ee); box-shadow:0 6px 20px rgba(34,211,238,.25) }
+h1{ margin:0; font-size:18px }
+.card{ background:var(--panel); border:1px solid var(--line); border-radius:16px; padding:16px }
+.chat{ display:flex; flex-direction:column; gap:12px; height:min(72vh,780px) }
+.scroll{ flex:1; overflow:auto; padding-right:4px }
+.msg{ display:flex; gap:10px; padding:10px 12px; border-radius:14px; border:1px solid var(--line) }
+.me{ background:#0f172a }
+.ai{ background:#0b1320 }
+.who{ font-weight:700; color:#93c5fd; min-width:48px }
+.text{ white-space:pre-wrap; line-height:1.55 }
+.row{ display:flex; gap:10px; margin-top:10px }
+textarea{ flex:1; resize:vertical; min-height:44px; max-height:180px; color:var(--ink); background:#0b1320; border:1px solid var(--line); border-radius:12px; padding:10px 12px }
+button{ cursor:pointer; background:#0b1320; color:var(--ink); border:1px solid var(--line); border-radius:12px; padding:10px 14px }
+button:hover{ background:#0f172a }
+.pill{ display:inline-flex; align-items:center; gap:8px; background:#0b1320; border:1px solid var(--line); border-radius:999px; padding:6px 10px; color:var(--muted); font-size:12px }
+.muted{ color:var(--muted); font-size:12px }
+.err{ color:#fecaca }
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+<div class="brand">
+<div class="logo"></div>
+<h1>KIMI Chat · grátis via OpenRouter + Worker</h1>
+</div>
+<div class="pill" title="Modelo usado">
+🧠 modelo: <strong>moonshotai/kimi-k2:free</strong>
+</div>
+</header>
+
+
+<section class="card chat">
+<div id="history" class="scroll"></div>
+<div class="row">
+<textarea id="msg" placeholder="Pergunte algo… (Shift+Enter = quebrar linha)"></textarea>
+<button id="send">Enviar</button>
+</div>
+<div class="muted" id="status"></div>
+</section>
+
+
+<p class="muted" style="margin-top:10px">Dica: seu browser fala com o <em>Cloudflare Worker</em>, e o Worker chama o OpenRouter. Assim sua chave não fica exposta no cliente.</p>
+</div>
+
+
+<script>
+const WORKER_ENDPOINT = "/kimi"; // ajuste se publicar em outra rota/domínio
+const historyEl = document.getElementById('history');
