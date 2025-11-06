@@ -22,7 +22,7 @@
     button{cursor:pointer;background:#111827}
     button:hover{background:#0f172a}
     #log{display:flex;flex-direction:column;gap:10px}
-    .msg{padding:12px;border-radius:12px;line-height:1.5}
+    .msg{padding:12px;border-radius:12px;line-height:1.5;white-space:pre-wrap}
     .user{background:#111827;border:1px solid rgba(255,255,255,.07)}
     .assistant{background:#0b1220;border:1px solid rgba(34,211,238,.25)}
     .sys{background:#0b1220;border:1px dashed rgba(255,255,255,.2);color:var(--muted);font-size:13px}
@@ -32,6 +32,7 @@
     footer{margin-top:18px;text-align:center;color:var(--muted);font-size:12px}
     a{color:var(--acc);text-decoration:none}
     .small{font-size:12px;color:var(--muted)}
+    .right{margin-left:auto}
   </style>
 </head>
 <body>
@@ -55,6 +56,10 @@
             <option value="">(usar o padrão do Worker)</option>
           </select>
         </div>
+        <div>
+          <label for="persist">Salvar configurações</label>
+          <button id="persist" title="Salvar endpoint e modelo localmente">Salvar</button>
+        </div>
       </div>
       <div style="margin-top:10px">
         <label for="system">System prompt (opcional)</label>
@@ -65,12 +70,12 @@
     <section class="card" style="margin-bottom:12px">
       <div>
         <label for="userInput">Sua pergunta</label>
-        <textarea id="userInput" placeholder="Escreva sua pergunta para a Kimi..."></textarea>
+        <textarea id="userInput" placeholder="Escreva sua pergunta para a AI... (Ctrl/⌘+Enter para enviar)"></textarea>
       </div>
       <div class="row" style="margin-top:10px;align-items:center">
         <button id="sendBtn">Enviar</button>
         <button id="clearBtn">Limpar histórico</button>
-        <span class="status" id="hint">Dica: o modelo free exige “Free model publication” ativado na sua conta do OpenRouter.</span>
+        <span class="status" id="hint">Dica: para modelos free no OpenRouter, ative “Free model publication” nas configurações de privacidade.</span>
       </div>
     </section>
 
@@ -78,7 +83,7 @@
       <div id="log"></div>
     </section>
 
-    <footer>© <span id="y"></span> • Feito para testar <code>/kimi</code> no seu Worker</footer>
+    <footer>© <span id="y"></span> • Chat de teste do endpoint <code>/kimi</code> no seu Worker</footer>
   </div>
 
   <script>
@@ -90,9 +95,32 @@
     const $model = document.getElementById('model');
     const $system = document.getElementById('system');
     const $input = document.getElementById('userInput');
+    const $persist = document.getElementById('persist');
+
     document.getElementById('y').textContent = new Date().getFullYear();
 
-    // Histórico apenas em memória da página
+    // Carrega preferências salvas
+    (function loadPrefs(){
+      try{
+        const p = JSON.parse(localStorage.getItem('kimi_chat_prefs') || '{}');
+        if(p.endpoint) $endpoint.value = p.endpoint;
+        if(p.model) $model.value = p.model;
+        if(p.system) $system.value = p.system;
+      }catch{}
+    })();
+
+    $persist.addEventListener('click', ()=>{
+      const prefs = {
+        endpoint: $endpoint.value.trim(),
+        model: $model.value,
+        system: $system.value
+      };
+      localStorage.setItem('kimi_chat_prefs', JSON.stringify(prefs));
+      setStatus('Preferências salvas ✔︎');
+      setTimeout(()=> setStatus('Pronto'), 1200);
+    });
+
+    // Histórico apenas em memória
     const messages = [];
 
     function setStatus(txt, isErr=false){
@@ -106,7 +134,6 @@
       div.className = 'msg ' + (role === 'user' ? 'user' : role === 'assistant' ? 'assistant' : 'sys');
       div.textContent = content;
       $log.appendChild(div);
-      // scroll
       setTimeout(()=>{ div.scrollIntoView({behavior:'smooth', block:'end'}); }, 10);
     }
 
@@ -119,6 +146,14 @@
       }
     }
 
+    function showSelectedModel() {
+      const m = $model.value.trim();
+      if (!m) { setStatus('Pronto'); return; }
+      setStatus(`Modelo: ${m}`);
+    }
+    $model.addEventListener('change', showSelectedModel);
+    showSelectedModel();
+
     async function send(){
       const txt = ($input.value || '').trim();
       if(!txt) return;
@@ -128,10 +163,20 @@
       $input.value = '';
 
       const body = { messages };
-      const model = $model.value.trim();
-      if(model) body.model = model;
+      const chosenModel = $model.value.trim();
+      if (chosenModel) body.model = chosenModel;
 
-      const endpoint = ($endpoint.value || '').trim();
+      // Força também via query string (?model=...)
+      let endpoint = ($endpoint.value || '').trim();
+      try {
+        const u = new URL(endpoint);
+        if (chosenModel) u.searchParams.set('model', chosenModel);
+        else u.searchParams.delete('model');
+        endpoint = u.toString();
+      } catch {
+        // se não for URL válida, usa como está
+      }
+
       setStatus('Enviando…');
       let resp;
       try{
@@ -139,7 +184,6 @@
           method: 'POST',
           headers: { 'content-type':'application/json' },
           body: JSON.stringify(body),
-          // Não enviar credentials; CORS do Worker é "*"
           mode: 'cors',
         });
       }catch(e){
@@ -149,7 +193,6 @@
         return;
       }
 
-      // Não-OK: mostra texto bruto
       if(!resp.ok){
         const t = await resp.text().catch(()=> '');
         console.error('HTTP error', resp.status, t);
@@ -158,9 +201,9 @@
         return;
       }
 
-      // Tenta stream (SSE/ndjson) primeiro
       const ctype = (resp.headers.get('content-type') || '').toLowerCase();
       try{
+        // Stream (SSE/NDJSON/TXT)
         if(ctype.includes('text/event-stream') || ctype.includes('x-ndjson') || ctype.includes('text/')){
           setStatus('Recebendo (stream)…');
           const reader = resp.body.getReader();
@@ -173,27 +216,25 @@
             if(done) break;
             acc += decoder.decode(value, { stream:true });
 
-            // tenta dividir por linhas
             const parts = acc.split(/\r?\n/);
             acc = parts.pop() || '';
             for(const line of parts){
               const s = line.trim();
               if(!s) continue;
-              // suporta "data: {json}" e puro JSON
               const payload = s.startsWith('data:') ? s.slice(5).trim() : s;
               try{
                 const j = JSON.parse(payload);
+                const retModel = j.model || chosenModel || '';
+                if (retModel && !printedOnce) setStatus(`OK • ${retModel}`);
                 const delta = j.choices?.[0]?.delta?.content ?? j.choices?.[0]?.message?.content ?? '';
                 if(delta){
                   if(!printedOnce){ appendMessage('assistant', delta); printedOnce = true; }
                   else{
-                    // adiciona no último balão do assistant
                     const last = Array.from($log.querySelectorAll('.msg.assistant')).pop();
                     if(last) last.textContent += delta;
                   }
                 }
               }catch{
-                // linha de texto puro
                 if(!printedOnce){ appendMessage('assistant', s); printedOnce = true; }
                 else{
                   const last = Array.from($log.querySelectorAll('.msg.assistant')).pop();
@@ -202,20 +243,22 @@
               }
             }
           }
+          if (!printedOnce) appendMessage('assistant', '(sem conteúdo)');
           setStatus('OK');
           return;
         }
 
-        // JSON padrão (OpenRouter)
+        // JSON padrão
         const json = await resp.json();
         const text = json?.choices?.[0]?.message?.content ?? '(sem conteúdo)';
+        const retModel = json?.model || chosenModel || '';
         appendMessage('assistant', text);
-        setStatus('OK');
+        setStatus(retModel ? `OK • ${retModel}` : 'OK');
       }catch(e){
         console.error('parse error', e);
         setStatus('Erro ao ler resposta', true);
         const t = await resp.text().catch(()=> '');
-        appendMessage('system', 'Não consegui interpretar a resposta. Veja console.');
+        appendMessage('system', 'Não consegui interpretar a resposta. Veja console (F12).');
         console.log('Raw response body:', t);
       }
     }
@@ -232,14 +275,16 @@
         appendMessage('system', `System: ${$system.value.trim()}`);
         messages.push({ role:'system', content: $system.value.trim() });
       }
+      showSelectedModel();
     });
 
-    // Pré-popula uma mensagem system (visual)
+    // Inicialização visual
     (function init(){
-      const sys = 'Você é um assistente útil e direto.';
+      const sys = $system.value.trim() || 'Você é um assistente útil e direto.';
       $system.value = sys;
       appendMessage('system', `System: ${sys}`);
       messages.push({ role:'system', content: sys });
+      showSelectedModel();
     })();
   </script>
 </body>
