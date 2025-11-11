@@ -32,6 +32,10 @@
     .status{font-size:12px;color:#475569;margin-top:6px}
     .badge{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:#0369a1;background:#e0f2fe;border:1px solid #bae6fd;border-radius:999px;padding:2px 8px}
     @media (max-width:960px){.grid{grid-template-columns:1fr}}
+    /* Bloco resposta LLM */
+    .llm-box{margin-top:12px;padding:12px 14px;border:1px solid rgba(0,0,0,.08);border-radius:12px;background:#fff}
+    .llm-title{font-weight:700;margin:0 0 6px 0;font-size:14px;color:#0f172a}
+    .llm-note{font-size:12px;color:#64748b;margin:6px 0 0}
   </style>
 </head>
 <body>
@@ -39,7 +43,7 @@
     <header>
       <div class="brand">
         <div class="logo" aria-hidden="true"></div>
-        <h1 data-i18n="title" id="siteTitle">Dicas AI Investimentos para familia e amigos</h1>
+        <h1 data-i18n="title" id="siteTitle">AI Investimentos - Dicas para familia e amigos</h1>
       </div>
       <div style="display:flex;gap:8px;align-items:center">
         <button id="langToggle" class="btn" title="Switch language">🇧🇷/🇺🇸 <span id="langLabel">PT</span></button>
@@ -72,7 +76,7 @@
       <!-- Alertas (iframe) -->
       <section class="card" style="grid-column: span 4">
         <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
-          <h2 data-i18n="alerts_title">Alertas </h2>
+          <h2 data-i18n="alerts_title">Alertas</h2>
           <span class="badge">⚡ Agent</span>
         </div>
         <iframe
@@ -88,22 +92,32 @@
         </details>
       </section>
     </div>
-<!-- Opinião da AI (Técnico + Analistas) -->
+
+    <!-- Opinião (Técnico + Analistas) -->
     <section class="card" id="ai-opinion" style="margin-top:16px">
-      <h2 id="aiTitle">Opinião da AI (Técnico + Analistas)</h2>
+      <h2 id="aiTitle">Opinião (Técnico + Analistas) – Tire sua dúvida</h2>
       <div class="grid" style="grid-template-columns:repeat(12,1fr);gap:10px;margin:8px 0 12px 0">
         <input id="aiSymbolInput" placeholder="Ex.: NASDAQ:AMZN ou AMZN" style="grid-column:span 6" />
         <button id="aiAnalyzeBtn" class="btn" style="grid-column:span 3">Analisar</button>
         <button id="aiUseChartBtn" class="btn" style="grid-column:span 3">Usar símbolo do gráfico</button>
       </div>
+      <!-- Resultado “tradicional” calculado no Worker -->
       <div id="aiResult" class="card" style="background:#f8fafc;border:1px dashed rgba(0,0,0,.1);min-height:90px"></div>
+
+      <!-- Opinião adicional da AI (LLM via OpenRouter) -->
+      <div id="llmOpinionBox" class="llm-box" style="display:none">
+        <p class="llm-title">Opinião da AI (Grok)</p>
+        <div id="llmOpinionText" style="white-space:pre-wrap;line-height:1.5"></div>
+        <p class="llm-note" id="llmMeta"></p>
+      </div>
+
       <p class="status" id="aiStatus"></p>
     </section>
 
     <!-- Minhas posições (públicas + locais) -->
     <section class="card" style="margin-top:16px">
       <div style="display:flex;align-items:center;gap:8px;justify-content:space-between;flex-wrap:wrap">
-        <h2 data-i18n="positions_title">Minhas posições</h2>
+        <h2 data-i18n="positions_title">Minhas posições. Você pode adicionar as suas também</h2>
         <div style="display:flex;gap:8px;flex-wrap:wrap">
           <span class="badge" title="Visitantes veem essas posições">🌐 Público</span>
           <button id="loadPublicBtn" class="btn">Atualizar públicas</button>
@@ -142,7 +156,7 @@
       <p id="lastRefresh" class="status"></p>
     </section>
 
-    <!-- Ticker global no final da página -->
+    <!-- Ticker global -->
     <section class="card" style="margin-top:16px">
       <h2>Mercados Globais &amp; Magnificent 7</h2>
       <div class="tradingview-widget-container">
@@ -150,19 +164,20 @@
         <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
           {
             "symbols": [
-              {"proName": "FOREXCOM:US30",  "title": "Dow Jones"},
-              {"proName": "NASDAQ:IXIC", "title": "Nasdaq 100"},
-              {"proName": "BMFBOVESPA:IBOV", "title": "Ibovespa"},
-              {"proName": "FOREXCOM:EU50",  "title": "Euro Stoxx 50"},
-              {"proName": "FOREXCOM:UK100", "title": "FTSE 100"},
+              {"proName":"FOREXCOM:US30","title":"Dow Jones"},
+              {"proName":"FOREXCOM:US100","title":"Nasdaq 100"},
+              {"proName":"FOREXCOM:US500","title":"S&P 500"},
+              {"proName":"BMFBOVESPA:IBOV","title":"Ibovespa"},
+              {"proName":"FOREXCOM:EU50","title":"Euro Stoxx 50"},
+              {"proName":"FOREXCOM:UK100","title":"FTSE 100"},
 
-              {"proName": "NASDAQ:AAPL",  "title": "Apple"},
-              {"proName": "NASDAQ:MSFT",  "title": "Microsoft"},
-              {"proName": "NASDAQ:GOOGL", "title": "Alphabet"},
-              {"proName": "NASDAQ:AMZN",  "title": "Amazon"},
-              {"proName": "NASDAQ:NVDA",  "title": "NVIDIA"},
-              {"proName": "NASDAQ:META",  "title": "Meta"},
-              {"proName": "NASDAQ:TSLA",  "title": "Tesla"}
+              {"proName":"NASDAQ:AAPL","title":"Apple"},
+              {"proName":"NASDAQ:MSFT","title":"Microsoft"},
+              {"proName":"NASDAQ:GOOGL","title":"Alphabet"},
+              {"proName":"NASDAQ:AMZN","title":"Amazon"},
+              {"proName":"NASDAQ:NVDA","title":"NVIDIA"},
+              {"proName":"NASDAQ:META","title":"Meta"},
+              {"proName":"NASDAQ:TSLA","title":"Tesla"}
             ],
             "showSymbolLogo": true,
             "isTransparent": false,
@@ -182,6 +197,7 @@
   const API_BASE = "https://shiny-sea-44d3.rafaelnm.workers.dev";
   const QUOTE_API = API_BASE + "/quotes";
   const POS_API   = API_BASE + "/positions";
+  const KIMI_API  = API_BASE + "/kimi"; // aqui é o GROK via OpenRouter no seu Worker
 
   // ===================== I18N =====================
   const I18N = {
@@ -193,10 +209,10 @@
       ticker_title:"Ticker de Cotações", positions_title:"Minhas posições",
       add_position:"Adicionar posição", clear_all:"Limpar tudo", export_csv:"Exportar CSV",
       th_symbol:"Símbolo", th_avg:"Preço médio", th_last:"Preço atual", th_pl:"P/L %",
-      th_note:"Obs.", th_actions:"Ações", disclaimer:"Site educacional, não é recomendação de investimento - rafaelnm@gmail.com",
+      th_note:"Obs.", th_actions:"Ações", disclaimer:"Site educacional, não é recomendação de investimento",
       edit:"Editar", del:"Excluir", totals:"Total de posições: {n}", refresh:"Atualizar preços",
       set_symbol:"Carregar símbolo", add_from_chart:"Adicionar à lista", open_tv:"Abrir no TradingView",
-      ai_title:"Opinião da AI (Técnico + Analistas)", ai_analyze:"Analisar", ai_use_chart:"Usar símbolo do gráfico",
+      ai_title:"Opinião (Técnico + Analistas) – Tire sua dúvida", ai_analyze:"Analisar", ai_use_chart:"Usar símbolo do gráfico",
       ai_decision:"Decisão", ai_score:"Score", ai_reasons:"Motivos", ai_technicals:"Técnicos", ai_analysts:"Analistas",
       ai_buy:"Comprar", ai_hold:"Manter", ai_sell:"Vender", ai_last_update:"Última análise"
     },
@@ -208,10 +224,10 @@
       ticker_title:"Quotes Ticker", positions_title:"My positions", add_position:"Add position",
       clear_all:"Clear all", export_csv:"Export CSV", th_symbol:"Symbol", th_avg:"Avg. price",
       th_last:"Last price", th_pl:"P/L %", th_note:"Note", th_actions:"Actions",
-      disclaimer:"Educational site, not investment advice - rafaelnm@gmail.com", edit:"Edit", del:"Delete",
+      disclaimer:"Educational site, not investment advice", edit:"Edit", del:"Delete",
       totals:"Total positions: {n}", refresh:"Refresh prices", set_symbol:"Load symbol",
       add_from_chart:"Add from chart", open_tv:"Open on TradingView",
-      ai_title:"AI Opinion (Technical + Analysts)", ai_analyze:"Analyze", ai_use_chart:"Use chart symbol",
+      ai_title:"Opinion (Technical + Analysts) – Ask your question", ai_analyze:"Analyze", ai_use_chart:"Use chart symbol",
       ai_decision:"Decision", ai_score:"Score", ai_reasons:"Reasons", ai_technicals:"Technicals", ai_analysts:"Analysts",
       ai_buy:"Buy", ai_hold:"Hold", ai_sell:"Sell", ai_last_update:"Last analysis"
     }
@@ -238,7 +254,7 @@
     });
 
     // ===================== TradingView =====================
-    const DEFAULT_SYMBOL = 'NASDAQ:NVDA';
+    const DEFAULT_SYMBOL = 'NASDAQ:AAPL';
     let tvWidgetInstance;
     function getCurrentSymbol(){ return window.__CURRENT_SYMBOL || DEFAULT_SYMBOL; }
     function setCurrentSymbol(s){ window.__CURRENT_SYMBOL = s; }
@@ -264,9 +280,11 @@
     document.getElementById('addFromChartBtn').addEventListener('click', ()=>{
       document.getElementById('posSymbol').value = getCurrentSymbol(); document.getElementById('posAvg').focus();
     });
-    // ===================== Opinião da AI =====================
-    const AI_API = API_BASE + "/analyze"; // requer endpoint no Worker
+
+    // ===================== Opinião (Worker) + Opinião da AI (Grok) =====================
+    const AI_API = API_BASE + "/analyze"; // calculado no Worker
     function aiDict(){ return (document.documentElement.lang==='en') ? I18N.en : I18N.pt; }
+
     function renderAIResult(payload){
       const d = aiDict();
       const box = document.getElementById('aiResult');
@@ -301,21 +319,99 @@
         ${reasons.length?`<div style="margin-top:8px"><strong>${d.ai_reasons}:</strong><ul style="margin:6px 0;padding-left:18px">${reasons.map(r=>`<li>${r}</li>`).join('')}</ul></div>`:''}
       `;
     }
+
+    // ---- Monta prompt e consulta Grok (via seu Worker /kimi) ----
+    function buildLLMPrompt(symbol, payload){
+      const tech = payload?.technicals || {};
+      const an   = payload?.analysts   || {};
+      // Compacta o contexto a ser enviado
+      const context = {
+        symbol,
+        technicals: {
+          sma50: tech.sma50, sma200: tech.sma200, rsi14: tech.rsi,
+          macd: { macd: tech.macd?.macd, signal: tech.macd?.signal, hist: tech.macd?.hist }
+        },
+        analysts: { mean: an.mean, trend: an.trend } // mean 1..5; trend {buy,hold,sell}
+      };
+      const userQ = `Baseado nos indicadores técnicos e dos analistas enviados, a ação é para COMPRAR, VENDER ou MANTER? 
+Comece pela CONCLUSÃO (uma palavra: COMPRAR, VENDER ou MANTER) e depois explique o racional de forma concisa (até 120 palavras). 
+Não inclua disclaimers.`;
+
+      const sys = "Você é um analista financeiro objetivo. Use somente os dados fornecidos (técnicos e consenso de analistas). Seja direto.";
+      const msgUser = `SÍMBOLO: ${symbol}\nDADOS:\n${JSON.stringify(context)}\n\nPERGUNTA:\n${userQ}`;
+      return [
+        { role: "system", content: sys },
+        { role: "user", content: msgUser }
+      ];
+    }
+
+    async function callLLMWithGrok(messages){
+      // Modelo padrão pode ser alterado via localStorage.setItem('llm_model','x-ai/grok-4')
+      const chosen = localStorage.getItem('llm_model') || 'x-ai/grok-4-fast';
+      const payload = { messages, model: chosen, temperature: 0.3 };
+      const r = await fetch(KIMI_API, {
+        method: 'POST',
+        headers: { 'content-type':'application/json' },
+        body: JSON.stringify(payload)
+      });
+      if(!r.ok) throw new Error('HTTP '+r.status);
+      const j = await r.json().catch(()=>null);
+      // OpenRouter retorna em j.choices[0].message.content
+      const text = j?.choices?.[0]?.message?.content || '';
+      return { text, model: j?.model || chosen, raw: j };
+    }
+
+    function showLLMOpinion(text, meta){
+      const box = document.getElementById('llmOpinionBox');
+      const out = document.getElementById('llmOpinionText');
+      const info = document.getElementById('llmMeta');
+      out.textContent = text || '—';
+      info.textContent = meta || '';
+      box.style.display = 'block';
+    }
+
+    function hideLLMOpinion(){ document.getElementById('llmOpinionBox').style.display = 'none'; }
+
     async function runAIAnalysis(symbol){
       const d = aiDict();
       const aiStatus = document.getElementById('aiStatus');
       aiStatus.textContent = d.refresh+"…";
+      hideLLMOpinion();
+
       try{
+        // 1) Busca análise do seu Worker (técnicos+analistas)
         const resp = await fetch(AI_API + "?symbol=" + encodeURIComponent(symbol), { cache:'no-store' });
         if(!resp.ok) throw new Error('HTTP '+resp.status);
         const json = await resp.json();
         renderAIResult(json);
         aiStatus.textContent = d.ai_last_update+': '+new Date().toLocaleString(document.documentElement.lang==='en'?'en-US':'pt-BR',{hour12:false});
+
+        // 2) Envia ao LLM (Grok via OpenRouter) para gerar a opinião adicional
+        const messages = buildLLMPrompt(symbol, json);
+        const metaMsg = (document.documentElement.lang==='en'
+          ? 'Asking Grok for a brief opinion…'
+          : 'Consultando o Grok para opinião adicional…');
+        showLLMOpinion(metaMsg, '');
+
+        let llm;
+        try{
+          llm = await callLLMWithGrok(messages);
+          const modelShown = llm?.model || (localStorage.getItem('llm_model') || 'x-ai/grok-4-fast');
+          showLLMOpinion(llm.text || '—', `Modelo: ${modelShown}`);
+        }catch(err){
+          console.error('LLM error', err);
+          const fallback = (document.documentElement.lang==='en'
+            ? 'Could not get Grok opinion now.'
+            : 'Não foi possível obter a opinião do Grok agora.');
+          showLLMOpinion(fallback, '');
+        }
+
       }catch(e){
         console.error('AI analyze error', e);
         aiStatus.textContent = (document.documentElement.lang==='en'?'Could not analyze now.':'Não foi possível analisar agora.');
       }
     }
+
     document.getElementById('aiAnalyzeBtn').addEventListener('click', ()=>{
       const s = document.getElementById('aiSymbolInput').value.trim() || getCurrentSymbol();
       if(!s) return; runAIAnalysis(s);
@@ -326,9 +422,8 @@
     });
 
     // Ajusta textos da seção ao trocar idioma
-    const oldApplyI18n = applyI18n; // keep ref if exists
+    const oldApplyI18n = applyI18n; // referência
     applyI18n = function(){
-      // chama a versão original
       oldApplyI18n();
       const d = aiDict();
       const titleEl = document.getElementById('aiTitle'); if(titleEl) titleEl.textContent = d.ai_title;
