@@ -50,9 +50,9 @@
     <section class="card">
       <h2 data-i18n="quick_tips">Dicas rápidas</h2>
       <ul class="tips">
-        <li>Todos os dias o <strong>Agente</strong> enviará os alertas <strong>após o fechamento</strong> da bolsa de Wall Street.</li>
-        <li>Alertas de <strong>compra (curto prazo)</strong> buscam ganho de <strong>5%</strong>; de <strong>longo prazo</strong> buscam <strong>10%</strong>.</li>
-        <li>Fique ligado aos <strong>alertas de venda</strong>.</li>
+        <li data-i18n="quick_tip_1">Todos os dias o <strong>Agente</strong> enviará os alertas <strong>após o fechamento</strong> da bolsa de Wall Street.</li>
+        <li data-i18n="quick_tip_2">Alertas de <strong>compra (curto prazo)</strong> buscam ganho de <strong>5%</strong>; de <strong>longo prazo</strong> buscam <strong>10%</strong>.</li>
+        <li data-i18n="quick_tip_3">Fique ligado aos <strong>alertas de venda</strong>.</li>
       </ul>
     </section>
 
@@ -60,11 +60,11 @@
     <div class="grid" style="margin-top:16px">
       <!-- Opinião da AI -->
       <section class="card" id="ai-opinion" style="grid-column: span 8">
-        <h2 id="aiTitle">Opinião da AI (Técnico + Analistas)</h2>
+        <h2 id="aiTitle" data-i18n="ai_title">Opinião da AI (Técnico + Analistas)</h2>
         <div class="grid" style="grid-template-columns:repeat(12,1fr);gap:10px;margin:8px 0 12px 0">
-          <input id="aiSymbolInput" placeholder="Ex.: NASDAQ:AMZN ou AMZN" style="grid-column:span 6" />
-          <button id="aiAnalyzeBtn" class="btn" style="grid-column:span 3">Analisar</button>
-          <button id="aiUseChartBtn" class="btn" style="grid-column:span 3">Usar símbolo do gráfico</button>
+          <input id="aiSymbolInput" data-i18n-ph="ph_ai_symbol" placeholder="Ex.: NASDAQ:AMZN ou AMZN" style="grid-column:span 6" />
+          <button id="aiAnalyzeBtn" class="btn" style="grid-column:span 3" data-i18n="ai_analyze">Analisar</button>
+          <button id="aiUseChartBtn" class="btn" style="grid-column:span 3" data-i18n="ai_use_chart">Usar símbolo do gráfico</button>
         </div>
 
         <!-- Resultado calculado pelo Worker (/analyze) -->
@@ -72,7 +72,7 @@
 
         <!-- Opinião extra via LLM (Grok / OpenRouter) -->
         <div id="grokBox" class="card" style="margin-top:10px;background:#fff7ed;border:1px solid #fed7aa">
-          <h3 id="grokTitle" style="margin:0 0 8px 0">Opinião extra da IA (Grok)</h3>
+          <h3 id="grokTitle" data-i18n="grok_title" style="margin:0 0 8px 0">Opinião extra da IA (Grok)</h3>
           <div id="grokOpinion" class="status">—</div>
         </div>
 
@@ -83,7 +83,7 @@
       <section class="card" style="grid-column: span 4">
         <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
           <h2 data-i18n="alerts_title">Alertas</h2>
-          <span class="badge">⚡ Agent</span>
+          <span class="badge" data-i18n="alerts_badge">⚡ Agente</span>
         </div>
         <iframe
           src="https://shiny-sea-44d3.rafaelnm.workers.dev/"
@@ -93,8 +93,11 @@
           referrerpolicy="no-referrer"
           style="width:100%;height:520px;border:1px solid rgba(0,0,0,.1);border-radius:12px;background:#ffffff;color:#000000;">
         </iframe>
-        <details style="margin-top:8px"><summary class="status">Se a janela não aparecer</summary>
-          <p class="status">No Worker: remova <code>X-Frame-Options</code> e permita <code>frame-ancestors</code> no CSP (inclua seu domínio do GitHub Pages).</p>
+        <details style="margin-top:8px">
+          <summary class="status" data-i18n="alerts_iframe_help_sum">Se a janela não aparecer</summary>
+          <p class="status" data-i18n="alerts_iframe_help_txt">
+            No Worker: remova <code>X-Frame-Options</code> e permita <code>frame-ancestors</code> no CSP (inclua seu domínio do GitHub Pages).
+          </p>
         </details>
       </section>
     </div>
@@ -104,16 +107,16 @@
       <div style="display:flex;align-items:center;gap:8px;justify-content:space-between;flex-wrap:wrap">
         <h2 data-i18n="positions_title">Minhas posições</h2>
         <div style="display:flex;gap:8px;flex-wrap:wrap">
-          <span class="badge" title="Visitantes veem essas posições">🌐 Público</span>
-          <button id="loadPublicBtn" class="btn">Atualizar públicas</button>
-          <button id="publishBtn" class="btn" title="Enviar posições locais para o servidor (admin)">Publicar minhas posições (admin)</button>
+          <span class="badge" title="Visitantes veem essas posições" data-i18n="public_badge">🌐 Público</span>
+          <button id="loadPublicBtn" class="btn" data-i18n="update_public">Atualizar públicas</button>
+          <button id="publishBtn" class="btn" title="Enviar posições locais para o servidor (admin)" data-i18n="publish_admin">Publicar minhas posições (admin)</button>
         </div>
       </div>
 
       <div class="grid" style="grid-template-columns:repeat(12,1fr);gap:10px;margin:8px 0 12px 0">
-        <input id="posSymbol" placeholder="Ex.: NASDAQ:NVDA ou BMFBOVESPA:PETR4" style="grid-column:span 6" />
-        <input id="posAvg" type="number" inputmode="decimal" step="0.01" placeholder="Preço médio" style="grid-column:span 3" />
-        <input id="posNote" placeholder="Observação (opcional)" style="grid-column:span 3" />
+        <input id="posSymbol" data-i18n-ph="ph_pos_symbol" placeholder="Ex.: NASDAQ:NVDA ou BMFBOVESPA:PETR4" style="grid-column:span 6" />
+        <input id="posAvg" type="number" inputmode="decimal" step="0.01" data-i18n-ph="ph_pos_avg" placeholder="Preço médio" style="grid-column:span 3" />
+        <input id="posNote" data-i18n-ph="ph_pos_note" placeholder="Observação (opcional)" style="grid-column:span 3" />
       </div>
       <div style="display:flex;gap:10px;flex-wrap:wrap">
         <button id="addPosBtn" class="btn" data-i18n="add_position">Adicionar posição (local)</button>
@@ -147,7 +150,7 @@
       <section class="card" style="grid-column: span 8">
         <h2 data-i18n="chart_title">Gráfico (TradingView)</h2>
         <div class="grid" style="grid-template-columns:repeat(12,1fr);gap:10px;margin:0 0 10px 0">
-          <input id="chartSymbolInput" placeholder="Ex.: NASDAQ:NVDA ou BMFBOVESPA:PETR4" style="grid-column:span 6" />
+          <input id="chartSymbolInput" data-i18n-ph="ph_chart_symbol" placeholder="Ex.: NASDAQ:NVDA ou BMFBOVESPA:PETR4" style="grid-column:span 6" />
           <button id="setChartBtn" class="btn" style="grid-column:span 2" data-i18n="set_symbol">Carregar símbolo</button>
           <button id="addFromChartBtn" class="btn" style="grid-column:span 2" data-i18n="add_from_chart">Adicionar à lista</button>
           <a id="openTV" class="btn" style="grid-column:span 2;text-align:center" href="https://www.tradingview.com/chart/" target="_blank" rel="noopener" data-i18n="open_tv">Abrir no TradingView</a>
@@ -158,20 +161,20 @@
 
       <!-- Novo quadro de dicas ao lado do gráfico -->
       <section class="card" style="grid-column: span 4">
-        <h2>Boas práticas no gráfico</h2>
+        <h2 data-i18n="graph_tips_title">Boas práticas no gráfico</h2>
         <ul class="tips">
-          <li>Evite decisões com base em <strong>1 indicador</strong> apenas. Confirme com 2–3 sinais.</li>
-          <li>Observe a <strong>tendência (SMA50 x SMA200)</strong> antes do gatilho.</li>
-          <li>Prefira entrar com <strong>parcial</strong> e completar se o movimento confirmar.</li>
-          <li>Defina um <strong>stop técnico</strong> e um <strong>alvo</strong> antes de clicar.</li>
-          <li>Revise notícias/earnings que possam afetar o papel.</li>
+          <li data-i18n="gtip_1">Evite decisões com base em <strong>1 indicador</strong> apenas. Confirme com 2–3 sinais.</li>
+          <li data-i18n="gtip_2">Observe a <strong>tendência (SMA50 x SMA200)</strong> antes do gatilho.</li>
+          <li data-i18n="gtip_3">Prefira entrar com <strong>parcial</strong> e completar se o movimento confirmar.</li>
+          <li data-i18n="gtip_4">Defina um <strong>stop técnico</strong> e um <strong>alvo</strong> antes de clicar.</li>
+          <li data-i18n="gtip_5">Revise notícias/earnings que possam afetar o papel.</li>
         </ul>
       </section>
     </div>
 
     <!-- Ticker global no final da página -->
     <section class="card" style="margin-top:16px">
-      <h2>Mercados Globais &amp; Magnificent 7</h2>
+      <h2 data-i18n="global_ticker_title">Mercados Globais &amp; Magnificent 7</h2>
       <div class="tradingview-widget-container">
         <div class="tradingview-widget-container__widget"></div>
         <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
@@ -201,7 +204,7 @@
       </div>
     </section>
 
-    <footer>© <span id="y"></span> • <span data-i18n="disclaimer">Site educacional, não é recomendação de investimento.</span></footer>
+    <footer>© <span id="y"></span> • <span id="disclaimer" data-i18n="disclaimer">Site educacional, não é recomendação de investimento.</span></footer>
   </div>
 
   <script src="https://s3.tradingview.com/tv.js"></script>
@@ -215,71 +218,171 @@
 
   // ===================== I18N =====================
   const I18N = {
-    pt:{ title:"AI Invest - Dicas de Ações para familia e amigos", quick_tips:"Dicas rápidas",
-      tip1:"Defina <strong>entrada, stop e alvo</strong> antes de executar.",
-      tip2:"Use <strong>gestão de risco</strong> por posição e por carteira.",
-      tip3:"Combine <strong>fundamental + técnico</strong> para decisões mais sólidas.",
-      chart_title:"Gráfico (TradingView)", alerts_title:"Alertas",
-      ticker_title:"Ticker de Cotações", positions_title:"Minhas posições",
-      add_position:"Adicionar posição", clear_all:"Limpar tudo", export_csv:"Exportar CSV",
-      th_symbol:"Símbolo", th_avg:"Preço médio", th_last:"Preço atual", th_pl:"P/L %",
-      th_note:"Obs.", th_actions:"Ações", disclaimer:"Site educacional, não é recomendação de investimento - rafaelnm@gmail.com",
-      edit:"Editar", del:"Excluir", totals:"Total de posições: {n}", refresh:"Atualizar preços",
+    pt:{
+      title:"Dicas AI Investimentos para familia e amigos",
+      quick_tips:"Dicas rápidas",
+      quick_tip_1:"Todos os dias o <strong>Agente</strong> enviará os alertas <strong>após o fechamento</strong> da bolsa de Wall Street.",
+      quick_tip_2:"Alertas de <strong>compra (curto prazo)</strong> buscam ganho de <strong>5%</strong>; de <strong>longo prazo</strong> buscam <strong>10%</strong>.",
+      quick_tip_3:"Fique ligado aos <strong>alertas de venda</strong>.",
+      alerts_title:"Alertas",
+      alerts_badge:"⚡ Agente",
+      alerts_iframe_help_sum:"Se a janela não aparecer",
+      alerts_iframe_help_txt:"No Worker: remova <code>X-Frame-Options</code> e permita <code>frame-ancestors</code> no CSP (inclua seu domínio do GitHub Pages).",
+      positions_title:"Minhas posições",
+      public_badge:"🌐 Público",
+      update_public:"Atualizar públicas",
+      publish_admin:"Publicar minhas posições (admin)",
+      ph_pos_symbol:"Ex.: NASDAQ:NVDA ou BMFBOVESPA:PETR4",
+      ph_pos_avg:"Preço médio",
+      ph_pos_note:"Observação (opcional)",
+      add_position:"Adicionar posição (local)",
+      refresh:"Atualizar preços",
+      clear_all:"Limpar locais",
+      export_csv:"Exportar CSV (locais)",
+      th_symbol:"Símbolo", th_avg:"Preço médio", th_last:"Preço atual", th_pl:"P/L %", th_note:"Obs.", th_actions:"Ações",
+      chart_title:"Gráfico (TradingView)",
+      ph_chart_symbol:"Ex.: NASDAQ:NVDA ou BMFBOVESPA:PETR4",
       set_symbol:"Carregar símbolo", add_from_chart:"Adicionar à lista", open_tv:"Abrir no TradingView",
-      ai_title:"Opinião da AI (Técnico + Analistas)", ai_analyze:"Analisar", ai_use_chart:"Usar símbolo do gráfico",
+      graph_tips_title:"Boas práticas no gráfico",
+      gtip_1:"Evite decisões com base em <strong>1 indicador</strong> apenas. Confirme com 2–3 sinais.",
+      gtip_2:"Observe a <strong>tendência (SMA50 x SMA200)</strong> antes do gatilho.",
+      gtip_3:"Prefira entrar com <strong>parcial</strong> e completar se o movimento confirmar.",
+      gtip_4:"Defina um <strong>stop técnico</strong> e um <strong>alvo</strong> antes de clicar.",
+      gtip_5:"Revise notícias/earnings que possam afetar o papel.",
+      global_ticker_title:"Mercados Globais &amp; Magnificent 7",
+      disclaimer:"Site educacional, não é recomendação de investimento - rafaelnm@gmail.com",
+
+      // AI Opinion
+      ai_title:"Opinião da AI (Técnico + Analistas)",
+      ph_ai_symbol:"Ex.: NASDAQ:AMZN ou AMZN",
+      ai_analyze:"Analisar",
+      ai_use_chart:"Usar símbolo do gráfico",
       ai_decision:"Decisão", ai_score:"Score", ai_reasons:"Motivos", ai_technicals:"Técnicos", ai_analysts:"Analistas",
-      ai_buy:"Comprar", ai_hold:"Manter", ai_sell:"Vender", ai_last_update:"Última análise"
+      ai_buy:"Comprar", ai_hold:"Manter", ai_sell:"Vender", ai_last_update:"Última análise",
+
+      // Grok
+      grok_title:"Opinião extra da IA (Grok)",
+      grok_thinking:"Consultando o Grok…",
+      grok_error:"Não foi possível obter a opinião do Grok agora.",
+
+      // Misc
+      no_positions:"Sem posições.",
+      upd_prices:"Atualizando preços…",
+      no_quotes:"Não foi possível atualizar as cotações.",
+      could_not_analyze:"Não foi possível analisar agora.",
+      last_update:"Última atualização: ",
+      please_fill:"Preencha símbolo e preço médio.",
+      clear_locals_q:"Limpar as posições LOCAIS?"
     },
-    en:{ title:"AI Invest - Stocks TIPs for Family and Friends", quick_tips:"Quick tips",
-      tip1:"Define <strong>entry, stop and target</strong> before executing.",
-      tip2:"Use <strong>risk management</strong> per position and portfolio.",
-      tip3:"Combine <strong>fundamental + technical</strong> for stronger decisions.",
-      chart_title:"Chart (TradingView)", alerts_title:"Alerts",
-      ticker_title:"Quotes Ticker", positions_title:"My positions", add_position:"Add position",
-      clear_all:"Clear all", export_csv:"Export CSV", th_symbol:"Symbol", th_avg:"Avg. price",
-      th_last:"Last price", th_pl:"P/L %", th_note:"Note", th_actions:"Actions",
-      disclaimer:"Educational site, not investment advice - rafaelnm@gmail.com", edit:"Edit", del:"Delete",
-      totals:"Total positions: {n}", refresh:"Refresh prices", set_symbol:"Load symbol",
-      add_from_chart:"Add from chart", open_tv:"Open on TradingView",
-      ai_title:"AI Opinion (Technical + Analysts)", ai_analyze:"Analyze", ai_use_chart:"Use chart symbol",
+    en:{
+      title:"AI Investing Tips for Family & Friends",
+      quick_tips:"Quick tips",
+      quick_tip_1:"Every day the <strong>Agent</strong> will send alerts <strong>after Wall Street close</strong>.",
+      quick_tip_2:"<strong>Short-term buys</strong> target <strong>+5%</strong>; <strong>long-term</strong> target <strong>+10%</strong>.",
+      quick_tip_3:"Watch out for <strong>sell alerts</strong>.",
+      alerts_title:"Alerts",
+      alerts_badge:"⚡ Agent",
+      alerts_iframe_help_sum:"If the window doesn't appear",
+      alerts_iframe_help_txt:"On the Worker: remove <code>X-Frame-Options</code> and allow <code>frame-ancestors</code> in CSP (include your GitHub Pages domain).",
+      positions_title:"My positions",
+      public_badge:"🌐 Public",
+      update_public:"Refresh public",
+      publish_admin:"Publish my positions (admin)",
+      ph_pos_symbol:"e.g., NASDAQ:NVDA or BMFBOVESPA:PETR4",
+      ph_pos_avg:"Average price",
+      ph_pos_note:"Note (optional)",
+      add_position:"Add position (local)",
+      refresh:"Refresh prices",
+      clear_all:"Clear local",
+      export_csv:"Export CSV (local)",
+      th_symbol:"Symbol", th_avg:"Avg. price", th_last:"Last price", th_pl:"P/L %", th_note:"Note", th_actions:"Actions",
+      chart_title:"Chart (TradingView)",
+      ph_chart_symbol:"e.g., NASDAQ:NVDA or BMFBOVESPA:PETR4",
+      set_symbol:"Load symbol", add_from_chart:"Add from chart", open_tv:"Open on TradingView",
+      graph_tips_title:"Chart best practices",
+      gtip_1:"Don't rely on a <strong>single indicator</strong>. Confirm with 2–3 signals.",
+      gtip_2:"Check the <strong>trend (SMA50 vs SMA200)</strong> before the trigger.",
+      gtip_3:"Prefer a <strong>partial entry</strong> and add only if the move confirms.",
+      gtip_4:"Define a <strong>technical stop</strong> and a <strong>target</strong> before clicking.",
+      gtip_5:"Review news/earnings that may affect the stock.",
+      global_ticker_title:"Global Markets &amp; Magnificent 7",
+      disclaimer:"Educational site, not investment advice - rafaelnm@gmail.com",
+
+      // AI Opinion
+      ai_title:"AI Opinion (Technical + Analysts)",
+      ph_ai_symbol:"e.g., NASDAQ:AMZN or AMZN",
+      ai_analyze:"Analyze",
+      ai_use_chart:"Use chart symbol",
       ai_decision:"Decision", ai_score:"Score", ai_reasons:"Reasons", ai_technicals:"Technicals", ai_analysts:"Analysts",
-      ai_buy:"Buy", ai_hold:"Hold", ai_sell:"Sell", ai_last_update:"Last analysis"
+      ai_buy:"Buy", ai_hold:"Hold", ai_sell:"Sell", ai_last_update:"Last analysis",
+
+      // Grok
+      grok_title:"Extra AI Opinion (Grok)",
+      grok_thinking:"Asking Grok…",
+      grok_error:"Could not get Grok opinion now.",
+
+      // Misc
+      no_positions:"No positions.",
+      upd_prices:"Updating prices…",
+      no_quotes:"Could not update quotes.",
+      could_not_analyze:"Could not analyze now.",
+      last_update:"Last update: ",
+      please_fill:"Please fill symbol and avg. price.",
+      clear_locals_q:"Clear all LOCAL positions?"
     }
   };
+
+  // Helper para pegar dicionário ativo
+  function dict(){ return (document.documentElement.lang==='en') ? I18N.en : I18N.pt; }
+
+  // Aplica i18n em elementos com data-i18n e placeholders com data-i18n-ph
+  function applyI18n(){
+    const d = dict();
+    // texto/HTML
+    document.querySelectorAll('[data-i18n]').forEach(el=>{
+      const key = el.getAttribute('data-i18n');
+      if (d[key] !== undefined) el.innerHTML = d[key];
+    });
+    // placeholders
+    document.querySelectorAll('[data-i18n-ph]').forEach(el=>{
+      const key = el.getAttribute('data-i18n-ph');
+      if (d[key] !== undefined) el.setAttribute('placeholder', stripHTML(d[key]));
+    });
+    // html lang e label do botão
+    document.getElementById('langLabel').textContent = (document.documentElement.lang==='en') ? 'EN' : 'PT';
+
+    // Atualiza chart (locale) e re-render da tabela para labels dinâmicos
+    loadChart(getCurrentSymbol(), (document.documentElement.lang==='en') ? 'en' : 'br');
+    renderPositions(latestQuotesMap);
+  }
+
+  function stripHTML(s){
+    const tmp = document.createElement('div'); tmp.innerHTML = s; return tmp.textContent || tmp.innerText || '';
+  }
 
   document.addEventListener('DOMContentLoaded', () => {
     // ===== idioma =====
     function detectLang(){ const nav = navigator.language || 'pt-BR'; return String(nav).toLowerCase().startsWith('en') ? 'en' : 'pt'; }
-    let currentLang = (localStorage.getItem('lang') || detectLang());
-    const langLabel = document.getElementById('langLabel');
-    function applyI18n(){
-      const dict = I18N[currentLang] || I18N.pt;
-      document.documentElement.lang = currentLang === 'en' ? 'en' : 'pt-br';
-      document.querySelectorAll('[data-i18n]').forEach(el=>{
-        const key = el.getAttribute('data-i18n');
-        if(dict[key]) el.innerHTML = dict[key];
-      });
-      langLabel.textContent = currentLang.toUpperCase();
-      loadChart(getCurrentSymbol(), currentLang === 'en' ? 'en' : 'br');
-      renderPositions(latestQuotesMap);
+    const saved = localStorage.getItem('lang');
+    document.documentElement.lang = saved ? (saved==='en'?'en':'pt-br') : (detectLang()==='en'?'en':'pt-br');
+    applyI18n();
 
-      // Ajuste do título do Grok
-      const gdict = grokDict();
-      const gt = document.getElementById('grokTitle'); if (gt) gt.textContent = gdict.title;
-    }
     document.getElementById('langToggle').addEventListener('click', ()=>{
-      currentLang = currentLang === 'en' ? 'pt' : 'en'; localStorage.setItem('lang', currentLang); applyI18n();
+      const now = (document.documentElement.lang==='en') ? 'pt-br' : 'en';
+      document.documentElement.lang = now;
+      localStorage.setItem('lang', now==='en'?'en':'pt');
+      applyI18n();
     });
 
     // ===================== TradingView =====================
     const DEFAULT_SYMBOL = 'NASDAQ:NVDA';
     let tvWidgetInstance;
-    function getCurrentSymbol(){ return window.__CURRENT_SYMBOL || DEFAULT_SYMBOL; }
+    window.getCurrentSymbol = function(){ return window.__CURRENT_SYMBOL || DEFAULT_SYMBOL; }
     function setCurrentSymbol(s){ window.__CURRENT_SYMBOL = s; }
-    function loadChart(symbol, locale){
+    window.loadChart = function(symbol, locale){
       const tvStatus = document.getElementById('tvStatus');
       try{
-        const loc = locale || (currentLang === 'en' ? 'en' : 'br');
+        const loc = locale || (document.documentElement.lang==='en' ? 'en' : 'br');
         const s = (symbol || DEFAULT_SYMBOL).trim();
         setCurrentSymbol(s);
         if(tvWidgetInstance && typeof tvWidgetInstance.remove === 'function'){ tvWidgetInstance.remove(); }
@@ -290,20 +393,23 @@
         document.getElementById('openTV').href = `https://www.tradingview.com/chart/?symbol=${encodeURIComponent(s)}`;
         const input = document.getElementById('chartSymbolInput'); if(input && !input.value) input.value = s;
         tvStatus.textContent = '';
-      }catch(e){ tvStatus.textContent = (currentLang==='en'?'Could not load chart now.':'Não foi possível carregar o gráfico agora.'); console.error(e); }
+      }catch(e){
+        tvStatus.textContent = (document.documentElement.lang==='en'? I18N.en.could_not_analyze : I18N.pt.could_not_analyze);
+        console.error(e);
+      }
     }
     document.getElementById('setChartBtn').addEventListener('click', ()=>{
-      const s = document.getElementById('chartSymbolInput').value.trim(); if(!s){ alert(currentLang==='en'?'Enter a symbol':'Informe um símbolo'); return; } loadChart(s);
+      const s = document.getElementById('chartSymbolInput').value.trim();
+      if(!s){ alert(dict().please_fill); return; }
+      loadChart(s);
     });
     document.getElementById('addFromChartBtn').addEventListener('click', ()=>{
       document.getElementById('posSymbol').value = getCurrentSymbol(); document.getElementById('posAvg').focus();
     });
 
     // ===================== Opinião da AI (Worker /analyze + Grok via /kimi) =====================
-    function aiDict(){ return (document.documentElement.lang==='en') ? I18N.en : I18N.pt; }
-
     function renderAIResult(payload){
-      const d = aiDict();
+      const d = dict();
       const box = document.getElementById('aiResult');
       if(!payload || typeof payload !== 'object'){ box.innerHTML = '<p class="status">'+(d.ai_last_update+': —')+'</p>'; return; }
       const dec = String(payload.decision||'').toUpperCase();
@@ -337,34 +443,8 @@
       `;
     }
 
-    // ======== Rótulos para Grok ========
-    function grokDict(){
-      const isEN = document.documentElement.lang === 'en';
-      return isEN ? {
-        thinking: "Asking Grok…",
-        title: "Extra AI Opinion (Grok)",
-        introDecision: "Conclusion",
-        error: "Could not get Grok opinion now."
-      } : {
-        thinking: "Consultando o Grok…",
-        title: "Opinião extra da IA (Grok)",
-        introDecision: "Conclusão",
-        error: "Não foi possível obter a opinião do Grok agora."
-      };
-    }
-
-    // ======== Render Grok ========
-    function renderGrok(text){
-      const box = document.getElementById('grokOpinion');
-      if (!box) return;
-      box.innerHTML = text
-        ? text.replace(/\n/g, '<br/>')
-        : '—';
-    }
-
-    // ======== Prompt p/ Grok com dados do /analyze ========
     function buildGrokMessages(symbol, analyzePayload){
-      const isEN = document.documentElement.lang === 'en';
+      const isEN = (document.documentElement.lang==='en');
       const d = analyzePayload || {};
       const t = d.technicals || {};
       const a = d.analysts || {};
@@ -375,13 +455,8 @@
         symbol,
         decision_calc: dec,
         score_calc: score,
-        technicals: {
-          sma50: t.sma50, sma200: t.sma200, rsi14: t.rsi,
-          macd: t.macd?.macd, signal: t.macd?.signal, hist: t.macd?.hist
-        },
-        analysts: {
-          mean: a.mean, trend: a.trend
-        }
+        technicals: { sma50: t.sma50, sma200: t.sma200, rsi14: t.rsi, macd: t.macd?.macd, signal: t.macd?.signal, hist: t.macd?.hist },
+        analysts: { mean: a.mean, trend: a.trend }
       };
 
       const qPT = `Baseado APENAS nos indicadores técnicos e nos dados dos analistas fornecidos em JSON a seguir,
@@ -404,14 +479,15 @@ Avoid personalization and keep an educational tone.`;
       ];
     }
 
-    // ======== Chamada ao /kimi (Grok via OpenRouter) ========
-    async function askGrok(symbol, analyzePayload){
-      const lbl = grokDict();
-      const titleEl = document.getElementById('grokTitle');
-      if (titleEl) titleEl.textContent = lbl.title;
-
+    function renderGrok(text){
       const box = document.getElementById('grokOpinion');
-      if (box) box.textContent = lbl.thinking;
+      box.innerHTML = text ? text.replace(/\n/g, '<br/>') : '—';
+    }
+
+    async function askGrok(symbol, analyzePayload){
+      const d = dict();
+      const titleEl = document.getElementById('grokTitle'); if (titleEl) titleEl.innerHTML = d.grok_title;
+      const box = document.getElementById('grokOpinion'); if (box) box.textContent = d.grok_thinking;
 
       try{
         const messages = buildGrokMessages(symbol, analyzePayload);
@@ -423,16 +499,15 @@ Avoid personalization and keep an educational tone.`;
         if (!resp.ok) throw new Error('HTTP ' + resp.status);
         const j = await resp.json();
         const content = j?.choices?.[0]?.message?.content || '';
-        renderGrok(content || lbl.error);
+        renderGrok(content || d.grok_error);
       }catch(e){
         console.error('grok error', e);
-        renderGrok(grokDict().error);
+        renderGrok(dict().grok_error);
       }
     }
 
-    // ======== Fluxo principal da Opinião AI ========
     async function runAIAnalysis(symbol){
-      const d = aiDict();
+      const d = dict();
       const aiStatus = document.getElementById('aiStatus');
       aiStatus.textContent = d.refresh+"…";
       try{
@@ -440,25 +515,22 @@ Avoid personalization and keep an educational tone.`;
         if(!resp.ok) throw new Error('HTTP '+resp.status);
         const json = await resp.json();
 
-        // Render do cálculo local (/analyze)
         renderAIResult(json);
-
-        // Chama Grok para opinião extra baseada no JSON do /analyze
         askGrok(symbol, json);
 
-        aiStatus.textContent = d.ai_last_update+': '+new Date().toLocaleString(document.documentElement.lang==='en'?'en-US':'pt-BR',{hour12:false});
+        aiStatus.textContent = d.ai_last_update + (document.documentElement.lang==='en' ? new Date().toLocaleString('en-US',{hour12:false}) : new Date().toLocaleString('pt-BR',{hour12:false}));
       }catch(e){
         console.error('AI analyze error', e);
-        aiStatus.textContent = (document.documentElement.lang==='en'?'Could not analyze now.':'Não foi possível analisar agora.');
+        aiStatus.textContent = d.could_not_analyze;
       }
     }
+
     document.getElementById('aiAnalyzeBtn').addEventListener('click', ()=>{
       const s = document.getElementById('aiSymbolInput').value.trim() || getCurrentSymbol();
       if(!s) return; runAIAnalysis(s);
     });
     document.getElementById('aiUseChartBtn').addEventListener('click', ()=>{
-      const s = getCurrentSymbol();
-      document.getElementById('aiSymbolInput').value = s;
+      document.getElementById('aiSymbolInput').value = getCurrentSymbol();
     });
 
     // ===================== Posições: público + local =====================
@@ -486,20 +558,20 @@ Avoid personalization and keep an educational tone.`;
     let latestQuotesMap = {};
     function renderPositions(quotesMap={}){
       latestQuotesMap = quotesMap;
-      const dict = I18N[currentLang] || I18N.pt;
+      const d = dict();
       const data = getAllPositions();
       $tbody.innerHTML = '';
       data.forEach((row, idx)=>{
         const last = (typeof quotesMap[row.symbol] === 'number') ? quotesMap[row.symbol] : null;
         const pl = (last && row.avg>0) ? ((last/row.avg-1)*100) : null;
-        const badge = row.__public ? ' <span class="badge" title="Visível para todos">🌐</span>' : '';
+        const badge = row.__public ? ` <span class="badge" title="${stripHTML(d.public_badge)}">${d.public_badge}</span>` : '';
         const actions = row.__public
           ? '<span class="status">—</span>'
-          : `<button class="btn" data-act="edit" data-idx="${idx}">${dict.edit}</button>
-             <button class="btn" data-act="del" data-idx="${idx}">${dict.del}</button>`;
+          : `<button class="btn" data-act="edit" data-idx="${idx}">${d.edit||'Editar'}</button>
+             <button class="btn" data-act="del" data-idx="${idx}">${d.del||'Excluir'}</button>`;
         const tr = document.createElement('tr');
         tr.innerHTML = `
-          <td><button class="btn" data-act="show" data-idx="${idx}" title="Mostrar no gráfico">${row.symbol}</button>${badge}</td>
+          <td><button class="btn" data-act="show" data-idx="${idx}" title="${stripHTML(d.open_tv)}">${row.symbol}</button>${badge}</td>
           <td>${fmt(row.avg)}</td>
           <td>${last===null?'-':fmt(last)}</td>
           <td style="font-weight:700; color:${pl===null?'#334155':(pl>=0?'#15803d':'#b91c1c')}">${pl===null?'-':fmtPct(pl)}</td>
@@ -507,7 +579,11 @@ Avoid personalization and keep an educational tone.`;
           <td class="actions">${actions}</td>`;
         $tbody.appendChild(tr);
       });
-      $totals.textContent = (dict.totals||'').replace('{n}', data.length);
+      document.querySelectorAll('#posTable thead [data-i18n]').forEach(th=>{
+        const key = th.getAttribute('data-i18n'); if(dict()[key]!==undefined) th.textContent = stripHTML(dict()[key]);
+      });
+      const totalTxt = (d.totals||'Total de posições: {n}').replace('{n}', data.length);
+      document.getElementById('totals').textContent = totalTxt;
     }
 
     async function loadPublicPositions(){
@@ -524,13 +600,11 @@ Avoid personalization and keep an educational tone.`;
     }
 
     function addPositionLocal(){
+      const d = dict();
       const symbol = document.getElementById('posSymbol').value.trim() || getCurrentSymbol();
       const avg = number(document.getElementById('posAvg').value);
       const note = document.getElementById('posNote').value.trim();
-      if(!symbol || avg<=0){
-        alert(document.documentElement.lang==='en' ? 'Please fill symbol and avg. price.' : 'Preencha símbolo e preço médio.');
-        return;
-      }
+      if(!symbol || avg<=0){ alert(d.please_fill); return; }
       const data = readPositionsLocal();
       data.push({symbol, avg, note});
       writePositionsLocal(data);
@@ -541,6 +615,7 @@ Avoid personalization and keep an educational tone.`;
     }
 
     async function publishLocalPositions(){
+      const d = dict();
       const token = localStorage.getItem('admin_token') || prompt('Admin token (Bearer):');
       if(!token){ return; }
       localStorage.setItem('admin_token', token);
@@ -555,11 +630,11 @@ Avoid personalization and keep an educational tone.`;
           const t = await r.text().catch(()=> '');
           throw new Error(`HTTP ${r.status} ${t}`);
         }
-        alert('Posições publicadas com sucesso!');
+        alert((document.documentElement.lang==='en')?'Published!':'Posições publicadas com sucesso!');
         await loadPublicPositions();
       }catch(e){
         console.error('publishLocalPositions', e);
-        alert('Falha ao publicar. Verifique o token em ADMIN_TOKEN no Worker.');
+        alert((document.documentElement.lang==='en')?'Failed to publish. Check ADMIN_TOKEN on Worker.':'Falha ao publicar. Verifique o token em ADMIN_TOKEN no Worker.');
       }
     }
 
@@ -568,9 +643,8 @@ Avoid personalization and keep an educational tone.`;
     document.getElementById('loadPublicBtn').addEventListener('click', loadPublicPositions);
 
     document.getElementById('clearAllBtn').addEventListener('click', ()=>{
-      if(confirm(document.documentElement.lang==='en' ? 'Clear all LOCAL positions?' : 'Limpar as posições LOCAIS?')){
-        writePositionsLocal([]); renderPositions(latestQuotesMap);
-      }
+      const d = dict();
+      if(confirm(d.clear_locals_q)){ writePositionsLocal([]); renderPositions(latestQuotesMap); }
     });
     document.getElementById('exportBtn').addEventListener('click', ()=>{
       const rows = readPositionsLocal();
@@ -584,23 +658,24 @@ Avoid personalization and keep an educational tone.`;
 
     document.querySelector('#posTable tbody').addEventListener('click', (e)=>{
       const btn = e.target.closest('button'); if(!btn) return;
+      const d = dict();
       const act = btn.getAttribute('data-act');
       const idx = parseInt(btn.getAttribute('data-idx'),10);
       const data = getAllPositions();
       const row = data[idx];
       if(act==='del'){
-        if(row.__public){ alert('Posição pública não pode ser apagada por aqui. Use o botão "Publicar..." para sobrescrever.'); return; }
+        if(row.__public){ alert((document.documentElement.lang==='en')?'Public position cannot be deleted here.':'Posição pública não pode ser apagada por aqui.'); return; }
         const locals = readPositionsLocal();
         const found = locals.findIndex(x=> x.symbol===row.symbol && x.avg===row.avg && x.note===row.note);
         if(found>-1){ locals.splice(found,1); writePositionsLocal(locals); refreshPrices(); }
       }else if(act==='edit'){
-        if(row.__public){ alert('Posição pública não pode ser editada por aqui. Edite local e publique.'); return; }
+        if(row.__public){ alert((document.documentElement.lang==='en')?'Public position cannot be edited here.':'Posição pública não pode ser editada por aqui.'); return; }
         const locals = readPositionsLocal();
         const found = locals.findIndex(x=> x.symbol===row.symbol && x.avg===row.avg && x.note===row.note);
         if(found===-1) return;
-        const symbol = prompt(document.documentElement.lang==='en'?'Symbol:':'Símbolo:', row.symbol) || row.symbol;
-        const avg = parseFloat(prompt(document.documentElement.lang==='en'?'Avg. price:':'Preço médio:', row.avg)) || row.avg;
-        const note = prompt(document.documentElement.lang==='en'?'Note:':'Observação:', row.note||'') || row.note;
+        const symbol = prompt((document.documentElement.lang==='en')?'Symbol:':'Símbolo:', row.symbol) || row.symbol;
+        const avg = parseFloat(prompt((document.documentElement.lang==='en')?'Avg. price:':'Preço médio:', row.avg)) || row.avg;
+        const note = prompt((document.documentElement.lang==='en')?'Note:':'Observação:', row.note||'') || row.note;
         locals[found] = {symbol, avg, note};
         writePositionsLocal(locals); refreshPrices();
       }else if(act==='show'){
@@ -610,13 +685,14 @@ Avoid personalization and keep an educational tone.`;
 
     // ===================== Preços via Worker =====================
     async function refreshPrices(){
+      const d = dict();
       const rows = getAllPositions();
       const symbols = [...new Set(rows.map(r => (r.symbol||'').trim()).filter(Boolean))];
       if (symbols.length === 0) {
-        renderPositions({}); quoteStatus.textContent = (document.documentElement.lang==='en' ? 'No positions.' : 'Sem posições.');
+        renderPositions({}); quoteStatus.textContent = d.no_positions;
         lastRefreshEl.textContent = ''; return;
       }
-      quoteStatus.textContent = (document.documentElement.lang==='en' ? 'Updating prices…' : 'Atualizando preços…');
+      quoteStatus.textContent = d.upd_prices;
       try{
         const url = QUOTE_API + "?symbols=" + encodeURIComponent(symbols.join(','));
         const resp = await fetch(url, { cache: 'no-store' });
@@ -627,20 +703,22 @@ Avoid personalization and keep an educational tone.`;
         rows.forEach(r => { const v = map[r.symbol]; out[r.symbol] = (typeof v === 'number') ? v : null; });
         renderPositions(out);
         quoteStatus.textContent = '';
-        lastRefreshEl.textContent = (document.documentElement.lang==='en' ? 'Last update: ' : 'Última atualização: ') +
-          new Date().toLocaleString(document.documentElement.lang==='en'?'en-US':'pt-BR', {hour12:false});
+        lastRefreshEl.textContent = d.last_update +
+          (document.documentElement.lang==='en'
+            ? new Date().toLocaleString('en-US', {hour12:false})
+            : new Date().toLocaleString('pt-BR', {hour12:false})
+          );
         writeCache(out);
       }catch(e){
         console.error('quotes error', e);
         renderPositions(readCache());
-        quoteStatus.textContent = (document.documentElement.lang==='en' ? 'Could not update quotes.' : 'Não foi possível atualizar as cotações.');
+        quoteStatus.textContent = d.no_quotes;
       }
     }
 
     // ===================== Inicialização =====================
     document.getElementById('y').textContent = new Date().getFullYear();
-    applyI18n();
-    loadChart('NASDAQ:AAPL');
+    loadChart('NASDAQ:NVDA');
     loadPublicPositions();
     document.getElementById('refreshBtn').addEventListener('click', refreshPrices);
     setInterval(refreshPrices, 120000);
