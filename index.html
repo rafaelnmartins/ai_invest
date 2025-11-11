@@ -3,47 +3,40 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>AI Investimentos — Sidebar Pro</title>
+  <title>AI Investimentos — Dashboard Pro</title>
   <link rel="preconnect" href="https://s3.tradingview.com" crossorigin>
   <style>
     :root{
-      --bg:#0b1220; --panel:#0f172a; --ink:#e2e8f0; --muted:#94a3b8; --acc:#22d3ee;
-      --line:rgba(148,163,184,.12); --glow:0 10px 40px rgba(34,211,238,.12)
+      --bg:#0b1220; --panel:#0f172a; --ink:#e5e7eb; --muted:#94a3b8; --acc:#38bdf8; --line:rgba(148,163,184,.14)
     }
     *{box-sizing:border-box}
     html,body{height:100%}
-    body{margin:0;background:linear-gradient(180deg,#0b1220 0%, #0b1220 50%, #0a0f1a 100%);color:var(--ink);font:14px/1.5 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Helvetica Neue",Arial}
+    body{margin:0;background:radial-gradient(1200px 600px at 10% -10%, rgba(56,189,248,.08), transparent), #0b1220;color:var(--ink);font:14px/1.6 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Helvetica Neue",Arial}
     a{color:var(--acc);text-decoration:none}
 
-    /* Shell */
-    .shell{display:grid;grid-template-columns:280px 1fr;min-height:100dvh}
+    .wrap{max-width:1200px;margin:0 auto;padding:26px}
 
-    /* Sidebar */
-    .side{
-      position:sticky;top:0;align-self:start;height:100dvh;display:flex;flex-direction:column;
-      padding:22px;border-right:1px solid var(--line);background:rgba(15,23,42,.65);backdrop-filter: blur(8px)
-    }
-    .brand{display:flex;align-items:center;gap:12px;margin-bottom:18px}
-    .logo{width:36px;height:36px;border-radius:10px;background:conic-gradient(from 210deg,#22d3ee,#6366f1,#22d3ee);box-shadow:var(--glow)}
-    h1{font-size:16px;margin:0;color:#f8fafc;letter-spacing:.2px}
-    .btn{cursor:pointer;border-radius:10px;border:1px solid var(--line);background:#0b1220;padding:8px 10px;color:var(--ink)}
+    /* Hero */
+    .hero{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+    .brand{display:flex;align-items:center;gap:12px}
+    .logo{width:40px;height:40px;border-radius:12px;background:conic-gradient(from 210deg,#22d3ee,#6366f1,#22d3ee);box-shadow:0 0 0 6px rgba(56,189,248,.06)}
+    h1{font-size:20px;margin:0}
+    .btn{cursor:pointer;border-radius:10px;border:1px solid var(--line);background:#0b1220;padding:10px 12px;color:var(--ink)}
     .btn:hover{background:#0e1526}
-    .side .block{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px;margin-top:14px;box-shadow:var(--glow)}
-    .side h3{margin:0 0 8px 0;font-size:13px;color:#cbd5e1}
-    .tips{padding-left:18px;margin:0}
-    .tips li{margin:6px 0;color:var(--muted)}
-    .nav{display:grid;gap:8px;margin-top:auto}
-    .nav a{display:flex;align-items:center;gap:8px;border:1px solid var(--line);background:#0b1220;border-radius:10px;padding:10px 12px;color:#cbd5e1}
-    .nav a:hover{background:#0e1526}
 
-    /* Main area */
-    .main{padding:24px;display:grid;gap:16px}
+    /* KPI bar */
+    .kpis{display:grid;grid-template-columns:repeat(12,1fr);gap:12px;margin:16px 0}
+    .kpi{grid-column:span 3;background:linear-gradient(180deg,#0f172a,#0d1528);border:1px solid var(--line);border-radius:14px;padding:12px 14px}
+    .kpi h4{margin:0 0 6px 0;font-size:12px;color:#93c5fd;text-transform:uppercase;letter-spacing:.6px}
+    .kpi p{margin:0;font-size:18px}
+
+    /* Grid blocks */
     .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px}
-    .card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:var(--glow)}
-    h2{margin:0 0 10px 0;font-size:16px;color:#e5e7eb}
-    p.status{color:var(--muted);font-size:12px;margin-top:6px}
+    .card{background:linear-gradient(180deg,#0f172a,#0d1426);border:1px solid var(--line);border-radius:16px;padding:18px}
+    h2{margin:0 0 10px 0;font-size:16px}
+    p.status{font-size:12px;color:var(--muted)}
 
-    /* Layout blocks */
+    /* Sections */
     .quick{grid-column:span 12}
     #ai-opinion{grid-column:span 8}
     .alerts{grid-column:span 4}
@@ -56,178 +49,170 @@
     th,td{padding:10px 12px;border-bottom:1px solid var(--line);text-align:left}
     th{font-size:12px;color:#94a3b8}
 
-    /* Badges */
-    .badge{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:#22d3ee;background:rgba(34,211,238,.08);border:1px solid rgba(34,211,238,.25);border-radius:999px;padding:2px 8px}
-
-    /* Inputs */
+    /* Lists & badges */
+    .tips{margin:0;padding-left:18px}
+    .tips li{margin:6px 0;color:var(--muted)}
+    .badge{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:#38bdf8;background:rgba(56,189,248,.08);border:1px solid rgba(56,189,248,.25);border-radius:999px;padding:2px 8px}
     input,select,textarea{font:inherit;border-radius:10px;border:1px solid var(--line);background:#0b1220;color:var(--ink);padding:10px 12px}
 
-    /* Responsive */
     @media (max-width:1024px){
-      .shell{grid-template-columns:1fr}
-      .side{position:static;height:auto}
       #ai-opinion,.alerts,.chart,.chart-tips{grid-column:span 12}
+      .kpi{grid-column:span 6}
     }
   </style>
 </head>
 <body>
-  <div class="shell">
-    <!-- SIDEBAR -->
-    <aside class="side">
+  <div class="wrap">
+    <!-- HERO -->
+    <div class="hero">
       <div class="brand">
         <div class="logo"></div>
         <h1>AI Investimentos</h1>
       </div>
-      <button id="langToggle" class="btn" style="width:100%">🇧🇷/🇺🇸 <span id="langLabel">PT</span></button>
+      <button id="langToggle" class="btn">🇧🇷/🇺🇸 <span id="langLabel">PT</span></button>
+    </div>
 
-      <div class="block">
-        <h3>Dicas rápidas</h3>
-        <ul class="tips" id="quickTips">
-          <li>Agente envia alertas <strong>após o fechamento</strong> de NY.</li>
-          <li>Compra curto: <strong>+5%</strong> · Longo: <strong>+10%</strong>.</li>
-          <li>Fique atento aos <strong>stops</strong> e às <strong>vendas</strong>.</li>
-        </ul>
-      </div>
+    <!-- KPI BAR -->
+    <div class="kpis">
+      <div class="kpi"><h4>Status</h4><p id="kpiStatus">Mercado Fechado</p></div>
+      <div class="kpi"><h4>Foco</h4><p>Large Caps 🇺🇸</p></div>
+      <div class="kpi"><h4>Risco</h4><p>Moderado</p></div>
+      <div class="kpi"><h4>Últ. atualização</h4><p id="y">—</p></div>
+    </div>
 
-      <div class="nav">
-        <a href="#ai-opinion">🤖 Opinião da AI</a>
-        <a href="#positions">📊 Minhas posições</a>
-        <a href="#chart">📈 Gráfico</a>
-      </div>
-    </aside>
+    <!-- (1) QUICK TIPS -->
+    <section class="card quick">
+      <h2 id="quickTitle">Dicas rápidas</h2>
+      <ul class="tips" id="quickTips">
+        <li>Agente envia alertas <strong>após o fechamento</strong> de NY.</li>
+        <li>Curto: <strong>+5%</strong> | Longo: <strong>+10%</strong>.</li>
+        <li>Use stop e acompanhe <strong>vendas</strong>.</li>
+      </ul>
+    </section>
 
-    <!-- MAIN -->
-    <main class="main">
-      <!-- (1) QUICK TIPS (extra header card if quiser) -->
-      <section class="card quick" aria-labelledby="quickTitle">
-        <h2 id="quickTitle">Dicas rápidas</h2>
-        <p class="status">Regras simples para decisões mais consistentes.</p>
-      </section>
-
-      <!-- (2) AI + ALERTAS -->
-      <div class="grid">
-        <section class="card" id="ai-opinion">
-          <h2>Opinião da AI (Técnico + Analistas)</h2>
-          <div class="grid" style="grid-template-columns:repeat(12,1fr);gap:10px;margin:8px 0 12px 0">
-            <input id="aiSymbolInput" placeholder="Ex.: NASDAQ:AMZN ou AMZN" style="grid-column:span 6" />
-            <button id="aiAnalyzeBtn" class="btn" style="grid-column:span 3">Analisar</button>
-            <button id="aiUseChartBtn" class="btn" style="grid-column:span 3">Usar símbolo do gráfico</button>
-          </div>
-          <div id="aiResult" class="card" style="background:#0b1220;border:1px dashed var(--line);min-height:90px"></div>
-          <div id="grokBox" class="card" style="margin-top:10px;background:#0b1220;border:1px solid var(--line)">
-            <h3 style="margin:0 0 8px 0">Opinião extra da IA (Grok)</h3>
-            <div id="grokOpinion" class="status">—</div>
-          </div>
-          <p class="status" id="aiStatus"></p>
-        </section>
-
-        <section class="card alerts">
-          <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
-            <h2>Alertas</h2>
-            <span class="badge">⚡ Agent</span>
-          </div>
-          <iframe
-            src="https://shiny-sea-44d3.rafaelnm.workers.dev/"
-            id="alertsFrame"
-            title="Alertas – Cloudflare Worker"
-            loading="lazy"
-            referrerpolicy="no-referrer"
-            style="width:100%;height:520px;border:1px solid var(--line);border-radius:12px;background:#0b1220;color:#ffffff;">
-          </iframe>
-        </section>
-      </div>
-
-      <!-- (3) POSIÇÕES -->
-      <section class="card positions" id="positions">
-        <div style="display:flex;align-items:center;gap:8px;justify-content:space-between;flex-wrap:wrap">
-          <h2>Minhas posições</h2>
-          <div style="display:flex;gap:8px;flex-wrap:wrap">
-            <span class="badge" title="Visível para todos">🌐 Público</span>
-            <button id="loadPublicBtn" class="btn">Atualizar públicas</button>
-            <button id="publishBtn" class="btn" title="Enviar posições locais para o servidor (admin)">Publicar (admin)</button>
-          </div>
-        </div>
+    <!-- (2) AI + ALERTAS -->
+    <div class="grid">
+      <section class="card" id="ai-opinion">
+        <h2>Opinião da AI (Técnico + Analistas)</h2>
         <div class="grid" style="grid-template-columns:repeat(12,1fr);gap:10px;margin:8px 0 12px 0">
-          <input id="posSymbol" placeholder="Ex.: NASDAQ:NVDA ou BMFBOVESPA:PETR4" style="grid-column:span 6" />
-          <input id="posAvg" type="number" inputmode="decimal" step="0.01" placeholder="Preço médio" style="grid-column:span 3" />
-          <input id="posNote" placeholder="Observação (opcional)" style="grid-column:span 3" />
+          <input id="aiSymbolInput" placeholder="Ex.: NASDAQ:AMZN ou AMZN" style="grid-column:span 6" />
+          <button id="aiAnalyzeBtn" class="btn" style="grid-column:span 3">Analisar</button>
+          <button id="aiUseChartBtn" class="btn" style="grid-column:span 3">Usar símbolo do gráfico</button>
         </div>
-        <div style="display:flex;gap:10px;flex-wrap:wrap">
-          <button id="addPosBtn" class="btn">Adicionar posição</button>
-          <button id="refreshBtn" class="btn">Atualizar preços</button>
-          <button id="clearAllBtn" class="btn">Limpar locais</button>
-          <button id="exportBtn" class="btn">Exportar CSV</button>
+        <div id="aiResult" class="card" style="background:#0b1220;border:1px dashed rgba(148,163,184,.18);min-height:90px"></div>
+        <div id="grokBox" class="card" style="margin-top:10px;background:#0b1220;border:1px solid rgba(148,163,184,.18)">
+          <h3 style="margin:0 0 8px 0" id="grokTitle">Opinião extra da IA (Grok)</h3>
+          <div id="grokOpinion" class="status">—</div>
         </div>
-        <p class="status" id="quoteStatus"></p>
-        <div style="overflow:auto;margin-top:12px">
-          <table id="posTable">
-            <thead>
-              <tr>
-                <th>Símbolo</th><th>Preço médio</th><th>Preço atual</th><th>P/L %</th><th>Obs.</th><th>Ações</th>
-              </tr>
-            </thead>
-            <tbody></tbody>
-          </table>
-        </div>
-        <p id="totals" class="status" style="margin-top:10px"></p>
-        <p id="lastRefresh" class="status"></p>
+        <p class="status" id="aiStatus"></p>
       </section>
 
-      <!-- (4) GRÁFICO + DICAS DO GRÁFICO -->
-      <div class="grid">
-        <section class="card chart" id="chart">
-          <h2>Gráfico (TradingView)</h2>
-          <div class="grid" style="grid-template-columns:repeat(12,1fr);gap:10px;margin:0 0 10px 0">
-            <input id="chartSymbolInput" placeholder="Ex.: NASDAQ:NVDA ou BMFBOVESPA:PETR4" style="grid-column:span 6" />
-            <button id="setChartBtn" class="btn" style="grid-column:span 2">Carregar símbolo</button>
-            <button id="addFromChartBtn" class="btn" style="grid-column:span 2">Adicionar à lista</button>
-            <a id="openTV" class="btn" style="grid-column:span 2;text-align:center" href="https://www.tradingview.com/chart/" target="_blank" rel="noopener">Abrir no TradingView</a>
-          </div>
-          <div id="tradingview_chart" style="height:520px;width:100%"></div>
-          <p class="status" id="tvStatus"></p>
-        </section>
+      <section class="card alerts">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
+          <h2 id="alertsTitle">Alertas</h2>
+          <span class="badge">⚡ Agent</span>
+        </div>
+        <iframe
+          src="https://shiny-sea-44d3.rafaelnm.workers.dev/"
+          id="alertsFrame"
+          title="Alertas – Cloudflare Worker"
+          loading="lazy"
+          referrerpolicy="no-referrer"
+          style="width:100%;height:520px;border:1px solid rgba(148,163,184,.18);border-radius:12px;background:#0b1220;color:#ffffff;">
+        </iframe>
+      </section>
+    </div>
 
-        <section class="card chart-tips">
-          <h2>Boas práticas no gráfico</h2>
-          <ul class="tips" id="chartTips">
-            <li>Confirme com 2–3 sinais, não 1 só.</li>
-            <li>Tendência (SMA50 vs SMA200) primeiro.</li>
-            <li>Entre parcial e adicione se confirmar.</li>
-            <li>Defina stop técnico e alvo antes.</li>
-            <li>Revise notícias/earnings relevantes.</li>
-          </ul>
-        </section>
+    <!-- (3) POSIÇÕES -->
+    <section class="card positions" id="positions">
+      <div style="display:flex;align-items:center;gap:8px;justify-content:space-between;flex-wrap:wrap">
+        <h2 id="positionsTitle">Minhas posições</h2>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <span class="badge" title="Visível para todos">🌐 Público</span>
+          <button id="loadPublicBtn" class="btn">Atualizar públicas</button>
+          <button id="publishBtn" class="btn">Publicar (admin)</button>
+        </div>
       </div>
+      <div class="grid" style="grid-template-columns:repeat(12,1fr);gap:10px;margin:8px 0 12px 0">
+        <input id="posSymbol" placeholder="Ex.: NASDAQ:NVDA ou BMFBOVESPA:PETR4" style="grid-column:span 6" />
+        <input id="posAvg" type="number" inputmode="decimal" step="0.01" placeholder="Preço médio" style="grid-column:span 3" />
+        <input id="posNote" placeholder="Observação (opcional)" style="grid-column:span 3" />
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <button id="addPosBtn" class="btn">Adicionar posição</button>
+        <button id="refreshBtn" class="btn">Atualizar preços</button>
+        <button id="clearAllBtn" class="btn">Limpar locais</button>
+        <button id="exportBtn" class="btn">Exportar CSV</button>
+      </div>
+      <p class="status" id="quoteStatus"></p>
+      <div style="overflow:auto;margin-top:12px">
+        <table id="posTable">
+          <thead>
+            <tr>
+              <th>Símbolo</th><th>Preço médio</th><th>Preço atual</th><th>P/L %</th><th>Obs.</th><th>Ações</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <p id="totals" class="status" style="margin-top:10px"></p>
+      <p id="lastRefresh" class="status"></p>
+    </section>
 
-      <!-- TICKER -->
-      <section class="card">
-        <h2>Mercados Globais &amp; Magnificent 7</h2>
-        <div class="tradingview-widget-container">
-          <div class="tradingview-widget-container__widget"></div>
-          <script src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
-          {
-            "symbols":[
-              {"proName":"FOREXCOM:US30","title":"Dow Jones"},
-              {"proName":"FOREXCOM:US100","title":"Nasdaq 100"},
-              {"proName":"FOREXCOM:US500","title":"S&P 500"},
-              {"proName":"BMFBOVESPA:IBOV","title":"Ibovespa"},
-              {"proName":"FOREXCOM:EU50","title":"Euro Stoxx 50"},
-              {"proName":"FOREXCOM:UK100","title":"FTSE 100"},
-              {"proName":"NASDAQ:AAPL","title":"Apple"},
-              {"proName":"NASDAQ:MSFT","title":"Microsoft"},
-              {"proName":"NASDAQ:GOOGL","title":"Alphabet"},
-              {"proName":"NASDAQ:AMZN","title":"Amazon"},
-              {"proName":"NASDAQ:NVDA","title":"NVIDIA"},
-              {"proName":"NASDAQ:META","title":"Meta"},
-              {"proName":"NASDAQ:TSLA","title":"Tesla"}],
-            "showSymbolLogo":true,"isTransparent":false,"displayMode":"adaptive","colorTheme":"dark"
-          }
-          </script>
+    <!-- (4) CHART + TIPS -->
+    <div class="grid">
+      <section class="card chart" id="chart">
+        <h2 id="chartTitle">Gráfico (TradingView)</h2>
+        <div class="grid" style="grid-template-columns:repeat(12,1fr);gap:10px;margin:0 0 10px 0">
+          <input id="chartSymbolInput" placeholder="Ex.: NASDAQ:NVDA ou BMFBOVESPA:PETR4" style="grid-column:span 6" />
+          <button id="setChartBtn" class="btn" style="grid-column:span 2">Carregar símbolo</button>
+          <button id="addFromChartBtn" class="btn" style="grid-column:span 2">Adicionar à lista</button>
+          <a id="openTV" class="btn" style="grid-column:span 2;text-align:center" href="https://www.tradingview.com/chart/" target="_blank" rel="noopener">Abrir no TradingView</a>
         </div>
+        <div id="tradingview_chart" style="height:520px;width:100%"></div>
+        <p class="status" id="tvStatus"></p>
       </section>
 
-      <p class="status" style="text-align:center;color:#64748b">© <span id="y"></span> • Site educacional, não é recomendação de investimento.</p>
-    </main>
+      <section class="card chart-tips">
+        <h2 id="chartTipsTitle">Boas práticas no gráfico</h2>
+        <ul class="tips" id="chartTips">
+          <li>Não dependa de um único indicador.</li>
+          <li>Tendência (SMA50 vs SMA200) antes do gatilho.</li>
+          <li>Entrada parcial + adição na confirmação.</li>
+          <li>Stop técnico e alvo definidos previamente.</li>
+          <li>Cheque notícias e earnings.</li>
+        </ul>
+      </section>
+    </div>
+
+    <!-- TICKER -->
+    <section class="card">
+      <h2>Mercados Globais &amp; Magnificent 7</h2>
+      <div class="tradingview-widget-container">
+        <div class="tradingview-widget-container__widget"></div>
+        <script src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
+        {
+          "symbols":[
+            {"proName":"FOREXCOM:US30","title":"Dow Jones"},
+            {"proName":"FOREXCOM:US100","title":"Nasdaq 100"},
+            {"proName":"FOREXCOM:US500","title":"S&P 500"},
+            {"proName":"BMFBOVESPA:IBOV","title":"Ibovespa"},
+            {"proName":"FOREXCOM:EU50","title":"Euro Stoxx 50"},
+            {"proName":"FOREXCOM:UK100","title":"FTSE 100"},
+            {"proName":"NASDAQ:AAPL","title":"Apple"},
+            {"proName":"NASDAQ:MSFT","title":"Microsoft"},
+            {"proName":"NASDAQ:GOOGL","title":"Alphabet"},
+            {"proName":"NASDAQ:AMZN","title":"Amazon"},
+            {"proName":"NASDAQ:NVDA","title":"NVIDIA"},
+            {"proName":"NASDAQ:META","title":"Meta"},
+            {"proName":"NASDAQ:TSLA","title":"Tesla"}],
+          "showSymbolLogo":true,"isTransparent":false,"displayMode":"adaptive","colorTheme":"dark"
+        }
+        </script>
+      </div>
+    </section>
+
+    <p class="status" style="text-align:center;color:#64748b">© <span id="y"></span> • Site educacional, não é recomendação de investimento.</p>
   </div>
 
   <script src="https://s3.tradingview.com/tv.js"></script>
