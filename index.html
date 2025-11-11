@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Dicas AI Investimentos para familia e amigos</title>
+  <title>AI Investimentos - Dicas para familia e amigos</title>
   <meta name="description" content="Site com dicas, gráfico TradingView, alertas embutidos e minhas posições com P/L %." />
   <link rel="preconnect" href="https://s3.tradingview.com" crossorigin>
   <style>
@@ -46,6 +46,7 @@
       </div>
     </header>
 
+    <!-- 1) Dicas rápidas -->
     <section class="card">
       <h2 data-i18n="quick_tips">Dicas rápidas</h2>
       <ul class="tips">
@@ -55,113 +56,118 @@
       </ul>
     </section>
 
+    <!-- 2) Opinião da AI (com Grok) ao lado dos Alertas -->
     <div class="grid" style="margin-top:16px">
-  <!-- Opinião da AI ao lado dos Alertas -->
-  <section class="card" id="ai-opinion" style="grid-column: span 8">
-    <h2 id="aiTitle">Opinião da AI (Técnico + Analistas)</h2>
-    <div class="grid" style="grid-template-columns:repeat(12,1fr);gap:10px;margin:8px 0 12px 0">
-      <input id="aiSymbolInput" placeholder="Ex.: NASDAQ:AMZN ou AMZN" style="grid-column:span 6" />
-      <button id="aiAnalyzeBtn" class="btn" style="grid-column:span 3">Analisar</button>
-      <button id="aiUseChartBtn" class="btn" style="grid-column:span 3">Usar símbolo do gráfico</button>
-    </div>
-    <div id="aiResult" class="card" style="background:#f8fafc;border:1px dashed rgba(0,0,0,.1);min-height:90px"></div>
-    <div id="llmOpinionBox" class="llm-box" style="display:none">
-      <p class="llm-title">Opinião da AI (Grok)</p>
-      <div id="llmOpinionText" style="white-space:pre-wrap;line-height:1.5"></div>
-      <p class="llm-note" id="llmMeta"></p>
-    </div>
-    <p class="status" id="aiStatus"></p>
-  </section>
+      <!-- Opinião da AI -->
+      <section class="card" id="ai-opinion" style="grid-column: span 8">
+        <h2 id="aiTitle">Opinião da AI (Técnico + Analistas)</h2>
+        <div class="grid" style="grid-template-columns:repeat(12,1fr);gap:10px;margin:8px 0 12px 0">
+          <input id="aiSymbolInput" placeholder="Ex.: NASDAQ:AMZN ou AMZN" style="grid-column:span 6" />
+          <button id="aiAnalyzeBtn" class="btn" style="grid-column:span 3">Analisar</button>
+          <button id="aiUseChartBtn" class="btn" style="grid-column:span 3">Usar símbolo do gráfico</button>
+        </div>
 
-  <!-- Alertas -->
-  <section class="card" style="grid-column: span 4">
-    <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
-      <h2 data-i18n="alerts_title">Alertas </h2>
-      <span class="badge">⚡ Agent</span>
+        <!-- Resultado calculado pelo Worker (/analyze) -->
+        <div id="aiResult" class="card" style="background:#f8fafc;border:1px dashed rgba(0,0,0,.1);min-height:90px"></div>
+
+        <!-- Opinião extra via LLM (Grok / OpenRouter) -->
+        <div id="grokBox" class="card" style="margin-top:10px;background:#fff7ed;border:1px solid #fed7aa">
+          <h3 id="grokTitle" style="margin:0 0 8px 0">Opinião extra da IA (Grok)</h3>
+          <div id="grokOpinion" class="status">—</div>
+        </div>
+
+        <p class="status" id="aiStatus"></p>
+      </section>
+
+      <!-- Alertas -->
+      <section class="card" style="grid-column: span 4">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
+          <h2 data-i18n="alerts_title">Alertas</h2>
+          <span class="badge">⚡ Agent</span>
+        </div>
+        <iframe
+          src="https://shiny-sea-44d3.rafaelnm.workers.dev/"
+          id="alertsFrame"
+          title="Alertas – Cloudflare Worker"
+          loading="lazy"
+          referrerpolicy="no-referrer"
+          style="width:100%;height:520px;border:1px solid rgba(0,0,0,.1);border-radius:12px;background:#ffffff;color:#000000;">
+        </iframe>
+        <details style="margin-top:8px"><summary class="status">Se a janela não aparecer</summary>
+          <p class="status">No Worker: remova <code>X-Frame-Options</code> e permita <code>frame-ancestors</code> no CSP (inclua seu domínio do GitHub Pages).</p>
+        </details>
+      </section>
     </div>
-    <iframe
-      src="https://shiny-sea-44d3.rafaelnm.workers.dev/"
-      id="alertsFrame"
-      title="Alertas – Cloudflare Worker"
-      loading="lazy"
-      referrerpolicy="no-referrer"
-      style="width:100%;height:520px;border:1px solid rgba(0,0,0,.1);border-radius:12px;background:#ffffff;color:#000000;">
-    </iframe>
-    <details style="margin-top:8px"><summary class="status">Se a janela não aparecer</summary>
-      <p class="status">No Worker: remova <code>X-Frame-Options</code> e permita <code>frame-ancestors</code> no CSP (inclua seu domínio do GitHub Pages).</p>
-    </details>
-  </section>
-</div>
-<!-- FIM do bloco AI + Alertas -->
-    <!-- Minhas posições (públicas + locais) -->
+
+    <!-- 3) Minhas posições -->
     <section class="card" style="margin-top:16px">
-  <div style="display:flex;align-items:center;gap:8px;justify-content:space-between;flex-wrap:wrap">
-    <h2 data-i18n="positions_title">Minhas posições</h2>
-    <div style="display:flex;gap:8px;flex-wrap:wrap">
-      <span class="badge" title="Visitantes veem essas posições">🌐 Público</span>
-      <button id="loadPublicBtn" class="btn">Atualizar públicas</button>
-      <button id="publishBtn" class="btn" title="Enviar posições locais para o servidor (admin)">Publicar minhas posições (admin)</button>
+      <div style="display:flex;align-items:center;gap:8px;justify-content:space-between;flex-wrap:wrap">
+        <h2 data-i18n="positions_title">Minhas posições</h2>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <span class="badge" title="Visitantes veem essas posições">🌐 Público</span>
+          <button id="loadPublicBtn" class="btn">Atualizar públicas</button>
+          <button id="publishBtn" class="btn" title="Enviar posições locais para o servidor (admin)">Publicar minhas posições (admin)</button>
+        </div>
+      </div>
+
+      <div class="grid" style="grid-template-columns:repeat(12,1fr);gap:10px;margin:8px 0 12px 0">
+        <input id="posSymbol" placeholder="Ex.: NASDAQ:NVDA ou BMFBOVESPA:PETR4" style="grid-column:span 6" />
+        <input id="posAvg" type="number" inputmode="decimal" step="0.01" placeholder="Preço médio" style="grid-column:span 3" />
+        <input id="posNote" placeholder="Observação (opcional)" style="grid-column:span 3" />
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <button id="addPosBtn" class="btn" data-i18n="add_position">Adicionar posição (local)</button>
+        <button id="refreshBtn" class="btn" data-i18n="refresh">Atualizar preços</button>
+        <button id="clearAllBtn" class="btn" data-i18n="clear_all">Limpar locais</button>
+        <button id="exportBtn" class="btn" data-i18n="export_csv">Exportar CSV (locais)</button>
+      </div>
+      <p class="status" id="quoteStatus"></p>
+      <div style="overflow:auto;margin-top:12px">
+        <table id="posTable" aria-label="positions">
+          <thead>
+            <tr>
+              <th data-i18n="th_symbol">Símbolo</th>
+              <th data-i18n="th_avg">Preço médio</th>
+              <th data-i18n="th_last">Preço atual</th>
+              <th data-i18n="th_pl">P/L %</th>
+              <th data-i18n="th_note">Obs.</th>
+              <th data-i18n="th_actions">Ações</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <p id="totals" class="status" style="margin-top:10px"></p>
+      <p id="lastRefresh" class="status"></p>
+    </section>
+
+    <!-- 4) Gráfico (TradingView) + novo quadro de dicas -->
+    <div class="grid" style="margin-top:16px">
+      <!-- Gráfico -->
+      <section class="card" style="grid-column: span 8">
+        <h2 data-i18n="chart_title">Gráfico (TradingView)</h2>
+        <div class="grid" style="grid-template-columns:repeat(12,1fr);gap:10px;margin:0 0 10px 0">
+          <input id="chartSymbolInput" placeholder="Ex.: NASDAQ:NVDA ou BMFBOVESPA:PETR4" style="grid-column:span 6" />
+          <button id="setChartBtn" class="btn" style="grid-column:span 2" data-i18n="set_symbol">Carregar símbolo</button>
+          <button id="addFromChartBtn" class="btn" style="grid-column:span 2" data-i18n="add_from_chart">Adicionar à lista</button>
+          <a id="openTV" class="btn" style="grid-column:span 2;text-align:center" href="https://www.tradingview.com/chart/" target="_blank" rel="noopener" data-i18n="open_tv">Abrir no TradingView</a>
+        </div>
+        <div id="tradingview_chart" style="height:520px;width:100%"></div>
+        <p class="status" id="tvStatus"></p>
+      </section>
+
+      <!-- Novo quadro de dicas ao lado do gráfico -->
+      <section class="card" style="grid-column: span 4">
+        <h2>Boas práticas no gráfico</h2>
+        <ul class="tips">
+          <li>Evite decisões com base em <strong>1 indicador</strong> apenas. Confirme com 2–3 sinais.</li>
+          <li>Observe a <strong>tendência (SMA50 x SMA200)</strong> antes do gatilho.</li>
+          <li>Prefira entrar com <strong>parcial</strong> e completar se o movimento confirmar.</li>
+          <li>Defina um <strong>stop técnico</strong> e um <strong>alvo</strong> antes de clicar.</li>
+          <li>Revise notícias/earnings que possam afetar o papel.</li>
+        </ul>
+      </section>
     </div>
-  </div>
-
-  <div class="grid" style="grid-template-columns:repeat(12,1fr);gap:10px;margin:8px 0 12px 0">
-    <input id="posSymbol" placeholder="Ex.: NASDAQ:NVDA ou BMFBOVESPA:PETR4" style="grid-column:span 6" />
-    <input id="posAvg" type="number" inputmode="decimal" step="0.01" placeholder="Preço médio" style="grid-column:span 3" />
-    <input id="posNote" placeholder="Observação (opcional)" style="grid-column:span 3" />
-  </div>
-  <div style="display:flex;gap:10px;flex-wrap:wrap">
-    <button id="addPosBtn" class="btn" data-i18n="add_position">Adicionar posição (local)</button>
-    <button id="refreshBtn" class="btn" data-i18n="refresh">Atualizar preços</button>
-    <button id="clearAllBtn" class="btn" data-i18n="clear_all">Limpar locais</button>
-    <button id="exportBtn" class="btn" data-i18n="export_csv">Exportar CSV (locais)</button>
-  </div>
-  <p class="status" id="quoteStatus"></p>
-  <div style="overflow:auto;margin-top:12px">
-    <table id="posTable" aria-label="positions">
-      <thead>
-        <tr>
-          <th data-i18n="th_symbol">Símbolo</th>
-          <th data-i18n="th_avg">Preço médio</th>
-          <th data-i18n="th_last">Preço atual</th>
-          <th data-i18n="th_pl">P/L %</th>
-          <th data-i18n="th_note">Obs.</th>
-          <th data-i18n="th_actions">Ações</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
-  </div>
-  <p id="totals" class="status" style="margin-top:10px"></p>
-  <p id="lastRefresh" class="status"></p>
-</section>
-
-<!-- NOVO BLOCO: Gráfico com Dicas ao lado -->
-<div class="grid" style="margin-top:16px">
-  <!-- Gráfico TradingView -->
-  <section class="card" style="grid-column: span 8">
-    <h2 data-i18n="chart_title">Gráfico (TradingView)</h2>
-    <div class="grid" style="grid-template-columns:repeat(12,1fr);gap:10px;margin:0 0 10px 0">
-      <input id="chartSymbolInput" placeholder="Ex.: NASDAQ:NVDA ou BMFBOVESPA:PETR4" style="grid-column:span 6" />
-      <button id="setChartBtn" class="btn" style="grid-column:span 2" data-i18n="set_symbol">Carregar símbolo</button>
-      <button id="addFromChartBtn" class="btn" style="grid-column:span 2" data-i18n="add_from_chart">Adicionar à lista</button>
-      <a id="openTV" class="btn" style="grid-column:span 2;text-align:center" href="https://www.tradingview.com/chart/" target="_blank" rel="noopener" data-i18n="open_tv">Abrir no TradingView</a>
-    </div>
-    <div id="tradingview_chart" style="height:520px;width:100%"></div>
-    <p class="status" id="tvStatus"></p>
-  </section>
-
-  <!-- Dicas do Gráfico -->
-  <section class="card" style="grid-column: span 4">
-    <h2>📌 Dicas do Gráfico</h2>
-    <ul class="tips" style="margin-top:6px">
-      <li>Use intervalos 15/60 min para swing; diário para posição.</li>
-      <li>Confirme rompimentos com volume e tendência (SMA50 vs SMA200).</li>
-      <li>RSI &lt; 30 pode sinalizar oportunidade; &gt; 70, cautela.</li>
-      <li>MACD cruzando para cima reforça momentum de compra.</li>
-      <li>Defina <em>stop</em> antes da entrada; risco ≤ 1–2% por trade.</li>
-    </ul>
-  </section>
-</div>
 
     <!-- Ticker global no final da página -->
     <section class="card" style="margin-top:16px">
@@ -204,33 +210,35 @@
   const API_BASE = "https://shiny-sea-44d3.rafaelnm.workers.dev";
   const QUOTE_API = API_BASE + "/quotes";
   const POS_API   = API_BASE + "/positions";
+  const AI_API    = API_BASE + "/analyze"; // Worker: /analyze
+  // LLM (Grok via OpenRouter) está exposto no seu Worker como /kimi
 
   // ===================== I18N =====================
   const I18N = {
-    pt:{ title:"Dicas AI Investimentos para familia e amigos", quick_tips:"Dicas rápidas",
+    pt:{ title:"AI Invest - Dicas de Ações para familia e amigos", quick_tips:"Dicas rápidas",
       tip1:"Defina <strong>entrada, stop e alvo</strong> antes de executar.",
       tip2:"Use <strong>gestão de risco</strong> por posição e por carteira.",
       tip3:"Combine <strong>fundamental + técnico</strong> para decisões mais sólidas.",
-      chart_title:"Gráfico (TradingView)", alerts_title:"Alertas (janela interna)",
+      chart_title:"Gráfico (TradingView)", alerts_title:"Alertas",
       ticker_title:"Ticker de Cotações", positions_title:"Minhas posições",
       add_position:"Adicionar posição", clear_all:"Limpar tudo", export_csv:"Exportar CSV",
       th_symbol:"Símbolo", th_avg:"Preço médio", th_last:"Preço atual", th_pl:"P/L %",
-      th_note:"Obs.", th_actions:"Ações", disclaimer:"Site educacional, não é recomendação de investimento.",
+      th_note:"Obs.", th_actions:"Ações", disclaimer:"Site educacional, não é recomendação de investimento - rafaelnm@gmail.com",
       edit:"Editar", del:"Excluir", totals:"Total de posições: {n}", refresh:"Atualizar preços",
       set_symbol:"Carregar símbolo", add_from_chart:"Adicionar à lista", open_tv:"Abrir no TradingView",
       ai_title:"Opinião da AI (Técnico + Analistas)", ai_analyze:"Analisar", ai_use_chart:"Usar símbolo do gráfico",
       ai_decision:"Decisão", ai_score:"Score", ai_reasons:"Motivos", ai_technicals:"Técnicos", ai_analysts:"Analistas",
       ai_buy:"Comprar", ai_hold:"Manter", ai_sell:"Vender", ai_last_update:"Última análise"
     },
-    en:{ title:"Dicas AI Investimentos para familia e amigos", quick_tips:"Quick tips",
+    en:{ title:"AI Invest - Stocks TIPs for Family and Friends", quick_tips:"Quick tips",
       tip1:"Define <strong>entry, stop and target</strong> before executing.",
       tip2:"Use <strong>risk management</strong> per position and portfolio.",
       tip3:"Combine <strong>fundamental + technical</strong> for stronger decisions.",
-      chart_title:"Chart (TradingView)", alerts_title:"Alerts (embedded window)",
+      chart_title:"Chart (TradingView)", alerts_title:"Alerts",
       ticker_title:"Quotes Ticker", positions_title:"My positions", add_position:"Add position",
       clear_all:"Clear all", export_csv:"Export CSV", th_symbol:"Symbol", th_avg:"Avg. price",
       th_last:"Last price", th_pl:"P/L %", th_note:"Note", th_actions:"Actions",
-      disclaimer:"Educational site, not investment advice.", edit:"Edit", del:"Delete",
+      disclaimer:"Educational site, not investment advice - rafaelnm@gmail.com", edit:"Edit", del:"Delete",
       totals:"Total positions: {n}", refresh:"Refresh prices", set_symbol:"Load symbol",
       add_from_chart:"Add from chart", open_tv:"Open on TradingView",
       ai_title:"AI Opinion (Technical + Analysts)", ai_analyze:"Analyze", ai_use_chart:"Use chart symbol",
@@ -254,13 +262,17 @@
       langLabel.textContent = currentLang.toUpperCase();
       loadChart(getCurrentSymbol(), currentLang === 'en' ? 'en' : 'br');
       renderPositions(latestQuotesMap);
+
+      // Ajuste do título do Grok
+      const gdict = grokDict();
+      const gt = document.getElementById('grokTitle'); if (gt) gt.textContent = gdict.title;
     }
     document.getElementById('langToggle').addEventListener('click', ()=>{
       currentLang = currentLang === 'en' ? 'pt' : 'en'; localStorage.setItem('lang', currentLang); applyI18n();
     });
 
     // ===================== TradingView =====================
-    const DEFAULT_SYMBOL = 'NASDAQ:AAPL';
+    const DEFAULT_SYMBOL = 'NASDAQ:NVDA';
     let tvWidgetInstance;
     function getCurrentSymbol(){ return window.__CURRENT_SYMBOL || DEFAULT_SYMBOL; }
     function setCurrentSymbol(s){ window.__CURRENT_SYMBOL = s; }
@@ -286,9 +298,10 @@
     document.getElementById('addFromChartBtn').addEventListener('click', ()=>{
       document.getElementById('posSymbol').value = getCurrentSymbol(); document.getElementById('posAvg').focus();
     });
-    // ===================== Opinião da AI =====================
-    const AI_API = API_BASE + "/analyze"; // requer endpoint no Worker
+
+    // ===================== Opinião da AI (Worker /analyze + Grok via /kimi) =====================
     function aiDict(){ return (document.documentElement.lang==='en') ? I18N.en : I18N.pt; }
+
     function renderAIResult(payload){
       const d = aiDict();
       const box = document.getElementById('aiResult');
@@ -323,6 +336,101 @@
         ${reasons.length?`<div style="margin-top:8px"><strong>${d.ai_reasons}:</strong><ul style="margin:6px 0;padding-left:18px">${reasons.map(r=>`<li>${r}</li>`).join('')}</ul></div>`:''}
       `;
     }
+
+    // ======== Rótulos para Grok ========
+    function grokDict(){
+      const isEN = document.documentElement.lang === 'en';
+      return isEN ? {
+        thinking: "Asking Grok…",
+        title: "Extra AI Opinion (Grok)",
+        introDecision: "Conclusion",
+        error: "Could not get Grok opinion now."
+      } : {
+        thinking: "Consultando o Grok…",
+        title: "Opinião extra da IA (Grok)",
+        introDecision: "Conclusão",
+        error: "Não foi possível obter a opinião do Grok agora."
+      };
+    }
+
+    // ======== Render Grok ========
+    function renderGrok(text){
+      const box = document.getElementById('grokOpinion');
+      if (!box) return;
+      box.innerHTML = text
+        ? text.replace(/\n/g, '<br/>')
+        : '—';
+    }
+
+    // ======== Prompt p/ Grok com dados do /analyze ========
+    function buildGrokMessages(symbol, analyzePayload){
+      const isEN = document.documentElement.lang === 'en';
+      const d = analyzePayload || {};
+      const t = d.technicals || {};
+      const a = d.analysts || {};
+      const dec = (d.decision || '').toString().toUpperCase();
+      const score = typeof d.score === 'number' ? Math.round(d.score) : null;
+
+      const summary = {
+        symbol,
+        decision_calc: dec,
+        score_calc: score,
+        technicals: {
+          sma50: t.sma50, sma200: t.sma200, rsi14: t.rsi,
+          macd: t.macd?.macd, signal: t.macd?.signal, hist: t.macd?.hist
+        },
+        analysts: {
+          mean: a.mean, trend: a.trend
+        }
+      };
+
+      const qPT = `Baseado APENAS nos indicadores técnicos e nos dados dos analistas fornecidos em JSON a seguir,
+responda começando pela CONCLUSÃO (uma palavra: "COMPRAR", "VENDER" ou "MANTER"), e logo depois explique o racional em 3–5 frases objetivas.
+Evite jargões e não faça recomendação personalizada. Mantenha tom educacional e conciso.`;
+
+      const qEN = `Based ONLY on the provided technical indicators and analyst data (JSON below),
+start with the CONCLUSION (one word: "BUY", "SELL", or "HOLD"), then explain the rationale in 3–5 concise sentences.
+Avoid personalization and keep an educational tone.`;
+
+      const userContent = (isEN ? qEN : qPT) + `\n\nSYMBOL: ${symbol}\nDATA:\n` + JSON.stringify(summary, null, 2);
+
+      const systemContent = isEN
+        ? "You are a financial analysis assistant. Provide concise, educational summaries. Do not give personalized advice."
+        : "Você é um assistente de análise financeira. Forneça resumos concisos e educacionais. Não dê aconselhamento personalizado.";
+
+      return [
+        { role: "system", content: systemContent },
+        { role: "user", content: userContent }
+      ];
+    }
+
+    // ======== Chamada ao /kimi (Grok via OpenRouter) ========
+    async function askGrok(symbol, analyzePayload){
+      const lbl = grokDict();
+      const titleEl = document.getElementById('grokTitle');
+      if (titleEl) titleEl.textContent = lbl.title;
+
+      const box = document.getElementById('grokOpinion');
+      if (box) box.textContent = lbl.thinking;
+
+      try{
+        const messages = buildGrokMessages(symbol, analyzePayload);
+        const resp = await fetch(API_BASE + "/kimi?model=" + encodeURIComponent("x-ai/grok-4-fast"), {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({ messages })
+        });
+        if (!resp.ok) throw new Error('HTTP ' + resp.status);
+        const j = await resp.json();
+        const content = j?.choices?.[0]?.message?.content || '';
+        renderGrok(content || lbl.error);
+      }catch(e){
+        console.error('grok error', e);
+        renderGrok(grokDict().error);
+      }
+    }
+
+    // ======== Fluxo principal da Opinião AI ========
     async function runAIAnalysis(symbol){
       const d = aiDict();
       const aiStatus = document.getElementById('aiStatus');
@@ -331,7 +439,13 @@
         const resp = await fetch(AI_API + "?symbol=" + encodeURIComponent(symbol), { cache:'no-store' });
         if(!resp.ok) throw new Error('HTTP '+resp.status);
         const json = await resp.json();
+
+        // Render do cálculo local (/analyze)
         renderAIResult(json);
+
+        // Chama Grok para opinião extra baseada no JSON do /analyze
+        askGrok(symbol, json);
+
         aiStatus.textContent = d.ai_last_update+': '+new Date().toLocaleString(document.documentElement.lang==='en'?'en-US':'pt-BR',{hour12:false});
       }catch(e){
         console.error('AI analyze error', e);
@@ -346,17 +460,6 @@
       const s = getCurrentSymbol();
       document.getElementById('aiSymbolInput').value = s;
     });
-
-    // Ajusta textos da seção ao trocar idioma
-    const oldApplyI18n = applyI18n; // keep ref if exists
-    applyI18n = function(){
-      // chama a versão original
-      oldApplyI18n();
-      const d = aiDict();
-      const titleEl = document.getElementById('aiTitle'); if(titleEl) titleEl.textContent = d.ai_title;
-      const b1 = document.getElementById('aiAnalyzeBtn'); if(b1) b1.textContent = d.ai_analyze;
-      const b2 = document.getElementById('aiUseChartBtn'); if(b2) b2.textContent = d.ai_use_chart;
-    };
 
     // ===================== Posições: público + local =====================
     const posKeyLocal = 'positions_v4_pl_only_autorefresh';
