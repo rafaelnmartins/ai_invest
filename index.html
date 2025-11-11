@@ -3,113 +3,86 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>AI Investimentos — Dashboard Pro</title>
+  <title>AI Investimentos - Dicas para familia e amigos</title>
+  <meta name="description" content="Site com dicas, gráfico TradingView, alertas embutidos e minhas posições com P/L %." />
   <link rel="preconnect" href="https://s3.tradingview.com" crossorigin>
   <style>
-    :root{
-      --bg:#0b1220; --panel:#0f172a; --ink:#e5e7eb; --muted:#94a3b8; --acc:#38bdf8; --line:rgba(148,163,184,.14)
-    }
+    :root{ --bg:#f8fafc; --panel:#ffffff; --ink:#0f172a; --muted:#475569; --acc:#0ea5e9; }
     *{box-sizing:border-box}
     html,body{height:100%}
-    body{margin:0;background:radial-gradient(1200px 600px at 10% -10%, rgba(56,189,248,.08), transparent), #0b1220;color:var(--ink);font:14px/1.6 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Helvetica Neue",Arial}
+    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,'Helvetica Neue',Arial,'Noto Sans',sans-serif;background:var(--bg);color:var(--ink)}
     a{color:var(--acc);text-decoration:none}
-
-    .wrap{max-width:1200px;margin:0 auto;padding:26px}
-
-    /* Hero */
-    .hero{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
-    .brand{display:flex;align-items:center;gap:12px}
-    .logo{width:40px;height:40px;border-radius:12px;background:conic-gradient(from 210deg,#22d3ee,#6366f1,#22d3ee);box-shadow:0 0 0 6px rgba(56,189,248,.06)}
-    h1{font-size:20px;margin:0}
-    .btn{cursor:pointer;border-radius:10px;border:1px solid var(--line);background:#0b1220;padding:10px 12px;color:var(--ink)}
-    .btn:hover{background:#0e1526}
-
-    /* KPI bar */
-    .kpis{display:grid;grid-template-columns:repeat(12,1fr);gap:12px;margin:16px 0}
-    .kpi{grid-column:span 3;background:linear-gradient(180deg,#0f172a,#0d1528);border:1px solid var(--line);border-radius:14px;padding:12px 14px}
-    .kpi h4{margin:0 0 6px 0;font-size:12px;color:#93c5fd;text-transform:uppercase;letter-spacing:.6px}
-    .kpi p{margin:0;font-size:18px}
-
-    /* Grid blocks */
+    .wrap{max-width:1150px;margin:0 auto;padding:28px}
+    header{display:flex;gap:20px;align-items:center;justify-content:space-between;margin-bottom:22px}
+    .brand{display:flex;gap:12px;align-items:center}
+    .logo{width:40px;height:40px;border-radius:10px;background:conic-gradient(from 210deg,#22d3ee,#6366f1,#22d3ee);box-shadow:0 6px 20px rgba(34,211,238,.25)}
+    h1{font-size:clamp(18px,3.2vw,26px);margin:0}
     .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px}
-    .card{background:linear-gradient(180deg,#0f172a,#0d1426);border:1px solid var(--line);border-radius:16px;padding:18px}
-    h2{margin:0 0 10px 0;font-size:16px}
-    p.status{font-size:12px;color:var(--muted)}
-
-    /* Sections */
-    .quick{grid-column:span 12}
-    #ai-opinion{grid-column:span 8}
-    .alerts{grid-column:span 4}
-    .positions{grid-column:span 12}
-    .chart{grid-column:span 8}
-    .chart-tips{grid-column:span 4}
-
-    /* Table */
+    .card{background:var(--panel);border:1px solid rgba(0,0,0,.1);border-radius:16px;padding:18px}
+    h2{margin:0 0 10px 0;font-size:18px}
+    p{color:var(--muted);line-height:1.6;margin:8px 0}
+    .tips li{margin:8px 0;color:var(--ink)}
+    footer{margin:28px 0 8px 0;text-align:center;color:var(--muted);font-size:12px}
+    .btn{cursor:pointer;border-radius:12px;border:1px solid rgba(0,0,0,.15);background:#fff;padding:8px 12px}
+    .btn:hover{background:#f1f5f9}
+    input,select,textarea{font:inherit;border-radius:12px;border:1px solid rgba(0,0,0,.12);background:#fff;color:var(--ink);padding:10px 12px}
     table{width:100%;border-collapse:separate;border-spacing:0}
-    th,td{padding:10px 12px;border-bottom:1px solid var(--line);text-align:left}
-    th{font-size:12px;color:#94a3b8}
-
-    /* Lists & badges */
-    .tips{margin:0;padding-left:18px}
-    .tips li{margin:6px 0;color:var(--muted)}
-    .badge{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:#38bdf8;background:rgba(56,189,248,.08);border:1px solid rgba(56,189,248,.25);border-radius:999px;padding:2px 8px}
-    input,select,textarea{font:inherit;border-radius:10px;border:1px solid var(--line);background:#0b1220;color:var(--ink);padding:10px 12px}
-
-    @media (max-width:1024px){
-      #ai-opinion,.alerts,.chart,.chart-tips{grid-column:span 12}
-      .kpi{grid-column:span 6}
-    }
+    th,td{padding:10px 12px;border-bottom:1px solid rgba(0,0,0,.08);text-align:left}
+    th{font-size:13px;color:#334155}
+    .status{font-size:12px;color:#475569;margin-top:6px}
+    .badge{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:#0369a1;background:#e0f2fe;border:1px solid #bae6fd;border-radius:999px;padding:2px 8px}
+    @media (max-width:960px){.grid{grid-template-columns:1fr}}
   </style>
 </head>
 <body>
   <div class="wrap">
-    <!-- HERO -->
-    <div class="hero">
+    <header>
       <div class="brand">
-        <div class="logo"></div>
-        <h1>AI Investimentos</h1>
+        <div class="logo" aria-hidden="true"></div>
+        <h1 data-i18n="title" id="siteTitle">Dicas AI Investimentos para familia e amigos</h1>
       </div>
-      <button id="langToggle" class="btn">🇧🇷/🇺🇸 <span id="langLabel">PT</span></button>
-    </div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <button id="langToggle" class="btn" title="Switch language">🇧🇷/🇺🇸 <span id="langLabel">PT</span></button>
+      </div>
+    </header>
 
-    <!-- KPI BAR -->
-    <div class="kpis">
-      <div class="kpi"><h4>Status</h4><p id="kpiStatus">Mercado Fechado</p></div>
-      <div class="kpi"><h4>Foco</h4><p>Large Caps 🇺🇸</p></div>
-      <div class="kpi"><h4>Risco</h4><p>Moderado</p></div>
-      <div class="kpi"><h4>Últ. atualização</h4><p id="y">—</p></div>
-    </div>
-
-    <!-- (1) QUICK TIPS -->
-    <section class="card quick">
-      <h2 id="quickTitle">Dicas rápidas</h2>
-      <ul class="tips" id="quickTips">
-        <li>Agente envia alertas <strong>após o fechamento</strong> de NY.</li>
-        <li>Curto: <strong>+5%</strong> | Longo: <strong>+10%</strong>.</li>
-        <li>Use stop e acompanhe <strong>vendas</strong>.</li>
+    <!-- 1) Dicas rápidas -->
+    <section class="card">
+      <h2 data-i18n="quick_tips">Dicas rápidas</h2>
+      <ul class="tips">
+        <li>Todos os dias o <strong>Agente</strong> enviará os alertas <strong>após o fechamento</strong> da bolsa de Wall Street.</li>
+        <li>Alertas de <strong>compra (curto prazo)</strong> buscam ganho de <strong>5%</strong>; de <strong>longo prazo</strong> buscam <strong>10%</strong>.</li>
+        <li>Fique ligado aos <strong>alertas de venda</strong>.</li>
       </ul>
     </section>
 
-    <!-- (2) AI + ALERTAS -->
-    <div class="grid">
-      <section class="card" id="ai-opinion">
-        <h2>Opinião da AI (Técnico + Analistas)</h2>
+    <!-- 2) Opinião da AI (com Grok) ao lado dos Alertas -->
+    <div class="grid" style="margin-top:16px">
+      <!-- Opinião da AI -->
+      <section class="card" id="ai-opinion" style="grid-column: span 8">
+        <h2 id="aiTitle">Opinião da AI (Técnico + Analistas)</h2>
         <div class="grid" style="grid-template-columns:repeat(12,1fr);gap:10px;margin:8px 0 12px 0">
           <input id="aiSymbolInput" placeholder="Ex.: NASDAQ:AMZN ou AMZN" style="grid-column:span 6" />
           <button id="aiAnalyzeBtn" class="btn" style="grid-column:span 3">Analisar</button>
           <button id="aiUseChartBtn" class="btn" style="grid-column:span 3">Usar símbolo do gráfico</button>
         </div>
-        <div id="aiResult" class="card" style="background:#0b1220;border:1px dashed rgba(148,163,184,.18);min-height:90px"></div>
-        <div id="grokBox" class="card" style="margin-top:10px;background:#0b1220;border:1px solid rgba(148,163,184,.18)">
-          <h3 style="margin:0 0 8px 0" id="grokTitle">Opinião extra da IA (Grok)</h3>
+
+        <!-- Resultado calculado pelo Worker (/analyze) -->
+        <div id="aiResult" class="card" style="background:#f8fafc;border:1px dashed rgba(0,0,0,.1);min-height:90px"></div>
+
+        <!-- Opinião extra via LLM (Grok / OpenRouter) -->
+        <div id="grokBox" class="card" style="margin-top:10px;background:#fff7ed;border:1px solid #fed7aa">
+          <h3 id="grokTitle" style="margin:0 0 8px 0">Opinião extra da IA (Grok)</h3>
           <div id="grokOpinion" class="status">—</div>
         </div>
+
         <p class="status" id="aiStatus"></p>
       </section>
 
-      <section class="card alerts">
+      <!-- Alertas -->
+      <section class="card" style="grid-column: span 4">
         <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
-          <h2 id="alertsTitle">Alertas</h2>
+          <h2 data-i18n="alerts_title">Alertas</h2>
           <span class="badge">⚡ Agent</span>
         </div>
         <iframe
@@ -118,38 +91,47 @@
           title="Alertas – Cloudflare Worker"
           loading="lazy"
           referrerpolicy="no-referrer"
-          style="width:100%;height:520px;border:1px solid rgba(148,163,184,.18);border-radius:12px;background:#0b1220;color:#ffffff;">
+          style="width:100%;height:520px;border:1px solid rgba(0,0,0,.1);border-radius:12px;background:#ffffff;color:#000000;">
         </iframe>
+        <details style="margin-top:8px"><summary class="status">Se a janela não aparecer</summary>
+          <p class="status">No Worker: remova <code>X-Frame-Options</code> e permita <code>frame-ancestors</code> no CSP (inclua seu domínio do GitHub Pages).</p>
+        </details>
       </section>
     </div>
 
-    <!-- (3) POSIÇÕES -->
-    <section class="card positions" id="positions">
+    <!-- 3) Minhas posições -->
+    <section class="card" style="margin-top:16px">
       <div style="display:flex;align-items:center;gap:8px;justify-content:space-between;flex-wrap:wrap">
-        <h2 id="positionsTitle">Minhas posições</h2>
+        <h2 data-i18n="positions_title">Minhas posições</h2>
         <div style="display:flex;gap:8px;flex-wrap:wrap">
-          <span class="badge" title="Visível para todos">🌐 Público</span>
+          <span class="badge" title="Visitantes veem essas posições">🌐 Público</span>
           <button id="loadPublicBtn" class="btn">Atualizar públicas</button>
-          <button id="publishBtn" class="btn">Publicar (admin)</button>
+          <button id="publishBtn" class="btn" title="Enviar posições locais para o servidor (admin)">Publicar minhas posições (admin)</button>
         </div>
       </div>
+
       <div class="grid" style="grid-template-columns:repeat(12,1fr);gap:10px;margin:8px 0 12px 0">
         <input id="posSymbol" placeholder="Ex.: NASDAQ:NVDA ou BMFBOVESPA:PETR4" style="grid-column:span 6" />
         <input id="posAvg" type="number" inputmode="decimal" step="0.01" placeholder="Preço médio" style="grid-column:span 3" />
         <input id="posNote" placeholder="Observação (opcional)" style="grid-column:span 3" />
       </div>
       <div style="display:flex;gap:10px;flex-wrap:wrap">
-        <button id="addPosBtn" class="btn">Adicionar posição</button>
-        <button id="refreshBtn" class="btn">Atualizar preços</button>
-        <button id="clearAllBtn" class="btn">Limpar locais</button>
-        <button id="exportBtn" class="btn">Exportar CSV</button>
+        <button id="addPosBtn" class="btn" data-i18n="add_position">Adicionar posição (local)</button>
+        <button id="refreshBtn" class="btn" data-i18n="refresh">Atualizar preços</button>
+        <button id="clearAllBtn" class="btn" data-i18n="clear_all">Limpar locais</button>
+        <button id="exportBtn" class="btn" data-i18n="export_csv">Exportar CSV (locais)</button>
       </div>
       <p class="status" id="quoteStatus"></p>
       <div style="overflow:auto;margin-top:12px">
-        <table id="posTable">
+        <table id="posTable" aria-label="positions">
           <thead>
             <tr>
-              <th>Símbolo</th><th>Preço médio</th><th>Preço atual</th><th>P/L %</th><th>Obs.</th><th>Ações</th>
+              <th data-i18n="th_symbol">Símbolo</th>
+              <th data-i18n="th_avg">Preço médio</th>
+              <th data-i18n="th_last">Preço atual</th>
+              <th data-i18n="th_pl">P/L %</th>
+              <th data-i18n="th_note">Obs.</th>
+              <th data-i18n="th_actions">Ações</th>
             </tr>
           </thead>
           <tbody></tbody>
@@ -159,67 +141,510 @@
       <p id="lastRefresh" class="status"></p>
     </section>
 
-    <!-- (4) CHART + TIPS -->
-    <div class="grid">
-      <section class="card chart" id="chart">
-        <h2 id="chartTitle">Gráfico (TradingView)</h2>
+    <!-- 4) Gráfico (TradingView) + novo quadro de dicas -->
+    <div class="grid" style="margin-top:16px">
+      <!-- Gráfico -->
+      <section class="card" style="grid-column: span 8">
+        <h2 data-i18n="chart_title">Gráfico (TradingView)</h2>
         <div class="grid" style="grid-template-columns:repeat(12,1fr);gap:10px;margin:0 0 10px 0">
           <input id="chartSymbolInput" placeholder="Ex.: NASDAQ:NVDA ou BMFBOVESPA:PETR4" style="grid-column:span 6" />
-          <button id="setChartBtn" class="btn" style="grid-column:span 2">Carregar símbolo</button>
-          <button id="addFromChartBtn" class="btn" style="grid-column:span 2">Adicionar à lista</button>
-          <a id="openTV" class="btn" style="grid-column:span 2;text-align:center" href="https://www.tradingview.com/chart/" target="_blank" rel="noopener">Abrir no TradingView</a>
+          <button id="setChartBtn" class="btn" style="grid-column:span 2" data-i18n="set_symbol">Carregar símbolo</button>
+          <button id="addFromChartBtn" class="btn" style="grid-column:span 2" data-i18n="add_from_chart">Adicionar à lista</button>
+          <a id="openTV" class="btn" style="grid-column:span 2;text-align:center" href="https://www.tradingview.com/chart/" target="_blank" rel="noopener" data-i18n="open_tv">Abrir no TradingView</a>
         </div>
         <div id="tradingview_chart" style="height:520px;width:100%"></div>
         <p class="status" id="tvStatus"></p>
       </section>
 
-      <section class="card chart-tips">
-        <h2 id="chartTipsTitle">Boas práticas no gráfico</h2>
-        <ul class="tips" id="chartTips">
-          <li>Não dependa de um único indicador.</li>
-          <li>Tendência (SMA50 vs SMA200) antes do gatilho.</li>
-          <li>Entrada parcial + adição na confirmação.</li>
-          <li>Stop técnico e alvo definidos previamente.</li>
-          <li>Cheque notícias e earnings.</li>
+      <!-- Novo quadro de dicas ao lado do gráfico -->
+      <section class="card" style="grid-column: span 4">
+        <h2>Boas práticas no gráfico</h2>
+        <ul class="tips">
+          <li>Evite decisões com base em <strong>1 indicador</strong> apenas. Confirme com 2–3 sinais.</li>
+          <li>Observe a <strong>tendência (SMA50 x SMA200)</strong> antes do gatilho.</li>
+          <li>Prefira entrar com <strong>parcial</strong> e completar se o movimento confirmar.</li>
+          <li>Defina um <strong>stop técnico</strong> e um <strong>alvo</strong> antes de clicar.</li>
+          <li>Revise notícias/earnings que possam afetar o papel.</li>
         </ul>
       </section>
     </div>
 
-    <!-- TICKER -->
-    <section class="card">
+    <!-- Ticker global no final da página -->
+    <section class="card" style="margin-top:16px">
       <h2>Mercados Globais &amp; Magnificent 7</h2>
       <div class="tradingview-widget-container">
         <div class="tradingview-widget-container__widget"></div>
-        <script src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
-        {
-          "symbols":[
-            {"proName":"FOREXCOM:US30","title":"Dow Jones"},
-            {"proName":"FOREXCOM:US100","title":"Nasdaq 100"},
-            {"proName":"FOREXCOM:US500","title":"S&P 500"},
-            {"proName":"BMFBOVESPA:IBOV","title":"Ibovespa"},
-            {"proName":"FOREXCOM:EU50","title":"Euro Stoxx 50"},
-            {"proName":"FOREXCOM:UK100","title":"FTSE 100"},
-            {"proName":"NASDAQ:AAPL","title":"Apple"},
-            {"proName":"NASDAQ:MSFT","title":"Microsoft"},
-            {"proName":"NASDAQ:GOOGL","title":"Alphabet"},
-            {"proName":"NASDAQ:AMZN","title":"Amazon"},
-            {"proName":"NASDAQ:NVDA","title":"NVIDIA"},
-            {"proName":"NASDAQ:META","title":"Meta"},
-            {"proName":"NASDAQ:TSLA","title":"Tesla"}],
-          "showSymbolLogo":true,"isTransparent":false,"displayMode":"adaptive","colorTheme":"dark"
-        }
+        <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
+          {
+            "symbols": [
+              {"proName": "FOREXCOM:US30",  "title": "Dow Jones"},
+              {"proName": "FOREXCOM:US100", "title": "Nasdaq 100"},
+              {"proName": "FOREXCOM:US500", "title": "S&P 500"},
+              {"proName": "BMFBOVESPA:IBOV", "title": "Ibovespa"},
+              {"proName": "FOREXCOM:EU50",  "title": "Euro Stoxx 50"},
+              {"proName": "FOREXCOM:UK100", "title": "FTSE 100"},
+
+              {"proName": "NASDAQ:AAPL",  "title": "Apple"},
+              {"proName": "NASDAQ:MSFT",  "title": "Microsoft"},
+              {"proName": "NASDAQ:GOOGL", "title": "Alphabet"},
+              {"proName": "NASDAQ:AMZN",  "title": "Amazon"},
+              {"proName": "NASDAQ:NVDA",  "title": "NVIDIA"},
+              {"proName": "NASDAQ:META",  "title": "Meta"},
+              {"proName": "NASDAQ:TSLA",  "title": "Tesla"}
+            ],
+            "showSymbolLogo": true,
+            "isTransparent": false,
+            "displayMode": "adaptive",
+            "colorTheme": "light"
+          }
         </script>
       </div>
     </section>
 
-    <p class="status" style="text-align:center;color:#64748b">© <span id="y"></span> • Site educacional, não é recomendação de investimento.</p>
+    <footer>© <span id="y"></span> • <span data-i18n="disclaimer">Site educacional, não é recomendação de investimento.</span></footer>
   </div>
 
   <script src="https://s3.tradingview.com/tv.js"></script>
-  <!-- === Cole aqui o MESMO <script> do seu projeto atual (JS inalterado) === -->
   <script>
-    // Só para exibir o ano caso o seu JS não rode ainda:
+  // ===================== CONFIG =====================
+  const API_BASE = "https://shiny-sea-44d3.rafaelnm.workers.dev";
+  const QUOTE_API = API_BASE + "/quotes";
+  const POS_API   = API_BASE + "/positions";
+  const AI_API    = API_BASE + "/analyze"; // Worker: /analyze
+  // LLM (Grok via OpenRouter) está exposto no seu Worker como /kimi
+
+  // ===================== I18N =====================
+  const I18N = {
+    pt:{ title:"AI Invest - Dicas de Ações para familia e amigos", quick_tips:"Dicas rápidas",
+      tip1:"Defina <strong>entrada, stop e alvo</strong> antes de executar.",
+      tip2:"Use <strong>gestão de risco</strong> por posição e por carteira.",
+      tip3:"Combine <strong>fundamental + técnico</strong> para decisões mais sólidas.",
+      chart_title:"Gráfico (TradingView)", alerts_title:"Alertas",
+      ticker_title:"Ticker de Cotações", positions_title:"Minhas posições",
+      add_position:"Adicionar posição", clear_all:"Limpar tudo", export_csv:"Exportar CSV",
+      th_symbol:"Símbolo", th_avg:"Preço médio", th_last:"Preço atual", th_pl:"P/L %",
+      th_note:"Obs.", th_actions:"Ações", disclaimer:"Site educacional, não é recomendação de investimento - rafaelnm@gmail.com",
+      edit:"Editar", del:"Excluir", totals:"Total de posições: {n}", refresh:"Atualizar preços",
+      set_symbol:"Carregar símbolo", add_from_chart:"Adicionar à lista", open_tv:"Abrir no TradingView",
+      ai_title:"Opinião da AI (Técnico + Analistas)", ai_analyze:"Analisar", ai_use_chart:"Usar símbolo do gráfico",
+      ai_decision:"Decisão", ai_score:"Score", ai_reasons:"Motivos", ai_technicals:"Técnicos", ai_analysts:"Analistas",
+      ai_buy:"Comprar", ai_hold:"Manter", ai_sell:"Vender", ai_last_update:"Última análise"
+    },
+    en:{ title:"AI Invest - Stocks TIPs for Family and Friends", quick_tips:"Quick tips",
+      tip1:"Define <strong>entry, stop and target</strong> before executing.",
+      tip2:"Use <strong>risk management</strong> per position and portfolio.",
+      tip3:"Combine <strong>fundamental + technical</strong> for stronger decisions.",
+      chart_title:"Chart (TradingView)", alerts_title:"Alerts",
+      ticker_title:"Quotes Ticker", positions_title:"My positions", add_position:"Add position",
+      clear_all:"Clear all", export_csv:"Export CSV", th_symbol:"Symbol", th_avg:"Avg. price",
+      th_last:"Last price", th_pl:"P/L %", th_note:"Note", th_actions:"Actions",
+      disclaimer:"Educational site, not investment advice - rafaelnm@gmail.com", edit:"Edit", del:"Delete",
+      totals:"Total positions: {n}", refresh:"Refresh prices", set_symbol:"Load symbol",
+      add_from_chart:"Add from chart", open_tv:"Open on TradingView",
+      ai_title:"AI Opinion (Technical + Analysts)", ai_analyze:"Analyze", ai_use_chart:"Use chart symbol",
+      ai_decision:"Decision", ai_score:"Score", ai_reasons:"Reasons", ai_technicals:"Technicals", ai_analysts:"Analysts",
+      ai_buy:"Buy", ai_hold:"Hold", ai_sell:"Sell", ai_last_update:"Last analysis"
+    }
+  };
+
+  document.addEventListener('DOMContentLoaded', () => {
+    // ===== idioma =====
+    function detectLang(){ const nav = navigator.language || 'pt-BR'; return String(nav).toLowerCase().startsWith('en') ? 'en' : 'pt'; }
+    let currentLang = (localStorage.getItem('lang') || detectLang());
+    const langLabel = document.getElementById('langLabel');
+    function applyI18n(){
+      const dict = I18N[currentLang] || I18N.pt;
+      document.documentElement.lang = currentLang === 'en' ? 'en' : 'pt-br';
+      document.querySelectorAll('[data-i18n]').forEach(el=>{
+        const key = el.getAttribute('data-i18n');
+        if(dict[key]) el.innerHTML = dict[key];
+      });
+      langLabel.textContent = currentLang.toUpperCase();
+      loadChart(getCurrentSymbol(), currentLang === 'en' ? 'en' : 'br');
+      renderPositions(latestQuotesMap);
+
+      // Ajuste do título do Grok
+      const gdict = grokDict();
+      const gt = document.getElementById('grokTitle'); if (gt) gt.textContent = gdict.title;
+    }
+    document.getElementById('langToggle').addEventListener('click', ()=>{
+      currentLang = currentLang === 'en' ? 'pt' : 'en'; localStorage.setItem('lang', currentLang); applyI18n();
+    });
+
+    // ===================== TradingView =====================
+    const DEFAULT_SYMBOL = 'NASDAQ:NVDA';
+    let tvWidgetInstance;
+    function getCurrentSymbol(){ return window.__CURRENT_SYMBOL || DEFAULT_SYMBOL; }
+    function setCurrentSymbol(s){ window.__CURRENT_SYMBOL = s; }
+    function loadChart(symbol, locale){
+      const tvStatus = document.getElementById('tvStatus');
+      try{
+        const loc = locale || (currentLang === 'en' ? 'en' : 'br');
+        const s = (symbol || DEFAULT_SYMBOL).trim();
+        setCurrentSymbol(s);
+        if(tvWidgetInstance && typeof tvWidgetInstance.remove === 'function'){ tvWidgetInstance.remove(); }
+        tvWidgetInstance = new TradingView.widget({
+          autosize:true, symbol:s, interval:"60", timezone:"Etc/UTC", theme:"light", style:"1", locale:loc,
+          enable_publishing:false, container_id:"tradingview_chart", withdateranges:true, allow_symbol_change:true
+        });
+        document.getElementById('openTV').href = `https://www.tradingview.com/chart/?symbol=${encodeURIComponent(s)}`;
+        const input = document.getElementById('chartSymbolInput'); if(input && !input.value) input.value = s;
+        tvStatus.textContent = '';
+      }catch(e){ tvStatus.textContent = (currentLang==='en'?'Could not load chart now.':'Não foi possível carregar o gráfico agora.'); console.error(e); }
+    }
+    document.getElementById('setChartBtn').addEventListener('click', ()=>{
+      const s = document.getElementById('chartSymbolInput').value.trim(); if(!s){ alert(currentLang==='en'?'Enter a symbol':'Informe um símbolo'); return; } loadChart(s);
+    });
+    document.getElementById('addFromChartBtn').addEventListener('click', ()=>{
+      document.getElementById('posSymbol').value = getCurrentSymbol(); document.getElementById('posAvg').focus();
+    });
+
+    // ===================== Opinião da AI (Worker /analyze + Grok via /kimi) =====================
+    function aiDict(){ return (document.documentElement.lang==='en') ? I18N.en : I18N.pt; }
+
+    function renderAIResult(payload){
+      const d = aiDict();
+      const box = document.getElementById('aiResult');
+      if(!payload || typeof payload !== 'object'){ box.innerHTML = '<p class="status">'+(d.ai_last_update+': —')+'</p>'; return; }
+      const dec = String(payload.decision||'').toUpperCase();
+      const mapLabel = { BUY:d.ai_buy, HOLD:d.ai_hold, SELL:d.ai_sell };
+      const color = dec==='BUY' ? '#15803d' : (dec==='SELL' ? '#b91c1c' : '#334155');
+      const score = (typeof payload.score==='number') ? Math.round(payload.score) : null;
+      const tech = payload.technicals||{}; const an = payload.analysts||{}; const reasons = payload.reasons||[];
+      box.innerHTML = `
+        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+          <span class="badge" style="background:#f1f5f9;border-color:#e2e8f0;color:${color}"><strong>${d.ai_decision}:</strong> ${mapLabel[dec]||dec}</span>
+          ${score!==null?`<span class="badge"><strong>${d.ai_score}:</strong> ${score}/100</span>`:''}
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(12,1fr);gap:12px;margin-top:10px">
+          <div class="card" style="grid-column:span 6">
+            <h3 style="margin:0 0 6px 0">${d.ai_technicals}</h3>
+            <ul style="margin:0;padding-left:18px">
+              <li>SMA50: <strong>${tech.sma50??'-'}</strong> · SMA200: <strong>${tech.sma200??'-'}</strong></li>
+              <li>RSI14: <strong>${tech.rsi??'-'}</strong></li>
+              <li>MACD: <strong>${tech.macd?.macd??'-'}</strong> · Signal: <strong>${tech.macd?.signal??'-'}</strong></li>
+            </ul>
+          </div>
+          <div class="card" style="grid-column:span 6">
+            <h3 style="margin:0 0 6px 0">${d.ai_analysts}</h3>
+            <ul style="margin:0;padding-left:18px">
+              <li>Mean: <strong>${an.mean??'-'}</strong></li>
+              <li>Trend: ${an.trend ? `<strong>buy ${an.trend.buy||0}</strong> · hold ${an.trend.hold||0} · sell ${an.trend.sell||0}` : '-'}</li>
+            </ul>
+          </div>
+        </div>
+        ${reasons.length?`<div style="margin-top:8px"><strong>${d.ai_reasons}:</strong><ul style="margin:6px 0;padding-left:18px">${reasons.map(r=>`<li>${r}</li>`).join('')}</ul></div>`:''}
+      `;
+    }
+
+    // ======== Rótulos para Grok ========
+    function grokDict(){
+      const isEN = document.documentElement.lang === 'en';
+      return isEN ? {
+        thinking: "Asking Grok…",
+        title: "Extra AI Opinion (Grok)",
+        introDecision: "Conclusion",
+        error: "Could not get Grok opinion now."
+      } : {
+        thinking: "Consultando o Grok…",
+        title: "Opinião extra da IA (Grok)",
+        introDecision: "Conclusão",
+        error: "Não foi possível obter a opinião do Grok agora."
+      };
+    }
+
+    // ======== Render Grok ========
+    function renderGrok(text){
+      const box = document.getElementById('grokOpinion');
+      if (!box) return;
+      box.innerHTML = text
+        ? text.replace(/\n/g, '<br/>')
+        : '—';
+    }
+
+    // ======== Prompt p/ Grok com dados do /analyze ========
+    function buildGrokMessages(symbol, analyzePayload){
+      const isEN = document.documentElement.lang === 'en';
+      const d = analyzePayload || {};
+      const t = d.technicals || {};
+      const a = d.analysts || {};
+      const dec = (d.decision || '').toString().toUpperCase();
+      const score = typeof d.score === 'number' ? Math.round(d.score) : null;
+
+      const summary = {
+        symbol,
+        decision_calc: dec,
+        score_calc: score,
+        technicals: {
+          sma50: t.sma50, sma200: t.sma200, rsi14: t.rsi,
+          macd: t.macd?.macd, signal: t.macd?.signal, hist: t.macd?.hist
+        },
+        analysts: {
+          mean: a.mean, trend: a.trend
+        }
+      };
+
+      const qPT = `Baseado APENAS nos indicadores técnicos e nos dados dos analistas fornecidos em JSON a seguir,
+responda começando pela CONCLUSÃO (uma palavra: "COMPRAR", "VENDER" ou "MANTER"), e logo depois explique o racional em 3–5 frases objetivas.
+Evite jargões e não faça recomendação personalizada. Mantenha tom educacional e conciso.`;
+
+      const qEN = `Based ONLY on the provided technical indicators and analyst data (JSON below),
+start with the CONCLUSION (one word: "BUY", "SELL", or "HOLD"), then explain the rationale in 3–5 concise sentences.
+Avoid personalization and keep an educational tone.`;
+
+      const userContent = (isEN ? qEN : qPT) + `\n\nSYMBOL: ${symbol}\nDATA:\n` + JSON.stringify(summary, null, 2);
+
+      const systemContent = isEN
+        ? "You are a financial analysis assistant. Provide concise, educational summaries. Do not give personalized advice."
+        : "Você é um assistente de análise financeira. Forneça resumos concisos e educacionais. Não dê aconselhamento personalizado.";
+
+      return [
+        { role: "system", content: systemContent },
+        { role: "user", content: userContent }
+      ];
+    }
+
+    // ======== Chamada ao /kimi (Grok via OpenRouter) ========
+    async function askGrok(symbol, analyzePayload){
+      const lbl = grokDict();
+      const titleEl = document.getElementById('grokTitle');
+      if (titleEl) titleEl.textContent = lbl.title;
+
+      const box = document.getElementById('grokOpinion');
+      if (box) box.textContent = lbl.thinking;
+
+      try{
+        const messages = buildGrokMessages(symbol, analyzePayload);
+        const resp = await fetch(API_BASE + "/kimi?model=" + encodeURIComponent("x-ai/grok-4-fast"), {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({ messages })
+        });
+        if (!resp.ok) throw new Error('HTTP ' + resp.status);
+        const j = await resp.json();
+        const content = j?.choices?.[0]?.message?.content || '';
+        renderGrok(content || lbl.error);
+      }catch(e){
+        console.error('grok error', e);
+        renderGrok(grokDict().error);
+      }
+    }
+
+    // ======== Fluxo principal da Opinião AI ========
+    async function runAIAnalysis(symbol){
+      const d = aiDict();
+      const aiStatus = document.getElementById('aiStatus');
+      aiStatus.textContent = d.refresh+"…";
+      try{
+        const resp = await fetch(AI_API + "?symbol=" + encodeURIComponent(symbol), { cache:'no-store' });
+        if(!resp.ok) throw new Error('HTTP '+resp.status);
+        const json = await resp.json();
+
+        // Render do cálculo local (/analyze)
+        renderAIResult(json);
+
+        // Chama Grok para opinião extra baseada no JSON do /analyze
+        askGrok(symbol, json);
+
+        aiStatus.textContent = d.ai_last_update+': '+new Date().toLocaleString(document.documentElement.lang==='en'?'en-US':'pt-BR',{hour12:false});
+      }catch(e){
+        console.error('AI analyze error', e);
+        aiStatus.textContent = (document.documentElement.lang==='en'?'Could not analyze now.':'Não foi possível analisar agora.');
+      }
+    }
+    document.getElementById('aiAnalyzeBtn').addEventListener('click', ()=>{
+      const s = document.getElementById('aiSymbolInput').value.trim() || getCurrentSymbol();
+      if(!s) return; runAIAnalysis(s);
+    });
+    document.getElementById('aiUseChartBtn').addEventListener('click', ()=>{
+      const s = getCurrentSymbol();
+      document.getElementById('aiSymbolInput').value = s;
+    });
+
+    // ===================== Posições: público + local =====================
+    const posKeyLocal = 'positions_v4_pl_only_autorefresh';
+    const cacheKey = 'positions_last_prices_cache_v1';
+    const $tbody = document.querySelector('#posTable tbody');
+    const $totals = document.getElementById('totals');
+    const quoteStatus = document.getElementById('quoteStatus');
+    const lastRefreshEl = document.getElementById('lastRefresh');
+
+    let publicPositions = [];
+    function readPositionsLocal(){ try{ return JSON.parse(localStorage.getItem(posKeyLocal)) || []; }catch{ return []; } }
+    function writePositionsLocal(data){ localStorage.setItem(posKeyLocal, JSON.stringify(data)); }
+    function readCache(){ try{ return JSON.parse(localStorage.getItem(cacheKey)) || {}; }catch{ return {}; } }
+    function writeCache(obj){ localStorage.setItem(cacheKey, JSON.stringify(obj||{})); }
+    function number(v){ return isNaN(parseFloat(v)) ? 0 : parseFloat(v); }
+    function fmt(n, d=2){ if(n===null||n===undefined||isNaN(n)) return '-'; return Number(n).toFixed(d); }
+    function fmtPct(n){ if(n===null||n===undefined||isNaN(n)) return '-'; return (n>=0?'+':'')+Number(n).toFixed(2)+'%'; }
+
+    function getAllPositions(){
+      const locals = readPositionsLocal();
+      return [...publicPositions.map(p => ({...p, __public:true})), ...locals.map(p => ({...p, __public:false}))];
+    }
+
+    let latestQuotesMap = {};
+    function renderPositions(quotesMap={}){
+      latestQuotesMap = quotesMap;
+      const dict = I18N[currentLang] || I18N.pt;
+      const data = getAllPositions();
+      $tbody.innerHTML = '';
+      data.forEach((row, idx)=>{
+        const last = (typeof quotesMap[row.symbol] === 'number') ? quotesMap[row.symbol] : null;
+        const pl = (last && row.avg>0) ? ((last/row.avg-1)*100) : null;
+        const badge = row.__public ? ' <span class="badge" title="Visível para todos">🌐</span>' : '';
+        const actions = row.__public
+          ? '<span class="status">—</span>'
+          : `<button class="btn" data-act="edit" data-idx="${idx}">${dict.edit}</button>
+             <button class="btn" data-act="del" data-idx="${idx}">${dict.del}</button>`;
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><button class="btn" data-act="show" data-idx="${idx}" title="Mostrar no gráfico">${row.symbol}</button>${badge}</td>
+          <td>${fmt(row.avg)}</td>
+          <td>${last===null?'-':fmt(last)}</td>
+          <td style="font-weight:700; color:${pl===null?'#334155':(pl>=0?'#15803d':'#b91c1c')}">${pl===null?'-':fmtPct(pl)}</td>
+          <td>${row.note||''}</td>
+          <td class="actions">${actions}</td>`;
+        $tbody.appendChild(tr);
+      });
+      $totals.textContent = (dict.totals||'').replace('{n}', data.length);
+    }
+
+    async function loadPublicPositions(){
+      try{
+        const r = await fetch(POS_API, { cache:'no-store' });
+        if(!r.ok) throw new Error('HTTP '+r.status);
+        const j = await r.json();
+        publicPositions = Array.isArray(j.positions) ? j.positions : [];
+      }catch(e){
+        console.error('loadPublicPositions', e);
+        publicPositions = [];
+      }
+      await refreshPrices();
+    }
+
+    function addPositionLocal(){
+      const symbol = document.getElementById('posSymbol').value.trim() || getCurrentSymbol();
+      const avg = number(document.getElementById('posAvg').value);
+      const note = document.getElementById('posNote').value.trim();
+      if(!symbol || avg<=0){
+        alert(document.documentElement.lang==='en' ? 'Please fill symbol and avg. price.' : 'Preencha símbolo e preço médio.');
+        return;
+      }
+      const data = readPositionsLocal();
+      data.push({symbol, avg, note});
+      writePositionsLocal(data);
+      document.getElementById('posSymbol').value='';
+      document.getElementById('posAvg').value='';
+      document.getElementById('posNote').value='';
+      refreshPrices();
+    }
+
+    async function publishLocalPositions(){
+      const token = localStorage.getItem('admin_token') || prompt('Admin token (Bearer):');
+      if(!token){ return; }
+      localStorage.setItem('admin_token', token);
+      const list = readPositionsLocal();
+      try{
+        const r = await fetch(POS_API, {
+          method:'POST',
+          headers:{ 'content-type':'application/json', 'authorization':'Bearer '+token },
+          body: JSON.stringify({ positions: list })
+        });
+        if(!r.ok){
+          const t = await r.text().catch(()=> '');
+          throw new Error(`HTTP ${r.status} ${t}`);
+        }
+        alert('Posições publicadas com sucesso!');
+        await loadPublicPositions();
+      }catch(e){
+        console.error('publishLocalPositions', e);
+        alert('Falha ao publicar. Verifique o token em ADMIN_TOKEN no Worker.');
+      }
+    }
+
+    document.getElementById('addPosBtn').addEventListener('click', addPositionLocal);
+    document.getElementById('publishBtn').addEventListener('click', publishLocalPositions);
+    document.getElementById('loadPublicBtn').addEventListener('click', loadPublicPositions);
+
+    document.getElementById('clearAllBtn').addEventListener('click', ()=>{
+      if(confirm(document.documentElement.lang==='en' ? 'Clear all LOCAL positions?' : 'Limpar as posições LOCAIS?')){
+        writePositionsLocal([]); renderPositions(latestQuotesMap);
+      }
+    });
+    document.getElementById('exportBtn').addEventListener('click', ()=>{
+      const rows = readPositionsLocal();
+      const header = ['symbol','avg','note'];
+      const csv = [header.join(',')].concat(rows.map(r=> `${r.symbol},${r.avg},"${(r.note||'').replace(/"/g,'""')}"`)).join('\n');
+      const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a'); a.href = url; a.download = 'positions_local.csv'; a.click();
+      URL.revokeObjectURL(url);
+    });
+
+    document.querySelector('#posTable tbody').addEventListener('click', (e)=>{
+      const btn = e.target.closest('button'); if(!btn) return;
+      const act = btn.getAttribute('data-act');
+      const idx = parseInt(btn.getAttribute('data-idx'),10);
+      const data = getAllPositions();
+      const row = data[idx];
+      if(act==='del'){
+        if(row.__public){ alert('Posição pública não pode ser apagada por aqui. Use o botão "Publicar..." para sobrescrever.'); return; }
+        const locals = readPositionsLocal();
+        const found = locals.findIndex(x=> x.symbol===row.symbol && x.avg===row.avg && x.note===row.note);
+        if(found>-1){ locals.splice(found,1); writePositionsLocal(locals); refreshPrices(); }
+      }else if(act==='edit'){
+        if(row.__public){ alert('Posição pública não pode ser editada por aqui. Edite local e publique.'); return; }
+        const locals = readPositionsLocal();
+        const found = locals.findIndex(x=> x.symbol===row.symbol && x.avg===row.avg && x.note===row.note);
+        if(found===-1) return;
+        const symbol = prompt(document.documentElement.lang==='en'?'Symbol:':'Símbolo:', row.symbol) || row.symbol;
+        const avg = parseFloat(prompt(document.documentElement.lang==='en'?'Avg. price:':'Preço médio:', row.avg)) || row.avg;
+        const note = prompt(document.documentElement.lang==='en'?'Note:':'Observação:', row.note||'') || row.note;
+        locals[found] = {symbol, avg, note};
+        writePositionsLocal(locals); refreshPrices();
+      }else if(act==='show'){
+        document.getElementById('chartSymbolInput').value = row.symbol; loadChart(row.symbol);
+      }
+    });
+
+    // ===================== Preços via Worker =====================
+    async function refreshPrices(){
+      const rows = getAllPositions();
+      const symbols = [...new Set(rows.map(r => (r.symbol||'').trim()).filter(Boolean))];
+      if (symbols.length === 0) {
+        renderPositions({}); quoteStatus.textContent = (document.documentElement.lang==='en' ? 'No positions.' : 'Sem posições.');
+        lastRefreshEl.textContent = ''; return;
+      }
+      quoteStatus.textContent = (document.documentElement.lang==='en' ? 'Updating prices…' : 'Atualizando preços…');
+      try{
+        const url = QUOTE_API + "?symbols=" + encodeURIComponent(symbols.join(','));
+        const resp = await fetch(url, { cache: 'no-store' });
+        if(!resp.ok) throw new Error('HTTP ' + resp.status);
+        const json = await resp.json();
+        const map = json?.prices || {};
+        const out = {};
+        rows.forEach(r => { const v = map[r.symbol]; out[r.symbol] = (typeof v === 'number') ? v : null; });
+        renderPositions(out);
+        quoteStatus.textContent = '';
+        lastRefreshEl.textContent = (document.documentElement.lang==='en' ? 'Last update: ' : 'Última atualização: ') +
+          new Date().toLocaleString(document.documentElement.lang==='en'?'en-US':'pt-BR', {hour12:false});
+        writeCache(out);
+      }catch(e){
+        console.error('quotes error', e);
+        renderPositions(readCache());
+        quoteStatus.textContent = (document.documentElement.lang==='en' ? 'Could not update quotes.' : 'Não foi possível atualizar as cotações.');
+      }
+    }
+
+    // ===================== Inicialização =====================
     document.getElementById('y').textContent = new Date().getFullYear();
+    applyI18n();
+    loadChart('NASDAQ:AAPL');
+    loadPublicPositions();
+    document.getElementById('refreshBtn').addEventListener('click', refreshPrices);
+    setInterval(refreshPrices, 120000);
+  });
   </script>
 </body>
 </html>
