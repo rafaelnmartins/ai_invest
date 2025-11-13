@@ -11,25 +11,20 @@
        Theme variables
        ========================= */
     :root{
-      --page-bg: #f3f4f6;        /* light gray page background (not black) */
-      --panel: #ffffff;          /* cards */
-      --muted: #64748b;          /* muted text */
-      --ink: #0f172a;            /* primary text */
-      --accent: #0ea5e9;         /* accent / links */
-      --accent-2: #6366f1;       /* secondary accent */
+      --page-bg: #f3f4f6;
+      --panel: #ffffff;
+      --muted: #64748b;
+      --ink: #0f172a;
+      --accent: #0ea5e9;
+      --accent-2: #6366f1;
       --success: #15803d;
       --danger: #b91c1c;
-      --glass: rgba(255,255,255,0.6);
       --radius: 14px;
       --card-border: rgba(15,23,42,0.04);
       --shadow-1: 0 6px 18px rgba(15,23,42,0.06);
-      --compact-gap: 12px;
       --max-width: 1150px;
     }
 
-    /* =========================
-       Base reset & layout
-       ========================= */
     *{box-sizing:border-box}
     html,body{height:100%}
     body{
@@ -55,8 +50,6 @@
     }
     h1{font-size:clamp(18px,2.6vw,26px);margin:0;letter-spacing:-0.2px}
     header .meta{color:var(--muted);font-size:13px}
-
-    /* sticky header for better mobile UX (keeps header visible) */
     header.sticky{
       position: sticky;
       top: 12px;
@@ -67,15 +60,9 @@
       padding: 10px 14px;
     }
 
-    /* =========================
-       Grid system
-       ========================= */
     .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px}
     @media (max-width:960px){ .grid{grid-template-columns:1fr} }
 
-    /* =========================
-       Card component
-       ========================= */
     .card{
       background:var(--panel);
       border:1px solid var(--card-border);
@@ -83,17 +70,11 @@
       padding:18px;
       box-shadow:var(--shadow-1);
     }
-    .card.header{
-      display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 18px;
-    }
     .card h2{margin:0 0 8px 0;font-size:18px}
     .card h3{margin:0 0 6px 0;font-size:14px;color:var(--muted)}
     p{color:var(--muted);margin:8px 0}
     .muted{color:var(--muted);font-size:13px}
 
-    /* =========================
-       Controls & inputs
-       ========================= */
     .controls{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
     .btn{
       cursor:pointer;border-radius:12px;border:1px solid rgba(15,23,42,0.06);
@@ -107,7 +88,6 @@
     input,select,textarea{font:inherit;border-radius:12px;border:1px solid rgba(2,6,23,0.06);background:#fff;color:var(--ink);padding:10px 12px;min-height:40px}
     input::placeholder{color:#94a3b8}
 
-    /* compact grid helper inside cards */
     .form-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:10px;align-items:center}
     .col-span-6{grid-column:span 6}
     .col-span-4{grid-column:span 4}
@@ -115,17 +95,8 @@
     .col-span-2{grid-column:span 2}
     .col-span-12{grid-column:span 12}
 
-    /* =========================
-       Alerts iframe styling
-       ========================= */
-    iframe{
-      width:100%;height:520px;border:0;border-radius:10px;box-shadow:0 8px 20px rgba(2,6,23,0.04);
-      background:transparent;
-    }
+    iframe{width:100%;height:520px;border:0;border-radius:10px;box-shadow:0 8px 20px rgba(2,6,23,0.04);background:transparent;}
 
-    /* =========================
-       Table styling
-       ========================= */
     .table-wrap{overflow:auto;border-radius:10px;border:1px solid rgba(2,6,23,0.03)}
     table{width:100%;border-collapse:collapse;min-width:680px}
     th,td{padding:12px 14px;text-align:left;border-bottom:1px solid rgba(2,6,23,0.04)}
@@ -133,51 +104,30 @@
     tbody tr:hover{background:linear-gradient(90deg, rgba(14,165,233,0.02), transparent)}
     .actions .btn{margin-right:6px}
 
-    /* =========================
-       Badges & status
-       ========================= */
-    .badge{
-      display:inline-flex;align-items:center;gap:8px;font-size:13px;color:#0369a1;background:#e0f2fe;border:1px solid #bae6fd;border-radius:999px;padding:6px 10px;
-      font-weight:600;
-    }
+    .badge{display:inline-flex;align-items:center;gap:8px;font-size:13px;color:#0369a1;background:#e0f2fe;border:1px solid #bae6fd;border-radius:999px;padding:6px 10px;font-weight:600;}
     .status{font-size:13px;color:var(--muted);margin-top:6px}
 
-    /* =========================
-       Tips list
-       ========================= */
     .tips{padding-left:18px;margin:10px 0}
     .tips li{margin:8px 0;color:var(--ink)}
 
-    /* =========================
-       TV Chart container improvements
-       ========================= */
     #tradingview_chart{
       height:520px;width:100%;border-radius:10px;overflow:hidden;border:1px solid rgba(2,6,23,0.03);
       background:linear-gradient(180deg,#ffffff,#fbfdff);
       display:flex;align-items:center;justify-content:center;position:relative;
     }
-    /* small overlay to show symbol/title */
+    /* chart-topbar moved outside widget container but inside card */
     .chart-topbar{
       position:absolute;left:12px;top:12px;padding:6px 10px;border-radius:999px;font-size:13px;background:rgba(255,255,255,0.6);backdrop-filter:blur(4px);border:1px solid rgba(2,6,23,0.04)
     }
 
-    /* =========================
-       Footer
-       ========================= */
     footer{margin:28px 0 8px 0;text-align:center;color:var(--muted);font-size:13px}
 
-    /* =========================
-       Responsive tweaks
-       ========================= */
     @media (max-width:720px){
       .logo{width:44px;height:44px;font-size:16px}
       #tradingview_chart{height:360px}
       iframe{height:360px}
     }
 
-    /* =========================
-       Utility helpers
-       ========================= */
     .muted-small{color:var(--muted);font-size:12px}
     .text-green{color:var(--success);font-weight:700}
     .text-red{color:var(--danger);font-weight:700}
@@ -223,6 +173,10 @@
       /* ensure badges & tiny texts wrap nicely */
       .badge { font-size:13px; padding:6px 8px; }
       .muted-small { font-size:12px; }
+
+      /* Make controls stack on mobile so buttons are visible */
+      .controls { flex-direction:column; align-items:stretch; }
+      .controls input, .controls .btn { width:100% !important; }
     }
   </style>
 </head>
@@ -270,10 +224,12 @@
             <div class="muted-small" id="aiSubtitle">Resultado do worker /analyze + opinião extra via Grok</div>
           </div>
           <div class="controls">
-            <div style="display:flex;gap:8px;align-items:center">
-              <input id="aiSymbolInput" placeholder="Ex.: NASDAQ:AMZN ou AMZN" style="min-width:220px" />
-              <button id="aiAnalyzeBtn" class="btn small">Analisar</button>
-              <button id="aiUseChartBtn" class="btn small ghost">Usar do gráfico</button>
+            <div style="display:flex;gap:8px;align-items:center;width:100%">
+              <input id="aiSymbolInput" placeholder="Ex.: NASDAQ:AMZN ou AMZN" style="min-width:220px;flex:1" />
+              <div style="display:flex;gap:8px;flex-shrink:0">
+                <button id="aiAnalyzeBtn" class="btn small">Analisar</button>
+                <button id="aiUseChartBtn" class="btn small ghost">Usar do gráfico</button>
+              </div>
             </div>
           </div>
         </div>
@@ -375,7 +331,7 @@
     <!-- 4) Gráfico (TradingView) + novo quadro de dicas -->
     <div class="grid" style="margin-top:16px;align-items:start">
       <!-- Gráfico -->
-      <section class="card" style="grid-column: span 8">
+      <section class="card" style="grid-column: span 8; position:relative;">
         <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
           <div>
             <h2 data-i18n="chart_title">Gráfico (TradingView)</h2>
@@ -390,9 +346,12 @@
           </div>
         </div>
 
-        <div id="tradingview_chart" class="card" style="margin-top:12px;padding:0">
+        <!-- card body for chart -->
+        <div id="tradingview_chart" style="margin-top:12px;padding:0" class="card">
           <div class="chart-topbar" id="chartTopbar">Símbolo: <strong id="chartSymbolLabel">—</strong></div>
-          <!-- TradingView widget injected into this div by tv.js -->
+
+          <!-- NEW: internal container dedicated to TradingView widget to avoid overlay conflicts -->
+          <div id="tv_container" style="height:100%;width:100%"></div>
         </div>
         <p class="status" id="tvStatus" style="margin-top:10px"></p>
       </section>
@@ -466,10 +425,9 @@
   const API_BASE = "https://shiny-sea-44d3.rafaelnm.workers.dev";
   const QUOTE_API = API_BASE + "/quotes";
   const POS_API   = API_BASE + "/positions";
-  const AI_API    = API_BASE + "/analyze"; // Worker: /analyze
-  // LLM (Grok via OpenRouter) está exposto no seu Worker como /kimi
+  const AI_API    = API_BASE + "/analyze";
 
-  // ===================== I18N =====================
+  // ===================== I18N (mantive como antes) =====================
   const I18N = {
     pt:{ title:"AI Invest - Dicas de Ações para familia e amigos", quick_tips:"Dicas rápidas",
       tip1:"Defina <strong>entrada, stop e alvo</strong> antes de executar.",
@@ -504,7 +462,6 @@
   };
 
   document.addEventListener('DOMContentLoaded', () => {
-    // ===== idioma =====
     function detectLang(){ const nav = navigator.language || 'pt-BR'; return String(nav).toLowerCase().startsWith('en') ? 'en' : 'pt'; }
     let currentLang = (localStorage.getItem('lang') || detectLang());
     const langLabel = document.getElementById('langLabel');
@@ -518,8 +475,6 @@
       langLabel.textContent = currentLang.toUpperCase();
       loadChart(getCurrentSymbol(), currentLang === 'en' ? 'en' : 'br');
       renderPositions(latestQuotesMap);
-
-      // Ajuste do título do Grok
       const gdict = grokDict();
       const gt = document.getElementById('grokTitle'); if (gt) gt.textContent = gdict.title;
     }
@@ -529,9 +484,8 @@
 
     // ===================== TradingView =====================
     const DEFAULT_SYMBOL = 'NASDAQ:NVDA';
-    let tvWidgetInstance;
-    // expose on window so resize helper can access
-    window.tvWidgetInstance = tvWidgetInstance;
+    // keep widget reference on window
+    window.tvWidgetInstance = null;
 
     function getCurrentSymbol(){ return window.__CURRENT_SYMBOL || DEFAULT_SYMBOL; }
     function setCurrentSymbol(s){ window.__CURRENT_SYMBOL = s; }
@@ -541,19 +495,51 @@
         const loc = locale || (currentLang === 'en' ? 'en' : 'br');
         const s = (symbol || DEFAULT_SYMBOL).trim();
         setCurrentSymbol(s);
+
         // update chart label (UI improvement)
         const chartLabel = document.getElementById('chartSymbolLabel');
         if (chartLabel) chartLabel.textContent = s;
 
-        if(window.tvWidgetInstance && typeof window.tvWidgetInstance.remove === 'function'){ window.tvWidgetInstance.remove(); }
-        window.tvWidgetInstance = new TradingView.widget({
-          autosize:true, symbol:s, interval:"60", timezone:"Etc/UTC", theme:"light", style:"1", locale:loc,
-          enable_publishing:false, container_id:"tradingview_chart", withdateranges:true, allow_symbol_change:true
-        });
-        document.getElementById('openTV').href = `https://www.tradingview.com/chart/?symbol=${encodeURIComponent(s)}`;
-        const input = document.getElementById('chartSymbolInput'); if(input && !input.value) input.value = s;
-        tvStatus.textContent = '';
-      }catch(e){ tvStatus.textContent = (currentLang==='en'?'Could not load chart now.':'Não foi possível carregar o gráfico agora.'); console.error(e); }
+        // ensure container exists
+        const container = document.getElementById('tv_container');
+        if(!container){
+          tvStatus.textContent = (currentLang==='en'?'Chart container missing.':'Container do gráfico não encontrado.');
+          return;
+        }
+
+        // if widget exists, remove it first
+        if(window.tvWidgetInstance && typeof window.tvWidgetInstance.remove === 'function'){ 
+          try{ window.tvWidgetInstance.remove(); }catch(e){ console.debug('error removing widget', e); }
+          window.tvWidgetInstance = null;
+        }
+
+        // Small timeout ensures the DOM is ready (helps on mobile/embedded contexts)
+        setTimeout(()=> {
+          window.tvWidgetInstance = new TradingView.widget({
+            autosize: true,
+            symbol: s,
+            interval: "60",
+            timezone: "Etc/UTC",
+            theme: "light",
+            style: "1",
+            locale: loc,
+            enable_publishing: false,
+            container_id: "tv_container",
+            withdateranges: true,
+            allow_symbol_change: true
+          });
+
+          // update external link
+          const openEl = document.getElementById('openTV');
+          if(openEl) openEl.href = `https://www.tradingview.com/chart/?symbol=${encodeURIComponent(s)}`;
+          const input = document.getElementById('chartSymbolInput'); if(input && !input.value) input.value = s;
+          tvStatus.textContent = '';
+        }, 50);
+
+      }catch(e){
+        tvStatus.textContent = (currentLang==='en'?'Could not load chart now.':'Não foi possível carregar o gráfico agora.');
+        console.error('loadChart error', e);
+      }
     }
     document.getElementById('setChartBtn').addEventListener('click', ()=>{
       const s = document.getElementById('chartSymbolInput').value.trim(); if(!s){ alert(currentLang==='en'?'Enter a symbol':'Informe um símbolo'); return; } loadChart(s);
@@ -600,7 +586,6 @@
       `;
     }
 
-    // ======== Rótulos para Grok ========
     function grokDict(){
       const isEN = document.documentElement.lang === 'en';
       return isEN ? {
@@ -616,16 +601,12 @@
       };
     }
 
-    // ======== Render Grok ========
     function renderGrok(text){
       const box = document.getElementById('grokOpinion');
       if (!box) return;
-      box.innerHTML = text
-        ? text.replace(/\n/g, '<br/>')
-        : '—';
+      box.innerHTML = text ? text.replace(/\n/g, '<br/>') : '—';
     }
 
-    // ======== Prompt p/ Grok com dados do /analyze ========
     function buildGrokMessages(symbol, analyzePayload){
       const isEN = document.documentElement.lang === 'en';
       const d = analyzePayload || {};
@@ -656,7 +637,6 @@ start with the CONCLUSION (one word: "BUY", "SELL", or "HOLD"), then explain the
 Avoid personalization and keep an educational tone.`;
 
       const userContent = (isEN ? qEN : qPT) + `\n\nSYMBOL: ${symbol}\nDATA:\n` + JSON.stringify(summary, null, 2);
-
       const systemContent = isEN
         ? "You are a financial analysis assistant. Provide concise, educational summaries. Do not give personalized advice."
         : "Você é um assistente de análise financeira. Forneça resumos concisos e educacionais. Não dê aconselhamento personalizado.";
@@ -667,15 +647,12 @@ Avoid personalization and keep an educational tone.`;
       ];
     }
 
-    // ======== Chamada ao /kimi (Grok via OpenRouter) ========
     async function askGrok(symbol, analyzePayload){
       const lbl = grokDict();
       const titleEl = document.getElementById('grokTitle');
       if (titleEl) titleEl.textContent = lbl.title;
-
       const box = document.getElementById('grokOpinion');
       if (box) box.textContent = lbl.thinking;
-
       try{
         const messages = buildGrokMessages(symbol, analyzePayload);
         const resp = await fetch(API_BASE + "/kimi?model=" + encodeURIComponent("x-ai/grok-4-fast"), {
@@ -693,7 +670,6 @@ Avoid personalization and keep an educational tone.`;
       }
     }
 
-    // ======== Fluxo principal da Opinião AI ========
     async function runAIAnalysis(symbol){
       const d = aiDict();
       const aiStatus = document.getElementById('aiStatus');
@@ -702,13 +678,8 @@ Avoid personalization and keep an educational tone.`;
         const resp = await fetch(AI_API + "?symbol=" + encodeURIComponent(symbol), { cache:'no-store' });
         if(!resp.ok) throw new Error('HTTP '+resp.status);
         const json = await resp.json();
-
-        // Render do cálculo local (/analyze)
         renderAIResult(json);
-
-        // Chama Grok para opinião extra baseada no JSON do /analyze
         askGrok(symbol, json);
-
         aiStatus.textContent = d.ai_last_update+': '+new Date().toLocaleString(document.documentElement.lang==='en'?'en-US':'pt-BR',{hour12:false});
       }catch(e){
         console.error('AI analyze error', e);
@@ -902,52 +873,52 @@ Avoid personalization and keep an educational tone.`;
     }
 
     // ===================== Responsive helpers & network-aware loading =====================
-    // Adjust chart height and force reload on resize/orientation to avoid layout glitches
     (function(){
       let resizeTimer = null;
       function adjustChartForViewport(){
         const chartEl = document.getElementById('tradingview_chart');
+        const container = document.getElementById('tv_container');
         const frame = document.querySelector('iframe#alertsFrame');
-        if(!chartEl) return;
+        if(!chartEl || !container) return;
         const w = window.innerWidth;
-        // smaller heights on small screens
         if(w <= 420){
-          chartEl.style.height = '300px';
+          chartEl.style.height = '300px'; container.style.height = '300px';
           if(frame) frame.style.height = '300px';
         } else if(w <= 720){
-          chartEl.style.height = '360px';
+          chartEl.style.height = '360px'; container.style.height = '360px';
           if(frame) frame.style.height = '360px';
         } else {
-          chartEl.style.height = '520px';
+          chartEl.style.height = '520px'; container.style.height = '520px';
           if(frame) frame.style.height = '520px';
         }
-        // if tradingview widget exists, try to remove and re-create to force resize
+        // reload widget to force proper resize
         try {
           if(window.tvWidgetInstance && typeof window.tvWidgetInstance.remove === 'function'){
             const currentSymbol = window.__CURRENT_SYMBOL || 'NASDAQ:NVDA';
             window.tvWidgetInstance.remove();
-            // small delay to ensure removal before creating new one
+            window.tvWidgetInstance = null;
             setTimeout(()=> {
               if(typeof loadChart === 'function') loadChart(currentSymbol);
-            }, 200);
+            }, 150);
+          } else {
+            // if not created yet, create it
+            const cur = window.__CURRENT_SYMBOL || 'NASDAQ:NVDA';
+            setTimeout(()=> { if(typeof loadChart === 'function') loadChart(cur); }, 150);
           }
         } catch(e) {
           console.debug('adjustChartForViewport error', e);
         }
       }
 
-      // attach listener with debounce
       window.addEventListener('resize', () => {
         clearTimeout(resizeTimer);
         resizeTimer = setTimeout(adjustChartForViewport, 150);
       }, {passive:true});
 
-      // also adjust on orientation change (mobile)
       window.addEventListener('orientationchange', () => {
         setTimeout(adjustChartForViewport, 300);
       }, {passive:true});
 
-      // run once on load
       setTimeout(adjustChartForViewport, 300);
     })();
 
@@ -956,31 +927,25 @@ Avoid personalization and keep an educational tone.`;
     applyI18n();
     loadChart('NASDAQ:AAPL');
 
-    // Network-aware decision: on very slow networks or if user enabled save-data, do not auto-load public positions
     const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection || {};
     const effectiveType = (connection && connection.effectiveType) ? connection.effectiveType : '';
     const saveData = connection && connection.saveData;
     const isSlowNetwork = saveData || /2g|slow-2g/.test(effectiveType);
 
     if(isSlowNetwork){
-      // network slow: give user control to load public positions manually
       console.info('Rede lenta detectada — loadPublicPositions adiada.');
       document.getElementById('loadPublicBtn').textContent = (document.documentElement.lang==='en' ? 'Load public (slow net)' : 'Carregar públicas (rede lenta)');
     } else {
-      // normal networks: load automatically
       loadPublicPositions();
     }
 
-    // Price refresh: keep auto-refresh but reduce aggressiveness on slow networks
-    const refreshIntervalMs = isSlowNetwork ? 180000 : 120000; // 3 min on slow, 2 min otherwise
+    const refreshIntervalMs = isSlowNetwork ? 180000 : 120000;
     document.getElementById('refreshBtn').addEventListener('click', refreshPrices);
     setInterval(refreshPrices, refreshIntervalMs);
 
-    // expose two helpers for dev/test
     window._refreshPrices = refreshPrices;
     window._loadPublicPositions = loadPublicPositions;
   });
   </script>
 </body>
 </html>
-
