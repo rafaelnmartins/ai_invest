@@ -6,159 +6,1717 @@
   <title>Stockgaide - Dicas para familia e amigos</title>
   <meta name="description" content="Site Stockgaide com dicas, gráfico TradingView, alertas embutidos e minhas posições com P/L %." />
   <link rel="preconnect" href="https://s3.tradingview.com" crossorigin>
+  <style>
+    /* =========================
+       Theme variables (DARK dashboard look)
+       ========================= */
+    :root{
+      --page-bg: #050814;
+      --panel: #0b1220;
+      --panel-2:#0f172a;
+      --muted: #9aa8bd;
+      --ink: #e7edf6;
 
-  <!-- TODO O SEU CSS ORIGINAL FOI PRESERVADO -->
-  <!-- (sem nenhuma alteração) -->
+      /* Paleta refinada (profissional) */
+      --bullish: #10b981;  /* verde suave */
+      --bearish: #ef4444;  /* vermelho */
+      --neutral: #f59e0b;  /* âmbar */
+      --primary: #3b82f6;  /* ação primária */
+      --secondary: #8b5cf6; /* secundária */
 
-  <!-- ⚠️ COLE AQUI EXATAMENTE O <style> COMPLETO QUE VOCÊ JÁ TEM -->
+      --accent: #38bdf8;
+      --accent-2: #6366f1;
+
+      --success: #22c55e;
+      --danger: #ef4444;
+
+      --radius: 14px;
+      --card-border: rgba(255,255,255,0.08);
+      --shadow-1: 0 18px 44px rgba(0,0,0,0.55);
+      --max-width: 1150px;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+
+    body{
+      margin:0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background:
+        radial-gradient(1200px 650px at 18% -10%, rgba(56,189,248,0.10), transparent 60%),
+        radial-gradient(1000px 550px at 90% 0%, rgba(99,102,241,0.10), transparent 60%),
+        radial-gradient(900px 600px at 40% 110%, rgba(56,189,248,0.06), transparent 60%),
+        var(--page-bg);
+      color:var(--ink);
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      line-height:1.5;
+      -webkit-tap-highlight-color: transparent;
+      padding-top: 54px; /* espaço para disclaimer fixo */
+    }
+
+    a{color:var(--accent);text-decoration:none}
+    .wrap{max-width:var(--max-width);margin:22px auto;padding:20px}
+
+    /* ===== Disclaimer fixo (mais visível) ===== */
+    .disclaimer-bar{
+      position:fixed;
+      top:0; left:0; right:0;
+      z-index:60;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      padding:10px 14px;
+      background: linear-gradient(180deg, rgba(15,23,42,0.95), rgba(2,6,23,0.92));
+      border-bottom: 1px solid rgba(255,255,255,0.10);
+      backdrop-filter: blur(10px);
+      color: #d6e0ef;
+      font-size: 13px;
+    }
+    .disclaimer-bar strong{color:#fff}
+    .disclaimer-bar .pill{
+      display:inline-flex;align-items:center;gap:6px;
+      padding:3px 10px;
+      border-radius:999px;
+      border:1px solid rgba(245,158,11,0.35);
+      background: rgba(245,158,11,0.12);
+      color:#ffe7b3;
+      font-weight:800;
+      font-size:12px;
+      letter-spacing:0.01em;
+    }
+
+    header{display:flex;gap:20px;align-items:center;justify-content:space-between;margin-bottom:14px}
+
+    .brand{display:flex;gap:14px;align-items:center}
+
+    .logo{
+      width:52px;height:52px;border-radius:14px;
+      background:linear-gradient(135deg,var(--accent),var(--accent-2));
+      box-shadow: 0 14px 34px rgba(56,189,248,0.22);
+      display:flex;align-items:center;justify-content:center;
+      color:#06111f;font-weight:900;
+      font-family:monospace;font-size:18px;
+    }
+
+    /* destaque do "ai" no nome Stockgaide */
+    .brand-name .ai{
+      color: var(--accent);
+      font-weight: 900;
+      text-shadow: 0 0 18px rgba(56,189,248,0.25);
+    }
+
+    h1{font-size:clamp(18px,2.6vw,26px);margin:0;letter-spacing:-0.2px}
+    header .meta{color:var(--muted);font-size:13px}
+
+    header.sticky{
+      position: sticky;
+      top: 64px; /* abaixo do disclaimer */
+      z-index: 40;
+      backdrop-filter: blur(10px);
+      background: linear-gradient(180deg, rgba(15,23,42,0.85), rgba(15,23,42,0.65));
+      border-radius: 14px;
+      padding: 12px 14px;
+      border:1px solid var(--card-border);
+      box-shadow:var(--shadow-1);
+    }
+
+    /* ===== Tabs principais ===== */
+    .tabs{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin: 14px 0 6px 0;
+    }
+    .tab-btn{
+      cursor:pointer;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,0.12);
+      background: rgba(2,6,23,0.55);
+      color: var(--muted);
+      padding:10px 14px;
+      font-weight:900;
+      font-size:13px;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      min-height:44px;
+      min-width:44px;
+    }
+    .tab-btn:hover{
+      border-color: rgba(56,189,248,0.25);
+      color: #dbe7ff;
+    }
+    .tab-btn.active{
+      background: linear-gradient(135deg, rgba(59,130,246,0.22), rgba(139,92,246,0.18));
+      border-color: rgba(59,130,246,0.35);
+      color: #eaf2ff;
+      box-shadow: 0 12px 32px rgba(59,130,246,0.10);
+    }
+    .tab-panel{display:none}
+    .tab-panel.active{display:block}
+
+    .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px}
+    @media (max-width:960px){ .grid{grid-template-columns:1fr} }
+
+    .card{
+      background: linear-gradient(180deg, rgba(15,23,42,0.92), rgba(11,18,32,0.92));
+      border:1px solid var(--card-border);
+      border-radius:var(--radius);
+      padding:18px;
+      box-shadow:var(--shadow-1);
+    }
+
+    .card h2{margin:0 0 8px 0;font-size:18px}
+    .card h3{margin:0 0 6px 0;font-size:14px;color:var(--muted)}
+    p{color:var(--muted);margin:8px 0}
+    .muted{color:var(--muted);font-size:13px}
+
+    .controls{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+
+    .btn{
+      cursor:pointer;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,0.10);
+      background: linear-gradient(180deg, rgba(30,41,59,0.85), rgba(2,6,23,0.92));
+      padding:8px 12px;
+      font-weight:700;
+      font-size:13px;
+      color:var(--ink);
+      box-shadow: 0 10px 26px rgba(0,0,0,0.35);
+      min-height:44px;
+      min-width:44px;
+      transition: transform .08s ease, box-shadow .2s ease, border-color .2s ease, filter .2s ease;
+    }
+    .btn:hover{
+      border-color: rgba(56,189,248,0.25);
+      box-shadow: 0 12px 32px rgba(56,189,248,0.10), 0 10px 26px rgba(0,0,0,0.35);
+    }
+    .btn.ghost{
+      background: transparent;
+      border:1px dashed rgba(255,255,255,0.16);
+    }
+    .btn.small{padding:6px 10px;font-size:13px;border-radius:10px; min-height:40px}
+    .btn:active{transform:translateY(1px)}
+    .btn.primary{
+      background: linear-gradient(135deg, rgba(59,130,246,0.28), rgba(139,92,246,0.18));
+      border-color: rgba(59,130,246,0.35);
+      box-shadow: 0 12px 32px rgba(59,130,246,0.12), 0 10px 26px rgba(0,0,0,0.35);
+      font-weight:900;
+    }
+    .btn.primary:hover{filter:brightness(1.05)}
+    .btn.loading{
+      position:relative;
+      pointer-events:none;
+      opacity:0.85;
+    }
+    .btn.loading::after{
+      content:"";
+      width:14px;height:14px;
+      border-radius:999px;
+      border:2px solid rgba(255,255,255,0.25);
+      border-top-color: rgba(255,255,255,0.9);
+      display:inline-block;
+      margin-left:8px;
+      animation: spin .8s linear infinite;
+      vertical-align: -2px;
+    }
+    @keyframes spin{to{transform:rotate(360deg)}}
+
+    input,select,textarea{
+      font:inherit;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,0.12);
+      background: rgba(2,6,23,0.75);
+      color:var(--ink);
+      padding:10px 12px;
+      min-height:44px;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.04);
+      outline:none;
+    }
+    input::placeholder{color:#7f8ba3}
+    input:focus{
+      border-color: rgba(59,130,246,0.45);
+      box-shadow: 0 0 0 4px rgba(59,130,246,0.15), inset 0 0 0 1px rgba(255,255,255,0.04);
+    }
+
+    .form-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:10px;align-items:center}
+    .col-span-6{grid-column:span 6}
+    .col-span-4{grid-column:span 4}
+    .col-span-3{grid-column:span 3}
+    .col-span-2{grid-column:span 2}
+    .col-span-12{grid-column:span 12}
+
+    iframe{
+      width:100%;
+      height:520px;
+      border:1px solid var(--card-border);
+      border-radius:12px;
+      box-shadow:0 16px 34px rgba(0,0,0,0.45);
+      background: rgba(2,6,23,0.45);
+    }
+
+    .table-wrap{
+      overflow:auto;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,0.08);
+      background: rgba(2,6,23,0.35);
+    }
+
+    table{width:100%;border-collapse:collapse;min-width:680px}
+    th,td{padding:12px 14px;text-align:left;border-bottom:1px solid rgba(255,255,255,0.06)}
+    th{
+      font-size:13px;
+      color:#c7d2fe;
+      font-weight:700;
+      background: linear-gradient(180deg, rgba(30,41,59,0.65), rgba(2,6,23,0.55));
+    }
+    tbody tr:hover{background: rgba(56,189,248,0.06)}
+    .actions .btn{margin-right:6px}
+
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      font-size:13px;
+      color:#bfe9ff;
+      background: rgba(56,189,248,0.14);
+      border:1px solid rgba(56,189,248,0.32);
+      border-radius:999px;
+      padding:6px 10px;
+      font-weight:800;
+    }
+
+    .status{font-size:13px;color:var(--muted);margin-top:6px}
+
+    .tips{padding-left:18px;margin:10px 0}
+    .tips li{margin:8px 0;color:var(--ink)}
+    .highlight{
+      font-weight:900;
+      color:#eaf2ff;
+      background: rgba(59,130,246,0.12);
+      border: 1px solid rgba(59,130,246,0.20);
+      padding: 1px 8px;
+      border-radius: 999px;
+      display:inline-block;
+      line-height:1.6;
+      margin: 0 2px;
+    }
+
+    #tradingview_chart{
+      height:520px;
+      width:100%;
+      border-radius:12px;
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,0.08);
+      background: linear-gradient(180deg, rgba(15,23,42,0.70), rgba(2,6,23,0.70));
+      display:flex;align-items:center;justify-content:center;position:relative;
+      box-shadow:0 18px 44px rgba(0,0,0,0.55);
+    }
+
+    .chart-topbar{
+      position:absolute;
+      left:12px;
+      top:12px;
+      padding:6px 10px;
+      border-radius:999px;
+      font-size:13px;
+      background: rgba(2,6,23,0.55);
+      backdrop-filter: blur(10px);
+      border:1px solid rgba(255,255,255,0.12);
+      color: var(--ink);
+    }
+
+    footer{margin:28px 0 8px 0;text-align:center;color:var(--muted);font-size:13px}
+
+    @media (max-width:720px){
+      .logo{width:44px;height:44px;font-size:16px}
+      #tradingview_chart{height:360px}
+      iframe{height:360px}
+    }
+
+    .muted-small{color:var(--muted);font-size:12px}
+    .text-green{color:var(--success);font-weight:800}
+    .text-red{color:var(--danger);font-weight:800}
+    code{
+      background: rgba(2,6,23,0.70);
+      border:1px solid rgba(255,255,255,0.10);
+      padding:2px 6px;
+      border-radius:6px;
+      font-size:12px;
+      color:#c7d2fe;
+    }
+
+    /* ===== Resumo (métricas topo) ===== */
+    .summary-grid{
+      display:grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 12px;
+      margin-top: 10px;
+    }
+    .summary-card{
+      grid-column: span 3;
+      padding: 14px;
+      border-radius: 14px;
+      background: linear-gradient(180deg, rgba(15,23,42,0.80), rgba(2,6,23,0.72));
+      border: 1px solid rgba(255,255,255,0.10);
+      box-shadow: 0 18px 44px rgba(0,0,0,0.40);
+    }
+    .summary-label{
+      font-size: 12px;
+      color: var(--muted);
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+    }
+    .summary-value{
+      margin-top: 6px;
+      font-size: 18px;
+      font-weight: 900;
+      letter-spacing: -0.02em;
+      color: #eaf2ff;
+    }
+    .summary-sub{
+      margin-top: 6px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .summary-pill{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.10);
+      background: rgba(2,6,23,0.55);
+      font-size: 12px;
+      font-weight: 900;
+      margin-top: 8px;
+      color: #dbe7ff;
+    }
+
+    /* ===== Placeholder estado vazio ===== */
+    .empty-state{
+      border:1px dashed rgba(255,255,255,0.18);
+      border-radius: 14px;
+      padding: 18px;
+      background: linear-gradient(180deg, rgba(2,6,23,0.55), rgba(2,6,23,0.35));
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 14px;
+      flex-wrap:wrap;
+      margin-top: 12px;
+    }
+    .empty-state .title{
+      font-weight: 900;
+      font-size: 15px;
+      color:#eaf2ff;
+    }
+    .empty-state .desc{color:var(--muted);font-size: 13px;margin-top: 4px}
+    .empty-illus{
+      width: 44px;height: 44px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, rgba(59,130,246,0.25), rgba(139,92,246,0.18));
+      border: 1px solid rgba(59,130,246,0.25);
+      display:flex;align-items:center;justify-content:center;
+      font-weight: 900;
+      color:#dbe7ff;
+      flex-shrink:0;
+    }
+
+    /* ===== Skeleton loaders ===== */
+    .skeleton{
+      position:relative;
+      overflow:hidden;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px;
+      height: 14px;
+    }
+    .skeleton::after{
+      content:"";
+      position:absolute; inset:0;
+      transform: translateX(-100%);
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.10), transparent);
+      animation: shimmer 1.1s infinite;
+    }
+    @keyframes shimmer{
+      100%{ transform: translateX(100%); }
+    }
+    .sk-row{display:grid;grid-template-columns:repeat(12,1fr);gap:10px;margin-top:10px}
+    .sk-col-4{grid-column:span 4}
+    .sk-col-6{grid-column:span 6}
+    .sk-col-12{grid-column:span 12}
+
+    /* ===== Toasts ===== */
+    .toasts{
+      position: fixed;
+      right: 14px;
+      bottom: 14px;
+      z-index: 80;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      pointer-events:none;
+    }
+    .toast{
+      pointer-events:auto;
+      border-radius: 14px;
+      padding: 12px 12px;
+      min-width: 260px;
+      max-width: 360px;
+      border: 1px solid rgba(255,255,255,0.10);
+      background: linear-gradient(180deg, rgba(15,23,42,0.95), rgba(2,6,23,0.92));
+      box-shadow: 0 18px 44px rgba(0,0,0,0.55);
+      color: #eaf2ff;
+      font-size: 13px;
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
+    }
+    .toast .dot{
+      width:10px;height:10px;border-radius:999px;margin-top:4px;flex-shrink:0;
+      background: rgba(245,158,11,0.9);
+    }
+    .toast.success .dot{background: rgba(16,185,129,0.95)}
+    .toast.error .dot{background: rgba(239,68,68,0.95)}
+    .toast .title{font-weight:900}
+    .toast .msg{color: var(--muted); margin-top:2px}
+    .toast button{
+      margin-left:auto;
+      border:none;
+      background: transparent;
+      color: rgba(255,255,255,0.70);
+      cursor:pointer;
+      font-weight:900;
+    }
+
+    /* ======= Mobile improvements (overrides) ======= */
+    @media (max-width: 960px) {
+      .wrap { padding:16px; }
+      header { flex-direction:column; align-items:flex-start; gap:12px; }
+      .brand { gap:10px; }
+      .logo { width:44px; height:44px; }
+      .grid { grid-template-columns: 1fr !important; gap:12px; }
+      .summary-card{grid-column: span 6}
+      .form-grid { grid-template-columns: repeat(6, 1fr); }
+      .form-grid input, .form-grid .btn { grid-column: span 6 !important; min-width:0; width:100%; }
+      .btn { padding:12px 14px; font-size:15px; border-radius:12px; }
+      .btn.small { padding:10px 12px; font-size:14px; }
+      #tradingview_chart { height: 360px; }
+      iframe { height: 360px; }
+      @media (max-width:420px) {
+        #tradingview_chart { height: 300px; }
+        iframe { height: 300px; }
+        .logo { width:40px; height:40px; }
+        h1 { font-size:18px; }
+        .card { padding:14px; border-radius:12px; }
+        .summary-card{grid-column: span 12}
+      }
+
+      .table-wrap table { min-width:unset; display:block; }
+      .table-wrap thead { display:none; }
+      .table-wrap tbody { display:block; }
+      .table-wrap tbody tr {
+        display:block;
+        margin:10px 0;
+        border:1px solid rgba(255,255,255,0.10);
+        border-radius:12px;
+        padding:10px;
+        background: linear-gradient(180deg, rgba(15,23,42,0.88), rgba(2,6,23,0.85));
+      }
+      .table-wrap tbody td { display:flex; justify-content:space-between; padding:6px 0; border-bottom:0; }
+      .table-wrap tbody td:first-child { font-weight:800; }
+      .table-wrap .actions { margin-top:8px; display:flex; gap:8px; flex-wrap:wrap; }
+      .badge { font-size:13px; padding:6px 8px; }
+      .muted-small { font-size:12px; }
+      .controls { flex-direction:column; align-items:stretch; }
+      .controls input, .controls .btn { width:100% !important; }
+      .tabs{gap:8px}
+      .tab-btn{width:100%; justify-content:center}
+    }
+  </style>
 </head>
-
 <body>
-
-<!-- ================= DISCLAIMER ================= -->
-<div class="disclaimer-bar">
-  <span class="pill">⚠️ Educacional</span>
-  <span><strong>Conteúdo educacional.</strong> Não é recomendação de investimento.</span>
-</div>
-
-<div class="wrap">
-
-<header id="mainHeader" class="sticky">
-  <div class="brand">
-    <div class="logo">AI</div>
-    <div>
-      <h1 class="brand-name">Stockg<span class="ai">ai</span>de — dicas para familia e amigos</h1>
-      <div class="meta muted-small">Gráficos TradingView • Alertas em tempo real • Posições públicas e locais</div>
-    </div>
-  </div>
-</header>
-
-<nav class="tabs">
-  <button class="tab-btn active" data-tab="tab-dashboard">📊 Dashboard</button>
-  <button class="tab-btn" data-tab="tab-analise">📈 Análise</button>
-  <button class="tab-btn" data-tab="tab-portfolio">💼 Portfólio</button>
-  <button class="tab-btn" data-tab="tab-mercados">🌍 Mercados</button>
-</nav>
-
-<!-- ================= DASHBOARD ================= -->
-<section id="tab-dashboard" class="tab-panel active">
-
-  <!-- QUICK TIPS + ALERTAS -->
-  <div class="grid" style="margin-top:12px">
-
-    <!-- QUICK TIPS -->
-    <section class="card" style="grid-column: span 6">
-      <h2>Dicas rápidas</h2>
-
-      <ul class="tips">
-        <li>🎯 Ganho esperado de <span class="highlight">5%</span> em até <span class="highlight">20 dias</span> por transação</li>
-        <li>⏰ Alertas enviados todos os dias <span class="highlight">após o fechamento</span> de Wall Street</li>
-        <li>Abaixo dos alertas você pode ver o painel consolidado das recomendações em busca dos 5%</li>
-        <li>Quando o objetivo é atingido, a posição segue automaticamente para o <span class="highlight">Histórico de transações</span></li>
-        <li>🛡️ Veja também a opinião da AI para qualquer ação na aba <span class="highlight">Análise</span></li>
-      </ul>
-    </section>
-
-    <!-- ALERTAS -->
-    <section class="card" style="grid-column: span 6">
-      <h2>Alertas</h2>
-
-      <iframe
-        src="https://shiny-sea-44d3.rafaelnm.workers.dev/"
-        loading="lazy"
-        referrerpolicy="no-referrer">
-      </iframe>
-    </section>
-
+  <!-- Disclaimer fixo -->
+  <div class="disclaimer-bar" role="status" aria-live="polite">
+    <span class="pill">⚠️ Educacional</span>
+    <span><strong>Conteúdo educacional.</strong> Não é recomendação de investimento.</span>
   </div>
 
-  <!-- DASHBOARD CLOUDFLARE -->
-  <section class="card" style="margin-top:16px">
-    <h2>📈 Recomendações & Histórico</h2>
-    <p class="muted">Painel consolidado com recomendações abertas e histórico de transações fechadas.</p>
+  <!-- Toasts -->
+  <div class="toasts" id="toasts" aria-live="polite" aria-atomic="true"></div>
 
-    <iframe
-      src="https://shiny-sea-44d3.rafaelnm.workers.dev/dashboard"
-      loading="lazy"
-      referrerpolicy="no-referrer">
-    </iframe>
-  </section>
-
-</section>
-<!-- ================= ANALISE ================= -->
-<section id="tab-analise" class="tab-panel">
-  <!-- TODO O CONTEÚDO DA ABA ANÁLISE FOI PRESERVADO -->
-  <!-- (AI, Grok, Gráfico TradingView, boas práticas, etc) -->
-</section>
-
-<!-- ================= PORTFOLIO ================= -->
-<section id="tab-portfolio" class="tab-panel">
-
-  <!-- RESUMO DO PORTFÓLIO (MOVIDO DO DASHBOARD) -->
-  <section class="card" style="margin-top:12px">
-    <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap">
-      <div>
-        <h2>Resumo do Portfólio</h2>
-        <p class="muted">Visão rápida do seu P/L e saúde da carteira.</p>
+  <div class="wrap">
+    <header id="mainHeader" class="sticky">
+      <div class="brand">
+        <div class="logo" aria-hidden="true">AI</div>
+        <div>
+          <h1 data-i18n="title" id="siteTitle" class="brand-name">Stockg<span class="ai">ai</span>de — dicas para familia e amigos</h1>
+          <div class="meta muted-small">Gráficos TradingView • Alertas em tempo real • Posições públicas e locais</div>
+        </div>
       </div>
-      <div class="muted-small">Última leitura: <strong id="lastRefreshTop">—</strong></div>
-    </div>
 
-    <div class="summary-grid">
-      <div class="summary-card">
-        <div class="summary-label">Portfolio</div>
-        <div class="summary-value" id="mPortfolioValue">—</div>
-        <div class="summary-sub">Valor aproximado</div>
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+        <div class="muted-small">Atalhos: <code>Ctrl/Cmd+K</code> buscar • <code>A</code> adicionar • <code>R</code> atualizar</div>
+        <button id="langToggle" class="btn small" title="Switch language" aria-label="Switch language">🇧🇷/🇺🇸 <span id="langLabel">PT</span></button>
       </div>
-      <div class="summary-card">
-        <div class="summary-label">P/L Médio</div>
-        <div class="summary-value" id="mPLPct">—</div>
-        <div class="summary-sub">Média das posições</div>
+    </header>
+
+    <!-- Tabs principais -->
+    <nav class="tabs" aria-label="Navegação principal">
+      <button class="tab-btn active" data-tab="tab-dashboard" aria-controls="tab-dashboard" aria-selected="true">📊 Dashboard</button>
+      <button class="tab-btn" data-tab="tab-analise" aria-controls="tab-analise" aria-selected="false">📈 Análise</button>
+      <button class="tab-btn" data-tab="tab-portfolio" aria-controls="tab-portfolio" aria-selected="false">💼 Portfólio</button>
+      <button class="tab-btn" data-tab="tab-mercados" aria-controls="tab-mercados" aria-selected="false">🌍 Mercados</button>
+    </nav>
+
+    <!-- ===== Painel: Dashboard ===== -->
+    <section id="tab-dashboard" class="tab-panel active">
+
+      <!-- (NOVO) Layout: Quick Tips + Alertas lado a lado -->
+      <div class="grid" style="margin-top:12px; align-items:start">
+        <!-- Dicas rápidas -->
+        <section class="card" style="grid-column: span 6">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap">
+            <div>
+              <h2 data-i18n="quick_tips">Dicas rápidas</h2>
+              <p class="muted">Resumo prático para uso diário dos sinais gerados pelo agente.</p>
+            </div>
+            <div class="muted-small">Status: <strong id="quickStatus">OK</strong></div>
+          </div>
+
+          <!-- (ATUALIZADO) Conteúdo pedido por você -->
+          <ul class="tips" style="margin-top:8px">
+            <li>🎯 Ganho esperado de <span class="highlight">5%</span> em até <span class="highlight">20 dias</span> por transação</li>
+            <li>⏰ Alertas enviados abaixo todos os dias: <span class="highlight">após fechamento</span> de Wall Street.</li>
+            <li>Abaixo dos alertas você pode ver o painel consolidado nas recomendações em busca dos <span class="highlight">5%</span>. Quando o objetivo é atingido a posição segue para o Histórico de transações</li>
+            <li>🛡️ Veja também a opinião da AI para qualquer ação em <span class="highlight">“Análise”</span></li>
+          </ul>
+        </section>
+
+        <!-- Alertas -->
+        <section class="card" style="grid-column: span 6">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap">
+            <div>
+              <h2 data-i18n="alerts_title">Alertas</h2>
+              <div class="muted-small">Janela com alertas do seu Worker (Cloudflare)</div>
+            </div>
+            <span class="badge">⚡ Agent</span>
+          </div>
+
+          <div style="margin-top:10px;border-radius:10px;overflow:hidden">
+            <iframe
+              src="https://shiny-sea-44d3.rafaelnm.workers.dev/"
+              id="alertsFrame"
+              title="Alertas – Cloudflare Worker"
+              loading="lazy"
+              referrerpolicy="no-referrer"
+              style="background:#fff;color:#000;">
+            </iframe>
+          </div>
+
+          <details style="margin-top:10px"><summary class="muted-small">Se a janela não aparecer</summary>
+            <p class="muted-small">No Worker: remova <code>X-Frame-Options</code> e permita <code>frame-ancestors</code> no CSP (inclua seu domínio do GitHub Pages).</p>
+          </details>
+        </section>
+
+        <!-- (NOVO) Recomendações & Histórico abaixo, largura total -->
+        <section class="card" style="grid-column: span 12">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap">
+            <div>
+              <h2>📌 Recomendações &amp; Histórico</h2>
+              <div class="muted-small">Acesse o painel consolidado do Cloudflare e acompanhe abertas e fechadas.</div>
+            </div>
+
+            <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+              <!-- Links (pedido) -->
+              <a class="btn small" href="https://shiny-sea-44d3.rafaelnm.workers.dev/dashboard?view=open" target="_blank" rel="noopener" aria-label="Abrir Recomendações Abertas no Cloudflare">
+                🔓 Recomendações Abertas
+              </a>
+              <a class="btn small ghost" href="https://shiny-sea-44d3.rafaelnm.workers.dev/dashboard?view=closed" target="_blank" rel="noopener" aria-label="Abrir Históricos Fechados no Cloudflare">
+                ✅ Históricos Fechados
+              </a>
+              <a class="btn small" href="https://shiny-sea-44d3.rafaelnm.workers.dev/dashboard" target="_blank" rel="noopener" aria-label="Abrir painel completo do Cloudflare">
+                ↗ Abrir painel completo
+              </a>
+            </div>
+          </div>
+
+          <div style="margin-top:12px;border-radius:10px;overflow:hidden">
+            <iframe
+              src="https://shiny-sea-44d3.rafaelnm.workers.dev/dashboard"
+              id="cfDashboardFrame"
+              title="Dashboard – Recomendações e Histórico (Cloudflare)"
+              loading="lazy"
+              referrerpolicy="no-referrer"
+              style="background:#fff;color:#000;">
+            </iframe>
+          </div>
+        </section>
       </div>
-      <div class="summary-card">
-        <div class="summary-label">Posições</div>
-        <div class="summary-value" id="mPositions">—</div>
-        <div class="summary-sub">Públicas + locais</div>
+    </section>
+
+    <!-- ===== Painel: Análise ===== -->
+    <section id="tab-analise" class="tab-panel">
+      <div class="grid" style="margin-top:16px">
+        <!-- Opinião da AI -->
+        <section class="card" id="ai-opinion" style="grid-column: span 8">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
+            <div>
+              <!-- Comunicação mais clara -->
+              <h2 id="aiTitle">Análise Técnica Automatizada</h2>
+              <div class="muted-small" id="aiSubtitle">Combinação de 15+ indicadores + consenso de analistas</div>
+            </div>
+
+            <div class="controls" style="width:100%">
+              <div style="display:flex;gap:8px;align-items:center;width:100%;flex-wrap:wrap">
+                <label class="muted-small" for="aiSymbolInput" style="min-width:120px">🔍 Símbolo</label>
+                <input id="aiSymbolInput" list="symbolList" placeholder="Ex.: NASDAQ:AMZN ou AMZN" style="min-width:220px;flex:1" aria-label="Campo de símbolo para análise" />
+                <div id="aiSymValid" class="muted-small" style="min-width:110px"></div>
+                <div style="display:flex;gap:8px;flex-shrink:0;flex-wrap:wrap">
+                  <!-- Ação primária mais destacada -->
+                  <button id="aiAnalyzeBtn" class="btn primary" aria-label="Analisar símbolo">Analisar símbolo</button>
+                  <button id="aiUseChartBtn" class="btn small ghost" aria-label="Usar símbolo do gráfico">Usar do gráfico</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Skeleton loader (substitui "carregando...") -->
+          <div id="aiSkeleton" class="card" style="display:none;background:linear-gradient(180deg, rgba(15,23,42,0.70), rgba(2,6,23,0.70));border:1px dashed rgba(255,255,255,0.10);min-height:90px;margin-top:12px">
+            <div class="sk-row">
+              <div class="skeleton sk-col-6"></div>
+              <div class="skeleton sk-col-6"></div>
+              <div class="skeleton sk-col-12" style="height:12px"></div>
+              <div class="skeleton sk-col-12" style="height:12px"></div>
+            </div>
+          </div>
+
+          <!-- Resultado calculado pelo Worker (/analyze) -->
+          <div id="aiResult" class="card" style="background:linear-gradient(180deg, rgba(15,23,42,0.70), rgba(2,6,23,0.70));border:1px dashed rgba(255,255,255,0.10);min-height:90px;margin-top:12px"></div>
+
+          <!-- Opinião extra via LLM (Grok / OpenRouter) -->
+          <details open style="margin-top:12px">
+            <summary class="muted-small" style="cursor:pointer">🤖 Opinião extra da IA (Grok)</summary>
+            <div id="grokBox" class="card" style="margin-top:12px;background:linear-gradient(180deg, rgba(30,41,59,0.55), rgba(2,6,23,0.55));border:1px solid rgba(250,204,21,0.22)">
+              <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
+                <h3 id="grokTitle" style="margin:0">Opinião extra da IA (Grok)</h3>
+                <div class="muted-small">Resumo conciso gerado pela LLM</div>
+              </div>
+              <div id="grokOpinion" class="status" style="margin-top:10px">—</div>
+            </div>
+          </details>
+
+          <p class="status" id="aiStatus" style="margin-top:10px"></p>
+
+          <!-- “Como funciona” (credibilidade/transparência) -->
+          <details style="margin-top:10px">
+            <summary class="muted-small" style="cursor:pointer">ℹ️ Como funciona</summary>
+            <div class="card" style="margin-top:10px;background:linear-gradient(180deg, rgba(2,6,23,0.55), rgba(2,6,23,0.35));border:1px solid rgba(255,255,255,0.10)">
+              <h3 style="margin:0 0 6px 0">🤖 Metodologia</h3>
+              <ul class="tips" style="margin:8px 0">
+                <li>• 15+ indicadores técnicos (SMA, RSI, MACD, etc.)</li>
+                <li>• Consenso de analistas (quando disponível)</li>
+                <li>• Atualização: sob demanda + refresh do portfólio</li>
+                <li>• Objetivo: organização e apoio educacional (não é recomendação)</li>
+              </ul>
+            </div>
+          </details>
+        </section>
+
+        <!-- Gráfico -->
+        <section class="card" style="grid-column: span 4; position:relative;">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
+            <div>
+              <h2 data-i18n="chart_title">Gráfico (TradingView)</h2>
+              <div class="muted-small">Carregue o símbolo e use os controles para adicionar à sua lista.</div>
+            </div>
+          </div>
+
+          <div class="controls" style="margin-top:10px">
+            <label class="muted-small" for="chartSymbolInput" style="min-width:120px">📌 Símbolo</label>
+            <input id="chartSymbolInput" list="symbolList" placeholder="Ex.: NASDAQ:NVDA ou BMFBOVESPA:PETR4" style="min-width:240px;flex:1" aria-label="Campo de símbolo do gráfico" />
+            <button id="setChartBtn" class="btn small" data-i18n="set_symbol" aria-label="Carregar símbolo no gráfico">Carregar símbolo</button>
+            <button id="addFromChartBtn" class="btn small ghost" data-i18n="add_from_chart" aria-label="Adicionar símbolo do gráfico ao portfólio">Adicionar à lista</button>
+            <a id="openTV" class="btn small" style="text-align:center" href="https://www.tradingview.com/chart/" target="_blank" rel="noopener" data-i18n="open_tv">Abrir no TradingView</a>
+          </div>
+
+          <div id="tradingview_chart" style="margin-top:12px;padding:0" class="card">
+            <div class="chart-topbar" id="chartTopbar">Símbolo: <strong id="chartSymbolLabel">—</strong></div>
+            <div id="tv_container" style="height:100%;width:100%"></div>
+          </div>
+          <p class="status" id="tvStatus" style="margin-top:10px"></p>
+
+          <!-- Cards colapsáveis para seções menos usadas -->
+          <details style="margin-top:10px">
+            <summary class="muted-small" style="cursor:pointer">✅ Boas práticas no gráfico</summary>
+            <div class="card" style="margin-top:10px;background:linear-gradient(180deg, rgba(2,6,23,0.55), rgba(2,6,23,0.35));border:1px solid rgba(255,255,255,0.10)">
+              <ul class="tips">
+                <li>Evite decisões com base em <strong>1 indicador</strong> apenas. Confirme com 2–3 sinais.</li>
+                <li>Observe a <strong>tendência (SMA50 x SMA200)</strong> antes do gatilho.</li>
+                <li>Prefira entrar com <strong>parcial</strong> e completar se o movimento confirmar.</li>
+                <li>Defina um <strong>stop técnico</strong> e um <strong>alvo</strong> antes de clicar.</li>
+                <li>Revise notícias/earnings que possam afetar o papel.</li>
+              </ul>
+
+              <div style="margin-top:12px">
+                <h3 style="margin-bottom:8px">Checklist rápido</h3>
+                <ul class="tips">
+                  <li>Volume confirmando o movimento?</li>
+                  <li>Preço acima da média relevante?</li>
+                  <li>Risco/recompensa favorável &lt; 1:2?</li>
+                </ul>
+              </div>
+            </div>
+          </details>
+        </section>
       </div>
-      <div class="summary-card">
-        <div class="summary-label">Em risco</div>
-        <div class="summary-value" id="mRisk">—</div>
-        <div class="summary-sub">Abaixo de -3%</div>
-      </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- GESTÃO DE POSIÇÕES (INALTERADA) -->
-  <!-- TODO O RESTANTE DO SEU PORTFÓLIO CONTINUA IGUAL -->
-</section>
+    <!-- ===== Painel: Portfólio ===== -->
+    <section id="tab-portfolio" class="tab-panel">
 
-<!-- ================= MERCADOS ================= -->
-<section id="tab-mercados" class="tab-panel">
-  <!-- TODO CONTEÚDO DE MERCADOS PERMANECE IGUAL -->
-</section>
+      <!-- (MOVIDO) Resumo do Portfólio veio da Dashboard para cá, mantendo IDs e JS -->
+      <section class="card" style="margin-top:16px">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap">
+          <div>
+            <h2>Resumo do Portfólio</h2>
+            <p class="muted">Visão rápida do seu P/L e saúde da carteira (com base no que você cadastrou).</p>
+          </div>
+          <div class="muted-small">Última leitura: <strong id="lastRefreshTop">—</strong></div>
+        </div>
 
-<footer>
-  © <span id="y"></span> • Site educacional, não é recomendação de investimento.
-</footer>
+        <div class="summary-grid" aria-label="Métricas do portfólio">
+          <div class="summary-card">
+            <div class="summary-label">Portfolio</div>
+            <div class="summary-value" id="mPortfolioValue">—</div>
+            <div class="summary-sub">Soma do valor atual (aprox.)</div>
+          </div>
+          <div class="summary-card">
+            <div class="summary-label">P/L Médio</div>
+            <div class="summary-value" id="mPLPct">—</div>
+            <div class="summary-sub">Média de P/L % das posições</div>
+          </div>
+          <div class="summary-card">
+            <div class="summary-label">Posições</div>
+            <div class="summary-value" id="mPositions">—</div>
+            <div class="summary-sub">Públicas + locais</div>
+          </div>
+          <div class="summary-card">
+            <div class="summary-label">Em risco</div>
+            <div class="summary-value" id="mRisk">—</div>
+            <div class="summary-sub">P/L abaixo de -3% (ajustável)</div>
+          </div>
+        </div>
 
-</div>
+        <div class="summary-pill" id="mHint">💡 Dica: use <strong>R</strong> para atualizar cotações rapidamente.</div>
+      </section>
 
-<!-- ================= SCRIPTS ================= -->
+      <section class="card" style="margin-top:16px">
+        <div style="display:flex;align-items:center;gap:8px;justify-content:space-between;flex-wrap:wrap">
+          <div>
+            <!-- Comunicação mais clara -->
+            <h2 data-i18n="positions_title">Portfólio</h2>
+            <div class="muted-small">Acompanhe seu P/L em tempo real</div>
+          </div>
 
-<script src="https://s3.tradingview.com/tv.js"></script>
+          <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+            <span class="badge" title="Visitantes veem essas posições">🌐 Público</span>
+            <button id="loadPublicBtn" class="btn small" aria-label="Atualizar posições públicas">Atualizar públicas</button>
+            <button id="publishBtn" class="btn small" title="Enviar posições locais para o servidor (admin)" aria-label="Publicar posições locais (admin)">Publicar (admin)</button>
+          </div>
+        </div>
 
-<script>
-/* =====================================================
-   TODO O SEU JAVASCRIPT ORIGINAL PERMANECE IGUAL
-   - Tabs
-   - AI / Grok
-   - Quotes
-   - Portfolio
-   - Dashboard
-   - Atalhos
-   - Toasts
-   ===================================================== */
-</script>
+        <div class="form-grid" style="margin-top:12px">
+          <input id="posSymbol" list="symbolList" class="col-span-6" placeholder="Ex.: NASDAQ:NVDA ou BMFBOVESPA:PETR4" aria-label="Símbolo da posição" />
+          <input id="posAvg" class="col-span-3" type="number" inputmode="decimal" step="0.01" placeholder="Preço médio" aria-label="Preço médio da posição" />
+          <input id="posNote" class="col-span-3" placeholder="Observação (opcional)" aria-label="Observação da posição" />
+        </div>
 
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px">
+          <button id="addPosBtn" class="btn primary" aria-label="Adicionar posição local">+ Adicionar ação</button>
+          <button id="refreshBtn" class="btn" aria-label="Atualizar preços do portfólio">Atualizar preços</button>
+          <button id="clearAllBtn" class="btn ghost" aria-label="Limpar posições locais">Limpar locais</button>
+          <button id="exportBtn" class="btn ghost" aria-label="Exportar posições locais para CSV">Exportar CSV (locais)</button>
+        </div>
+
+        <p class="status" id="quoteStatus"></p>
+
+        <!-- Placeholder ilustrado (estado vazio) -->
+        <div id="emptyPositions" class="empty-state" style="display:none">
+          <div style="display:flex;gap:12px;align-items:flex-start">
+            <div class="empty-illus">📈</div>
+            <div>
+              <div class="title">Adicione sua primeira posição</div>
+              <div class="desc">Comece pelo símbolo e preço médio — o P/L será calculado automaticamente.</div>
+            </div>
+          </div>
+          <button id="emptyCTA" class="btn primary" aria-label="Adicionar primeira posição">+ Adicionar ação</button>
+        </div>
+
+        <!-- Skeleton da tabela durante fetch -->
+        <div id="tableSkeleton" class="card" style="display:none;margin-top:12px;background:linear-gradient(180deg, rgba(2,6,23,0.55), rgba(2,6,23,0.35));border:1px solid rgba(255,255,255,0.10)">
+          <div class="sk-row">
+            <div class="skeleton sk-col-12" style="height:16px"></div>
+            <div class="skeleton sk-col-12" style="height:16px"></div>
+            <div class="skeleton sk-col-12" style="height:16px"></div>
+            <div class="skeleton sk-col-12" style="height:16px"></div>
+          </div>
+        </div>
+
+        <div class="table-wrap" style="margin-top:12px" id="posTableWrap">
+          <table id="posTable" aria-label="positions">
+            <thead>
+              <tr>
+                <th data-i18n="th_symbol">Símbolo</th>
+                <th data-i18n="th_avg">Preço médio</th>
+                <th data-i18n="th_last">Preço atual</th>
+                <th data-i18n="th_pl">P/L %</th>
+                <th data-i18n="th_note">Obs.</th>
+                <th data-i18n="th_actions">Ações</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px;flex-wrap:wrap;gap:8px">
+          <p id="totals" class="status"></p>
+          <p id="lastRefresh" class="muted-small"></p>
+        </div>
+      </section>
+    </section>
+
+    <!-- ===== Painel: Mercados ===== -->
+    <section id="tab-mercados" class="tab-panel">
+      <section class="card" style="margin-top:16px">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
+          <h2>Mercados Globais &amp; Magnificent 7</h2>
+          <div class="muted-small">Acompanhe os índices e mega-cap tech</div>
+        </div>
+
+        <div class="tradingview-widget-container" style="margin-top:12px">
+          <div class="tradingview-widget-container__widget"></div>
+          <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
+            {
+              "symbols": [
+                {"proName": "FOREXCOM:US30",  "title": "Dow Jones"},
+                {"proName": "FOREXCOM:US100", "title": "Nasdaq 100"},
+                {"proName": "FOREXCOM:US500", "title": "S&P 500"},
+                {"proName": "BMFBOVESPA:IBOV", "title": "Ibovespa"},
+                {"proName": "FOREXCOM:EU50",  "title": "Euro Stoxx 50"},
+                {"proName": "FOREXCOM:UK100", "title": "FTSE 100"},
+
+                {"proName": "NASDAQ:AAPL",  "title": "Apple"},
+                {"proName": "NASDAQ:MSFT",  "title": "Microsoft"},
+                {"proName": "NASDAQ:GOOGL", "title": "Alphabet"},
+                {"proName": "NASDAQ:AMZN",  "title": "Amazon"},
+                {"proName": "NASDAQ:NVDA",  "title": "NVIDIA"},
+                {"proName": "NASDAQ:META",  "title": "Meta"},
+                {"proName": "NASDAQ:TSLA",  "title": "Tesla"}
+              ],
+              "showSymbolLogo": true,
+              "isTransparent": false,
+              "displayMode": "adaptive",
+              "colorTheme": "light"
+            }
+          </script>
+        </div>
+      </section>
+    </section>
+
+    <footer>© <span id="y"></span> • <span data-i18n="disclaimer">Site educacional, não é recomendação de investimento.</span></footer>
+  </div>
+
+  <!-- Autocomplete (símbolos populares) -->
+  <datalist id="symbolList">
+    <option value="NASDAQ:NVDA"></option>
+    <option value="NASDAQ:AAPL"></option>
+    <option value="NASDAQ:MSFT"></option>
+    <option value="NASDAQ:AMZN"></option>
+    <option value="NASDAQ:GOOGL"></option>
+    <option value="NASDAQ:META"></option>
+    <option value="NASDAQ:TSLA"></option>
+    <option value="NYSE:BRK.B"></option>
+    <option value="BMFBOVESPA:PETR4"></option>
+    <option value="BMFBOVESPA:VALE3"></option>
+    <option value="BMFBOVESPA:ITUB4"></option>
+  </datalist>
+
+  <!-- TradingView library -->
+  <script src="https://s3.tradingview.com/tv.js"></script>
+
+  <script>
+  // ===================== CONFIG =====================
+  const API_BASE = "https://shiny-sea-44d3.rafaelnm.workers.dev";
+  const QUOTE_API = API_BASE + "/quotes";
+  const POS_API   = API_BASE + "/positions";
+  const AI_API    = API_BASE + "/analyze";
+
+  // ===================== I18N (mantive como antes) =====================
+  const I18N = {
+    pt:{ title:'Stockg<span class="ai">ai</span>de — Dicas de Ações para familia e amigos', quick_tips:"Dicas rápidas",
+      tip1:"Defina <strong>entrada, stop e alvo</strong> antes de executar.",
+      tip2:"Use <strong>gestão de risco</strong> por posição e por carteira.",
+      tip3:"Combine <strong>fundamental + técnico</strong> para decisões mais sólidas.",
+      chart_title:"Gráfico (TradingView)", alerts_title:"Alertas",
+      ticker_title:"Ticker de Cotações", positions_title:"Minhas posições",
+      add_position:"Adicionar posição", clear_all:"Limpar tudo", export_csv:"Exportar CSV",
+      th_symbol:"Símbolo", th_avg:"Preço médio", th_last:"Preço atual", th_pl:"P/L %",
+      th_note:"Obs.", th_actions:"Ações", disclaimer:"Site educacional, não é recomendação de investimento - rafaelnm@gmail.com",
+      edit:"Editar", del:"Excluir", totals:"Total de posições: {n}", refresh:"Atualizar preços",
+      set_symbol:"Carregar símbolo", add_from_chart:"Adicionar à lista", open_tv:"Abrir no TradingView",
+      ai_title:"Opinião da AI (Técnico + Analistas)", ai_analyze:"Analisar", ai_use_chart:"Usar símbolo do gráfico",
+      ai_decision:"Decisão", ai_score:"Score", ai_reasons:"Motivos", ai_technicals:"Técnicos", ai_analysts:"Analistas",
+      ai_buy:"Comprar", ai_hold:"Manter", ai_sell:"Vender", ai_last_update:"Última análise"
+    },
+    en:{ title:'Stockg<span class="ai">ai</span>de — Stocks TIPs for Family and Friends', quick_tips:"Quick tips",
+      tip1:"Define <strong>entry, stop and target</strong> before executing.",
+      tip2:"Use <strong>risk management</strong> per position and portfolio.",
+      tip3:"Combine <strong>fundamental + technical</strong> for stronger decisions.",
+      chart_title:"Chart (TradingView)", alerts_title:"Alerts",
+      ticker_title:"Quotes Ticker", positions_title:"My positions", add_position:"Add position",
+      clear_all:"Clear all", export_csv:"Export CSV", th_symbol:"Symbol", th_avg:"Avg. price",
+      th_last:"Last price", th_pl:"P/L %", th_note:"Note", th_actions:"Actions",
+      disclaimer:"Educational site, not investment advice - rafaelnm@gmail.com", edit:"Edit", del:"Delete",
+      totals:"Total positions: {n}", refresh:"Refresh prices", set_symbol:"Load symbol",
+      add_from_chart:"Add from chart", open_tv:"Open on TradingView",
+      ai_title:"AI Opinion (Technical + Analysts)", ai_analyze:"Analyze", ai_use_chart:"Use chart symbol",
+      ai_decision:"Decision", ai_score:"Score", ai_reasons:"Reasons", ai_technicals:"Technicals", ai_analysts:"Analysts",
+      ai_buy:"Buy", ai_hold:"Hold", ai_sell:"Sell", ai_last_update:"Last analysis"
+    }
+  };
+
+  document.addEventListener('DOMContentLoaded', () => {
+
+    // ===================== Tabs (UX) =====================
+    (function initTabs(){
+      const btns = Array.from(document.querySelectorAll('.tab-btn'));
+      const panels = Array.from(document.querySelectorAll('.tab-panel'));
+
+      function activate(tabId){
+        btns.forEach(b=>{
+          const on = b.getAttribute('data-tab') === tabId;
+          b.classList.toggle('active', on);
+          b.setAttribute('aria-selected', on ? 'true' : 'false');
+        });
+        panels.forEach(p=> p.classList.toggle('active', p.id === tabId));
+
+        // acessibilidade: foco no início do painel
+        const panel = document.getElementById(tabId);
+        if(panel){
+          const focusable = panel.querySelector('input,button,a,summary');
+          if(focusable) focusable.focus({preventScroll:true});
+        }
+      }
+
+      btns.forEach(b=> b.addEventListener('click', ()=> activate(b.getAttribute('data-tab'))));
+
+      // expõe helper (opcional)
+      window._activateTab = activate;
+    })();
+
+    // ===================== Toasts (UX feedback) =====================
+    function toast(type, title, msg, ttl=3500){
+      const root = document.getElementById('toasts');
+      if(!root) return;
+      const el = document.createElement('div');
+      el.className = 'toast ' + (type || '');
+      el.innerHTML = `
+        <div class="dot" aria-hidden="true"></div>
+        <div>
+          <div class="title">${escapeHtml(title || '')}</div>
+          <div class="msg">${escapeHtml(msg || '')}</div>
+        </div>
+        <button aria-label="Fechar">×</button>
+      `;
+      const btn = el.querySelector('button');
+      btn.addEventListener('click', ()=> el.remove());
+      root.appendChild(el);
+      setTimeout(()=> { if(el && el.parentNode) el.remove(); }, ttl);
+    }
+
+    function escapeHtml(s){
+      return String(s||'')
+        .replace(/&/g,'&amp;')
+        .replace(/</g,'&lt;')
+        .replace(/>/g,'&gt;')
+        .replace(/"/g,'&quot;')
+        .replace(/'/g,'&#039;');
+    }
+
+    // ===================== Input inteligente (validação simples + debounce) =====================
+    function isLikelySymbol(v){
+      const s = String(v||'').trim();
+      if(!s) return false;
+      // aceita: NASDAQ:AMZN, NYSE:BRK.B, AMZN, PETR4, BMFBOVESPA:PETR4
+      return /^[A-Za-z]{1,12}(:[A-Za-z0-9.\-]{1,18})?$/.test(s) || /^[A-Za-z]{4}\d{1,2}$/.test(s);
+    }
+    function debounce(fn, wait=500){
+      let t=null;
+      return (...args)=>{
+        clearTimeout(t);
+        t=setTimeout(()=> fn(...args), wait);
+      }
+    }
+
+    const aiInput = document.getElementById('aiSymbolInput');
+    const aiValid = document.getElementById('aiSymValid');
+    if(aiInput && aiValid){
+      const validate = debounce(()=>{
+        const ok = isLikelySymbol(aiInput.value);
+        aiValid.innerHTML = ok ? '<span class="text-green">✓ válido</span>' : '<span class="text-red">✗ inválido</span>';
+      }, 450);
+      aiInput.addEventListener('input', validate, {passive:true});
+      validate();
+    }
+
+    // ===================== I18N =====================
+    function detectLang(){ const nav = navigator.language || 'pt-BR'; return String(nav).toLowerCase().startsWith('en') ? 'en' : 'pt'; }
+    let currentLang = (localStorage.getItem('lang') || detectLang());
+    const langLabel = document.getElementById('langLabel');
+    function applyI18n(){
+      const dict = I18N[currentLang] || I18N.pt;
+      document.documentElement.lang = currentLang === 'en' ? 'en' : 'pt-br';
+      document.querySelectorAll('[data-i18n]').forEach(el=>{
+        const key = el.getAttribute('data-i18n');
+        if(dict[key]) el.innerHTML = dict[key];
+      });
+      langLabel.textContent = currentLang.toUpperCase();
+      loadChart(getCurrentSymbol(), currentLang === 'en' ? 'en' : 'br');
+      renderPositions(latestQuotesMap);
+      const gdict = grokDict();
+      const gt = document.getElementById('grokTitle'); if (gt) gt.textContent = gdict.title;
+    }
+    document.getElementById('langToggle').addEventListener('click', ()=>{
+      currentLang = currentLang === 'en' ? 'pt' : 'en'; localStorage.setItem('lang', currentLang); applyI18n();
+      toast('success', 'Idioma', currentLang === 'en' ? 'English enabled' : 'Português ativado');
+    });
+
+    // ===================== TradingView =====================
+    const DEFAULT_SYMBOL = 'NASDAQ:NVDA';
+    window.tvWidgetInstance = null;
+
+    function getCurrentSymbol(){ return window.__CURRENT_SYMBOL || DEFAULT_SYMBOL; }
+    function setCurrentSymbol(s){ window.__CURRENT_SYMBOL = s; }
+    function loadChart(symbol, locale){
+      const tvStatus = document.getElementById('tvStatus');
+      try{
+        const loc = locale || (currentLang === 'en' ? 'en' : 'br');
+        const s = (symbol || DEFAULT_SYMBOL).trim();
+        setCurrentSymbol(s);
+
+        const chartLabel = document.getElementById('chartSymbolLabel');
+        if (chartLabel) chartLabel.textContent = s;
+
+        const container = document.getElementById('tv_container');
+        if(!container){
+          tvStatus.textContent = (currentLang==='en'?'Chart container missing.':'Container do gráfico não encontrado.');
+          return;
+        }
+
+        if(window.tvWidgetInstance && typeof window.tvWidgetInstance.remove === 'function'){
+          try{ window.tvWidgetInstance.remove(); }catch(e){ console.debug('error removing widget', e); }
+          window.tvWidgetInstance = null;
+        }
+
+        setTimeout(()=> {
+          window.tvWidgetInstance = new TradingView.widget({
+            autosize: true,
+            symbol: s,
+            interval: "60",
+            timezone: "Etc/UTC",
+            theme: "light",
+            style: "1",
+            locale: loc,
+            enable_publishing: false,
+            container_id: "tv_container",
+            withdateranges: true,
+            allow_symbol_change: true
+          });
+
+          const openEl = document.getElementById('openTV');
+          if(openEl) openEl.href = `https://www.tradingview.com/chart/?symbol=${encodeURIComponent(s)}`;
+
+          const input = document.getElementById('chartSymbolInput');
+          if(input) input.value = s;
+
+          tvStatus.textContent = '';
+        }, 50);
+
+      }catch(e){
+        tvStatus.textContent = (currentLang==='en'?'Could not load chart now.':'Não foi possível carregar o gráfico agora.');
+        console.error('loadChart error', e);
+      }
+    }
+    document.getElementById('setChartBtn').addEventListener('click', ()=>{
+      const s = document.getElementById('chartSymbolInput').value.trim(); if(!s){ alert(currentLang==='en'?'Enter a symbol':'Informe um símbolo'); return; } loadChart(s);
+      toast('success', 'Gráfico', 'Símbolo carregado: ' + s);
+    });
+    document.getElementById('addFromChartBtn').addEventListener('click', ()=>{
+      document.getElementById('posSymbol').value = getCurrentSymbol(); document.getElementById('posAvg').focus();
+      toast('success', 'Portfólio', 'Símbolo enviado para adicionar posição');
+      if(typeof window._activateTab === 'function') window._activateTab('tab-portfolio');
+    });
+
+    // ===================== Opinião da AI (Worker /analyze + Grok via /kimi) =====================
+    function aiDict(){ return (document.documentElement.lang==='en') ? I18N.en : I18N.pt; }
+
+    function renderAIResult(payload){
+      const d = aiDict();
+      const box = document.getElementById('aiResult');
+      if(!payload || typeof payload !== 'object'){ box.innerHTML = '<p class="status">'+(d.ai_last_update+': —')+'</p>'; return; }
+      const dec = String(payload.decision||'').toUpperCase();
+      const mapLabel = { BUY:d.ai_buy, HOLD:d.ai_hold, SELL:d.ai_sell };
+      const color = dec==='BUY' ? '#22c55e' : (dec==='SELL' ? '#ef4444' : '#cbd5e1');
+      const score = (typeof payload.score==='number') ? Math.round(payload.score) : null;
+      const tech = payload.technicals||{}; const an = payload.analysts||{}; const reasons = payload.reasons||[];
+      box.innerHTML = `
+        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+          <span class="badge" style="background:rgba(2,6,23,0.65);border-color:rgba(255,255,255,0.12);color:${color}"><strong>${d.ai_decision}:</strong> ${mapLabel[dec]||dec}</span>
+          ${score!==null?`<span class="badge"><strong>${d.ai_score}:</strong> ${score}/100</span>`:''}
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(12,1fr);gap:12px;margin-top:10px">
+          <div class="card" style="grid-column:span 6">
+            <h3 style="margin:0 0 6px 0">${d.ai_technicals}</h3>
+            <ul style="margin:0;padding-left:18px">
+              <li>SMA50: <strong>${tech.sma50??'-'}</strong> · SMA200: <strong>${tech.sma200??'-'}</strong></li>
+              <li>RSI14: <strong>${tech.rsi??'-'}</strong></li>
+              <li>MACD: <strong>${tech.macd?.macd??'-'}</strong> · Signal: <strong>${tech.macd?.signal??'-'}</strong></li>
+            </ul>
+          </div>
+          <div class="card" style="grid-column:span 6">
+            <h3 style="margin:0 0 6px 0">${d.ai_analysts}</h3>
+            <ul style="margin:0;padding-left:18px">
+              <li>Mean: <strong>${an.mean??'-'}</strong></li>
+              <li>Trend: ${an.trend ? `<strong>buy ${an.trend.buy||0}</strong> · hold ${an.trend.hold||0} · sell ${an.trend.sell||0}` : '-'}</li>
+            </ul>
+          </div>
+        </div>
+        ${reasons.length?`<div style="margin-top:8px"><strong>${d.ai_reasons}:</strong><ul style="margin:6px 0;padding-left:18px">${reasons.map(r=>`<li>${r}</li>`).join('')}</ul></div>`:''}
+      `;
+    }
+
+    function grokDict(){
+      const isEN = document.documentElement.lang === 'en';
+      return isEN ? {
+        thinking: "Asking Grok…",
+        title: "Extra AI Opinion (Grok)",
+        introDecision: "Conclusion",
+        error: "Could not get Grok opinion now."
+      } : {
+        thinking: "Consultando o Grok…",
+        title: "Opinião extra da IA (Grok)",
+        introDecision: "Conclusão",
+        error: "Não foi possível obter a opinião do Grok agora."
+      };
+    }
+
+    function renderGrok(text){
+      const box = document.getElementById('grokOpinion');
+      if (!box) return;
+      box.innerHTML = text ? text.replace(/\n/g, '<br/>') : '—';
+    }
+
+    function buildGrokMessages(symbol, analyzePayload){
+      const isEN = document.documentElement.lang === 'en';
+      const d = analyzePayload || {};
+      const t = d.technicals || {};
+      const a = d.analysts || {};
+      const dec = (d.decision || '').toString().toUpperCase();
+      const score = typeof d.score === 'number' ? Math.round(d.score) : null;
+
+      const summary = {
+        symbol,
+        decision_calc: dec,
+        score_calc: score,
+        technicals: {
+          sma50: t.sma50, sma200: t.sma200, rsi14: t.rsi,
+          macd: t.macd?.macd, signal: t.macd?.signal, hist: t.macd?.hist
+        },
+        analysts: {
+          mean: a.mean, trend: a.trend
+        }
+      };
+
+      const qPT = `Baseado APENAS nos indicadores técnicos e nos dados dos analistas fornecidos em JSON a seguir,
+responda começando pela CONCLUSÃO (uma palavra: "COMPRAR", "VENDER" ou "MANTER"), e logo depois explique o racional em 3–5 frases objetivas.
+Evite jargões e não faça recomendação personalizada. Mantenha tom educacional e conciso.`;
+
+      const qEN = `Based ONLY on the provided technical indicators and analyst data (JSON below),
+start with the CONCLUSION (one word: "BUY", "SELL", or "HOLD"), then explain the rationale in 3–5 concise sentences.
+Avoid personalization and keep an educational tone.`;
+
+      const userContent = (isEN ? qEN : qPT) + `\n\nSYMBOL: ${symbol}\nDATA:\n` + JSON.stringify(summary, null, 2);
+      const systemContent = isEN
+        ? "You are a financial analysis assistant. Provide concise, educational summaries. Do not give personalized advice."
+        : "Você é um assistente de análise financeira. Forneça resumos concisos e educacionais. Não dê aconselhamento personalizado.";
+
+      return [
+        { role: "system", content: systemContent },
+        { role: "user", content: userContent }
+      ];
+    }
+
+    async function askGrok(symbol, analyzePayload){
+      const lbl = grokDict();
+      const titleEl = document.getElementById('grokTitle');
+      if (titleEl) titleEl.textContent = lbl.title;
+      const box = document.getElementById('grokOpinion');
+      if (box) box.textContent = lbl.thinking;
+      try{
+        const messages = buildGrokMessages(symbol, analyzePayload);
+        const resp = await fetch(API_BASE + "/kimi?model=" + encodeURIComponent("x-ai/grok-4-fast"), {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({ messages })
+        });
+        if (!resp.ok) throw new Error('HTTP ' + resp.status);
+        const j = await resp.json();
+        const content = j?.choices?.[0]?.message?.content || '';
+        renderGrok(content || lbl.error);
+      }catch(e){
+        console.error('grok error', e);
+        renderGrok(grokDict().error);
+      }
+    }
+
+    async function runAIAnalysis(symbol){
+      const d = aiDict();
+      const aiStatus = document.getElementById('aiStatus');
+      const btn = document.getElementById('aiAnalyzeBtn');
+
+      // loading states
+      const sk = document.getElementById('aiSkeleton');
+      const result = document.getElementById('aiResult');
+      if(sk) sk.style.display = 'block';
+      if(result) result.style.display = 'none';
+      if(btn) btn.classList.add('loading');
+
+      aiStatus.textContent = d.refresh+"…";
+      try{
+        const resp = await fetch(AI_API + "?symbol=" + encodeURIComponent(symbol), { cache:'no-store' });
+        if(!resp.ok) throw new Error('HTTP '+resp.status);
+        const json = await resp.json();
+        renderAIResult(json);
+        askGrok(symbol, json);
+        aiStatus.textContent = d.ai_last_update+': '+new Date().toLocaleString(document.documentElement.lang==='en'?'en-US':'pt-BR',{hour12:false});
+        toast('success', 'Análise', 'Resultado atualizado para ' + symbol);
+      }catch(e){
+        console.error('AI analyze error', e);
+        aiStatus.textContent = (document.documentElement.lang==='en'?'Could not analyze now.':'Não foi possível analisar agora.');
+        toast('error', 'Análise', 'Falha ao analisar (ver console).');
+      }finally{
+        if(sk) sk.style.display = 'none';
+        if(result) result.style.display = 'block';
+        if(btn) btn.classList.remove('loading');
+      }
+    }
+
+    document.getElementById('aiAnalyzeBtn').addEventListener('click', ()=>{
+      const s = document.getElementById('aiSymbolInput').value.trim() || getCurrentSymbol();
+      if(!s) return;
+      if(!isLikelySymbol(s)){
+        toast('error', 'Símbolo', 'Formato inválido. Ex.: NASDAQ:AMZN ou AMZN');
+        return;
+      }
+      runAIAnalysis(s);
+      document.getElementById('chartSymbolInput').value = s;
+      const chartLabel = document.getElementById('chartSymbolLabel');
+      if (chartLabel) chartLabel.textContent = s;
+      loadChart(s, currentLang === 'en' ? 'en' : 'br');
+    });
+
+    document.getElementById('aiUseChartBtn').addEventListener('click', ()=>{
+      const s = getCurrentSymbol();
+      document.getElementById('aiSymbolInput').value = s;
+      toast('success', 'Símbolo', 'Usando símbolo do gráfico: ' + s);
+    });
+
+    // ===================== Posições: público + local =====================
+    const posKeyLocal = 'positions_v4_pl_only_autorefresh';
+    const cacheKey = 'positions_last_prices_cache_v1';
+    const $tbody = document.querySelector('#posTable tbody');
+    const $totals = document.getElementById('totals');
+    const quoteStatus = document.getElementById('quoteStatus');
+    const lastRefreshEl = document.getElementById('lastRefresh');
+
+    let publicPositions = [];
+    function readPositionsLocal(){ try{ return JSON.parse(localStorage.getItem(posKeyLocal)) || []; }catch{ return []; } }
+    function writePositionsLocal(data){ localStorage.setItem(posKeyLocal, JSON.stringify(data)); }
+    function readCache(){ try{ return JSON.parse(localStorage.getItem(cacheKey)) || {}; }catch{ return {}; } }
+    function writeCache(obj){ localStorage.setItem(cacheKey, JSON.stringify(obj||{})); }
+    function number(v){ return isNaN(parseFloat(v)) ? 0 : parseFloat(v); }
+    function fmt(n, d=2){ if(n===null||n===undefined||isNaN(n)) return '-'; return Number(n).toFixed(d); }
+    function fmtPct(n){ if(n===null||n===undefined||isNaN(n)) return '-'; return (n>=0?'+':'')+Number(n).toFixed(2)+'%'; }
+
+    function getAllPositions(){
+      const locals = readPositionsLocal();
+      return [...publicPositions.map(p => ({...p, __public:true})), ...locals.map(p => ({...p, __public:false}))];
+    }
+
+    let latestQuotesMap = {};
+
+    // ===== Métricas topo (Dashboard/Portfólio) =====
+    function updateSummaryMetrics(quotesMap={}){
+      const rows = getAllPositions();
+      const riskThreshold = -3; // %
+      let count = rows.length;
+      let risk = 0;
+      let plSum = 0;
+      let plCount = 0;
+      let portfolioValue = 0;
+
+      rows.forEach(r=>{
+        const last = (typeof quotesMap[r.symbol] === 'number') ? quotesMap[r.symbol] : null;
+        if(last && r.avg > 0){
+          const pl = ((last/r.avg-1)*100);
+          plSum += pl;
+          plCount += 1;
+          if(pl < riskThreshold) risk += 1;
+
+          // Aproximação: sem quantidade -> assume 1 unidade (só para dar visual)
+          portfolioValue += last;
+        }
+      });
+
+      const elPV = document.getElementById('mPortfolioValue');
+      const elPL = document.getElementById('mPLPct');
+      const elPos = document.getElementById('mPositions');
+      const elRisk = document.getElementById('mRisk');
+
+      if(elPV) elPV.textContent = count ? ('R$ ' + fmt(portfolioValue, 2)) : '—';
+      if(elPL){
+        if(plCount){
+          const avgPL = plSum/plCount;
+          elPL.textContent = fmtPct(avgPL);
+          elPL.style.color = avgPL >= 0 ? 'var(--bullish)' : 'var(--bearish)';
+          elPL.style.fontWeight = '900';
+        } else {
+          elPL.textContent = '—';
+          elPL.style.color = '#eaf2ff';
+        }
+      }
+      if(elPos) elPos.textContent = String(count || 0);
+      if(elRisk) elRisk.textContent = String(risk || 0);
+    }
+
+    function setEmptyStateVisible(isEmpty){
+      const empty = document.getElementById('emptyPositions');
+      const tableWrap = document.getElementById('posTableWrap');
+      if(empty) empty.style.display = isEmpty ? 'flex' : 'none';
+      if(tableWrap) tableWrap.style.display = isEmpty ? 'none' : 'block';
+    }
+
+    function renderPositions(quotesMap={}){
+      latestQuotesMap = quotesMap;
+      const dict = I18N[currentLang] || I18N.pt;
+      const data = getAllPositions();
+      $tbody.innerHTML = '';
+
+      setEmptyStateVisible(data.length === 0);
+      updateSummaryMetrics(quotesMap);
+
+      data.forEach((row, idx)=>{
+        const last = (typeof quotesMap[row.symbol] === 'number') ? quotesMap[row.symbol] : null;
+        const pl = (last && row.avg>0) ? ((last/row.avg-1)*100) : null;
+        const badge = row.__public ? ' <span class="badge" title="Visível para todos">🌐</span>' : '';
+        const actions = row.__public
+          ? '<span class="muted-small">—</span>'
+          : `<button class="btn small" data-act="edit" data-idx="${idx}" aria-label="Editar posição">${dict.edit}</button>
+             <button class="btn small ghost" data-act="del" data-idx="${idx}" aria-label="Excluir posição">${dict.del}</button>`;
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><button class="btn small" data-act="show" data-idx="${idx}" title="Mostrar no gráfico" aria-label="Mostrar no gráfico">${row.symbol}</button>${badge}</td>
+          <td>${fmt(row.avg)}</td>
+          <td>${last===null?'-':fmt(last)}</td>
+          <td style="font-weight:900; color:${pl===null?'#cbd5e1':(pl>=0?'var(--bullish)':'var(--bearish)')}">${pl===null?'-':fmtPct(pl)}</td>
+          <td>${row.note||''}</td>
+          <td class="actions">${actions}</td>`;
+        $tbody.appendChild(tr);
+      });
+      $totals.textContent = (dict.totals||'').replace('{n}', data.length);
+    }
+
+    async function loadPublicPositions(){
+      const btn = document.getElementById('loadPublicBtn');
+      const sk = document.getElementById('tableSkeleton');
+      if(btn) btn.classList.add('loading');
+      if(sk) sk.style.display = 'block';
+      try{
+        const r = await fetch(POS_API, { cache:'no-store' });
+        if(!r.ok) throw new Error('HTTP '+r.status);
+        const j = await r.json();
+        publicPositions = Array.isArray(j.positions) ? j.positions : [];
+        toast('success', 'Público', 'Posições públicas atualizadas');
+      }catch(e){
+        console.error('loadPublicPositions', e);
+        publicPositions = [];
+        toast('error', 'Público', 'Falha ao carregar posições públicas');
+      }finally{
+        if(btn) btn.classList.remove('loading');
+        if(sk) sk.style.display = 'none';
+      }
+      await refreshPrices();
+    }
+
+    function addPositionLocal(){
+      const symbol = document.getElementById('posSymbol').value.trim() || getCurrentSymbol();
+      const avg = number(document.getElementById('posAvg').value);
+      const note = document.getElementById('posNote').value.trim();
+      if(!symbol || avg<=0){
+        alert(document.documentElement.lang==='en' ? 'Please fill symbol and avg. price.' : 'Preencha símbolo e preço médio.');
+        return;
+      }
+      const data = readPositionsLocal();
+      data.push({symbol, avg, note});
+      writePositionsLocal(data);
+      document.getElementById('posSymbol').value='';
+      document.getElementById('posAvg').value='';
+      document.getElementById('posNote').value='';
+      toast('success', 'Portfólio', 'Posição adicionada (local)');
+      refreshPrices();
+    }
+
+    async function publishLocalPositions(){
+      const token = localStorage.getItem('admin_token') || prompt('Admin token (Bearer):');
+      if(!token){ return; }
+      localStorage.setItem('admin_token', token);
+      const list = readPositionsLocal();
+      const btn = document.getElementById('publishBtn');
+      if(btn) btn.classList.add('loading');
+      try{
+        const r = await fetch(POS_API, {
+          method:'POST',
+          headers:{ 'content-type':'application/json', 'authorization':'Bearer '+token },
+          body: JSON.stringify({ positions: list })
+        });
+        if(!r.ok){
+          const t = await r.text().catch(()=> '');
+          throw new Error(`HTTP ${r.status} ${t}`);
+        }
+        toast('success', 'Publicar', 'Posições publicadas com sucesso!');
+        await loadPublicPositions();
+      }catch(e){
+        console.error('publishLocalPositions', e);
+        toast('error', 'Publicar', 'Falha ao publicar. Verifique o token em ADMIN_TOKEN no Worker.');
+      }finally{
+        if(btn) btn.classList.remove('loading');
+      }
+    }
+
+    document.getElementById('addPosBtn').addEventListener('click', addPositionLocal);
+    document.getElementById('publishBtn').addEventListener('click', publishLocalPositions);
+    document.getElementById('loadPublicBtn').addEventListener('click', loadPublicPositions);
+
+    // CTA do estado vazio
+    const emptyCTA = document.getElementById('emptyCTA');
+    if(emptyCTA){
+      emptyCTA.addEventListener('click', ()=>{
+        document.getElementById('posSymbol').focus();
+      });
+    }
+
+    document.getElementById('clearAllBtn').addEventListener('click', ()=>{
+      if(confirm(document.documentElement.lang==='en' ? 'Clear all LOCAL positions?' : 'Limpar as posições LOCAIS?')){
+        writePositionsLocal([]); renderPositions(latestQuotesMap);
+        toast('success', 'Portfólio', 'Posições locais limpas');
+      }
+    });
+    document.getElementById('exportBtn').addEventListener('click', ()=>{
+      const rows = readPositionsLocal();
+      const header = ['symbol','avg','note'];
+      const csv = [header.join(',')].concat(rows.map(r=> `${r.symbol},${r.avg},"${(r.note||'').replace(/"/g,'""')}"`)).join('\n');
+      const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a'); a.href = url; a.download = 'positions_local.csv'; a.click();
+      URL.revokeObjectURL(url);
+      toast('success', 'Exportar', 'CSV gerado com posições locais');
+    });
+
+    document.querySelector('#posTable tbody').addEventListener('click', (e)=>{
+      const btn = e.target.closest('button'); if(!btn) return;
+      const act = btn.getAttribute('data-act');
+      const idx = parseInt(btn.getAttribute('data-idx'),10);
+      const data = getAllPositions();
+      const row = data[idx];
+      if(act==='del'){
+        if(row.__public){ alert('Posição pública não pode ser apagada por aqui. Use o botão "Publicar..." para sobrescrever.'); return; }
+        const locals = readPositionsLocal();
+        const found = locals.findIndex(x=> x.symbol===row.symbol && x.avg===row.avg && x.note===row.note);
+        if(found>-1){ locals.splice(found,1); writePositionsLocal(locals); refreshPrices(); toast('success','Portfólio','Posição removida'); }
+      }else if(act==='edit'){
+        if(row.__public){ alert('Posição pública não pode ser editada por aqui. Edite local e publique.'); return; }
+        const locals = readPositionsLocal();
+        const found = locals.findIndex(x=> x.symbol===row.symbol && x.avg===row.avg && x.note===row.note);
+        if(found===-1) return;
+        const symbol = prompt(document.documentElement.lang==='en'?'Symbol:':'Símbolo:', row.symbol) || row.symbol;
+        const avg = parseFloat(prompt(document.documentElement.lang==='en'?'Avg. price:':'Preço médio:', row.avg)) || row.avg;
+        const note = prompt(document.documentElement.lang==='en'?'Note:':'Observação:', row.note||'') || row.note;
+        locals[found] = {symbol, avg, note};
+        writePositionsLocal(locals); refreshPrices(); toast('success','Portfólio','Posição atualizada');
+      }else if(act==='show'){
+        document.getElementById('chartSymbolInput').value = row.symbol; loadChart(row.symbol);
+        toast('success','Gráfico','Mostrando: ' + row.symbol);
+        if(typeof window._activateTab === 'function') window._activateTab('tab-analise');
+      }
+    });
+
+    // ===================== Preços via Worker =====================
+    async function refreshPrices(){
+      const rows = getAllPositions();
+      const symbols = [...new Set(rows.map(r => (r.symbol||'').trim()).filter(Boolean))];
+
+      const btn = document.getElementById('refreshBtn');
+      const sk = document.getElementById('tableSkeleton');
+
+      if (symbols.length === 0) {
+        renderPositions({}); quoteStatus.textContent = (document.documentElement.lang==='en' ? 'No positions.' : 'Sem posições.');
+        lastRefreshEl.textContent = ''; document.getElementById('lastRefreshTop').textContent = '—';
+        return;
+      }
+
+      quoteStatus.textContent = (document.documentElement.lang==='en' ? 'Updating prices…' : 'Atualizando preços…');
+      if(btn) btn.classList.add('loading');
+      if(sk) sk.style.display = 'block';
+
+      try{
+        const url = QUOTE_API + "?symbols=" + encodeURIComponent(symbols.join(','));
+        const resp = await fetch(url, { cache: 'no-store' });
+        if(!resp.ok) throw new Error('HTTP ' + resp.status);
+        const json = await resp.json();
+        const map = json?.prices || {};
+        const out = {};
+        rows.forEach(r => { const v = map[r.symbol]; out[r.symbol] = (typeof v === 'number') ? v : null; });
+        renderPositions(out);
+        quoteStatus.textContent = '';
+        const formatted = new Date().toLocaleString(document.documentElement.lang==='en'?'en-US':'pt-BR', {hour12:false});
+        lastRefreshEl.textContent = (document.documentElement.lang==='en' ? 'Last update: ' : 'Última atualização: ') + formatted;
+        document.getElementById('lastRefreshTop').textContent = formatted;
+        writeCache(out);
+        toast('success', 'Cotações', 'Atualizadas (' + symbols.length + ' símbolos)');
+      }catch(e){
+        console.error('quotes error', e);
+        renderPositions(readCache());
+        quoteStatus.textContent = (document.documentElement.lang==='en' ? 'Could not update quotes.' : 'Não foi possível atualizar as cotações.');
+        toast('error', 'Cotações', 'Falha ao atualizar. Usando cache local.');
+      }finally{
+        if(btn) btn.classList.remove('loading');
+        if(sk) sk.style.display = 'none';
+      }
+    }
+
+    // ===================== Responsive helpers & network-aware loading =====================
+    (function(){
+      let resizeTimer = null;
+      function adjustChartForViewport(){
+        const chartEl = document.getElementById('tradingview_chart');
+        const container = document.getElementById('tv_container');
+        const frame = document.querySelector('iframe#alertsFrame');
+        if(!chartEl || !container) return;
+        const w = window.innerWidth;
+        if(w <= 420){
+          chartEl.style.height = '300px'; container.style.height = '300px';
+          if(frame) frame.style.height = '300px';
+        } else if(w <= 720){
+          chartEl.style.height = '360px'; container.style.height = '360px';
+          if(frame) frame.style.height = '360px';
+        } else {
+          chartEl.style.height = '520px'; container.style.height = '520px';
+          if(frame) frame.style.height = '520px';
+        }
+        try {
+          if(window.tvWidgetInstance && typeof window.tvWidgetInstance.remove === 'function'){
+            const currentSymbol = window.__CURRENT_SYMBOL || 'NASDAQ:NVDA';
+            window.tvWidgetInstance.remove();
+            window.tvWidgetInstance = null;
+            setTimeout(()=> {
+              if(typeof loadChart === 'function') loadChart(currentSymbol);
+            }, 150);
+          } else {
+            const cur = window.__CURRENT_SYMBOL || 'NASDAQ:NVDA';
+            setTimeout(()=> { if(typeof loadChart === 'function') loadChart(cur); }, 150);
+          }
+        } catch(e) {
+          console.debug('adjustChartForViewport error', e);
+        }
+      }
+
+      window.addEventListener('resize', () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(adjustChartForViewport, 150);
+      }, {passive:true});
+
+      window.addEventListener('orientationchange', () => {
+        setTimeout(adjustChartForViewport, 300);
+      }, {passive:true});
+
+      setTimeout(adjustChartForViewport, 300);
+    })();
+
+    // ===================== Atalhos de teclado (UX) =====================
+    document.addEventListener('keydown', (e)=>{
+      const key = (e.key || '').toLowerCase();
+      const isMac = /mac/i.test(navigator.platform);
+      const mod = isMac ? e.metaKey : e.ctrlKey;
+
+      // Ctrl/Cmd + K: foca campo de busca (Análise)
+      if(mod && key === 'k'){
+        e.preventDefault();
+        if(typeof window._activateTab === 'function') window._activateTab('tab-analise');
+        const el = document.getElementById('aiSymbolInput');
+        if(el) el.focus();
+        return;
+      }
+
+      // A: adicionar posição rápida
+      if(!e.ctrlKey && !e.metaKey && key === 'a' && !/input|textarea/i.test((e.target && e.target.tagName)||'')){
+        e.preventDefault();
+        if(typeof window._activateTab === 'function') window._activateTab('tab-portfolio');
+        const el = document.getElementById('posSymbol');
+        if(el) el.focus();
+        return;
+      }
+
+      // R: refresh preços
+      if(!e.ctrlKey && !e.metaKey && key === 'r' && !/input|textarea/i.test((e.target && e.target.tagName)||'')){
+        e.preventDefault();
+        refreshPrices();
+        return;
+      }
+    }, {passive:false});
+
+    // ===================== Inicialização =====================
+    document.getElementById('y').textContent = new Date().getFullYear();
+    applyI18n();
+    loadChart('NASDAQ:AAPL');
+
+    const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection || {};
+    const effectiveType = (connection && connection.effectiveType) ? connection.effectiveType : '';
+    const saveData = connection && connection.saveData;
+    const isSlowNetwork = saveData || /2g|slow-2g/.test(effectiveType);
+
+    if(isSlowNetwork){
+      console.info('Rede lenta detectada — loadPublicPositions adiada.');
+      document.getElementById('loadPublicBtn').textContent = (document.documentElement.lang==='en' ? 'Load public (slow net)' : 'Carregar públicas (rede lenta)');
+    } else {
+      loadPublicPositions();
+    }
+
+    const refreshIntervalMs = isSlowNetwork ? 180000 : 120000;
+    document.getElementById('refreshBtn').addEventListener('click', refreshPrices);
+    setInterval(refreshPrices, refreshIntervalMs);
+
+    window._refreshPrices = refreshPrices;
+    window._loadPublicPositions = loadPublicPositions;
+
+    // primeira render com cache
+    renderPositions(readCache());
+    updateSummaryMetrics(readCache());
+
+  });
+  </script>
 </body>
 </html>
