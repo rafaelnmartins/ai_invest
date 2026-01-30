@@ -17,6 +17,13 @@
       --muted: #9aa8bd;
       --ink: #e7edf6;
 
+      /* Paleta refinada (profissional) */
+      --bullish: #10b981;  /* verde suave */
+      --bearish: #ef4444;  /* vermelho */
+      --neutral: #f59e0b;  /* âmbar */
+      --primary: #3b82f6;  /* ação primária */
+      --secondary: #8b5cf6; /* secundária */
+
       --accent: #38bdf8;
       --accent-2: #6366f1;
 
@@ -45,12 +52,42 @@
       -moz-osx-font-smoothing:grayscale;
       line-height:1.5;
       -webkit-tap-highlight-color: transparent;
+      padding-top: 54px; /* espaço para disclaimer fixo */
     }
 
     a{color:var(--accent);text-decoration:none}
     .wrap{max-width:var(--max-width);margin:22px auto;padding:20px}
 
-    header{display:flex;gap:20px;align-items:center;justify-content:space-between;margin-bottom:20px}
+    /* ===== Disclaimer fixo (mais visível) ===== */
+    .disclaimer-bar{
+      position:fixed;
+      top:0; left:0; right:0;
+      z-index:60;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      padding:10px 14px;
+      background: linear-gradient(180deg, rgba(15,23,42,0.95), rgba(2,6,23,0.92));
+      border-bottom: 1px solid rgba(255,255,255,0.10);
+      backdrop-filter: blur(10px);
+      color: #d6e0ef;
+      font-size: 13px;
+    }
+    .disclaimer-bar strong{color:#fff}
+    .disclaimer-bar .pill{
+      display:inline-flex;align-items:center;gap:6px;
+      padding:3px 10px;
+      border-radius:999px;
+      border:1px solid rgba(245,158,11,0.35);
+      background: rgba(245,158,11,0.12);
+      color:#ffe7b3;
+      font-weight:800;
+      font-size:12px;
+      letter-spacing:0.01em;
+    }
+
+    header{display:flex;gap:20px;align-items:center;justify-content:space-between;margin-bottom:14px}
 
     .brand{display:flex;gap:14px;align-items:center}
 
@@ -75,7 +112,7 @@
 
     header.sticky{
       position: sticky;
-      top: 12px;
+      top: 64px; /* abaixo do disclaimer */
       z-index: 40;
       backdrop-filter: blur(10px);
       background: linear-gradient(180deg, rgba(15,23,42,0.85), rgba(15,23,42,0.65));
@@ -84,6 +121,41 @@
       border:1px solid var(--card-border);
       box-shadow:var(--shadow-1);
     }
+
+    /* ===== Tabs principais ===== */
+    .tabs{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin: 14px 0 6px 0;
+    }
+    .tab-btn{
+      cursor:pointer;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,0.12);
+      background: rgba(2,6,23,0.55);
+      color: var(--muted);
+      padding:10px 14px;
+      font-weight:900;
+      font-size:13px;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      min-height:44px;
+      min-width:44px;
+    }
+    .tab-btn:hover{
+      border-color: rgba(56,189,248,0.25);
+      color: #dbe7ff;
+    }
+    .tab-btn.active{
+      background: linear-gradient(135deg, rgba(59,130,246,0.22), rgba(139,92,246,0.18));
+      border-color: rgba(59,130,246,0.35);
+      color: #eaf2ff;
+      box-shadow: 0 12px 32px rgba(59,130,246,0.10);
+    }
+    .tab-panel{display:none}
+    .tab-panel.active{display:block}
 
     .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px}
     @media (max-width:960px){ .grid{grid-template-columns:1fr} }
@@ -113,6 +185,9 @@
       font-size:13px;
       color:var(--ink);
       box-shadow: 0 10px 26px rgba(0,0,0,0.35);
+      min-height:44px;
+      min-width:44px;
+      transition: transform .08s ease, box-shadow .2s ease, border-color .2s ease, filter .2s ease;
     }
     .btn:hover{
       border-color: rgba(56,189,248,0.25);
@@ -122,8 +197,32 @@
       background: transparent;
       border:1px dashed rgba(255,255,255,0.16);
     }
-    .btn.small{padding:6px 10px;font-size:13px;border-radius:10px}
+    .btn.small{padding:6px 10px;font-size:13px;border-radius:10px; min-height:40px}
     .btn:active{transform:translateY(1px)}
+    .btn.primary{
+      background: linear-gradient(135deg, rgba(59,130,246,0.28), rgba(139,92,246,0.18));
+      border-color: rgba(59,130,246,0.35);
+      box-shadow: 0 12px 32px rgba(59,130,246,0.12), 0 10px 26px rgba(0,0,0,0.35);
+      font-weight:900;
+    }
+    .btn.primary:hover{filter:brightness(1.05)}
+    .btn.loading{
+      position:relative;
+      pointer-events:none;
+      opacity:0.85;
+    }
+    .btn.loading::after{
+      content:"";
+      width:14px;height:14px;
+      border-radius:999px;
+      border:2px solid rgba(255,255,255,0.25);
+      border-top-color: rgba(255,255,255,0.9);
+      display:inline-block;
+      margin-left:8px;
+      animation: spin .8s linear infinite;
+      vertical-align: -2px;
+    }
+    @keyframes spin{to{transform:rotate(360deg)}}
 
     input,select,textarea{
       font:inherit;
@@ -132,10 +231,15 @@
       background: rgba(2,6,23,0.75);
       color:var(--ink);
       padding:10px 12px;
-      min-height:40px;
+      min-height:44px;
       box-shadow: inset 0 0 0 1px rgba(255,255,255,0.04);
+      outline:none;
     }
     input::placeholder{color:#7f8ba3}
+    input:focus{
+      border-color: rgba(59,130,246,0.45);
+      box-shadow: 0 0 0 4px rgba(59,130,246,0.15), inset 0 0 0 1px rgba(255,255,255,0.04);
+    }
 
     .form-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:10px;align-items:center}
     .col-span-6{grid-column:span 6}
@@ -188,6 +292,17 @@
 
     .tips{padding-left:18px;margin:10px 0}
     .tips li{margin:8px 0;color:var(--ink)}
+    .highlight{
+      font-weight:900;
+      color:#eaf2ff;
+      background: rgba(59,130,246,0.12);
+      border: 1px solid rgba(59,130,246,0.20);
+      padding: 1px 8px;
+      border-radius: 999px;
+      display:inline-block;
+      line-height:1.6;
+      margin: 0 2px;
+    }
 
     #tradingview_chart{
       height:520px;
@@ -233,6 +348,150 @@
       color:#c7d2fe;
     }
 
+    /* ===== Resumo (métricas topo) ===== */
+    .summary-grid{
+      display:grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 12px;
+      margin-top: 10px;
+    }
+    .summary-card{
+      grid-column: span 3;
+      padding: 14px;
+      border-radius: 14px;
+      background: linear-gradient(180deg, rgba(15,23,42,0.80), rgba(2,6,23,0.72));
+      border: 1px solid rgba(255,255,255,0.10);
+      box-shadow: 0 18px 44px rgba(0,0,0,0.40);
+    }
+    .summary-label{
+      font-size: 12px;
+      color: var(--muted);
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+    }
+    .summary-value{
+      margin-top: 6px;
+      font-size: 18px;
+      font-weight: 900;
+      letter-spacing: -0.02em;
+      color: #eaf2ff;
+    }
+    .summary-sub{
+      margin-top: 6px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .summary-pill{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.10);
+      background: rgba(2,6,23,0.55);
+      font-size: 12px;
+      font-weight: 900;
+      margin-top: 8px;
+      color: #dbe7ff;
+    }
+
+    /* ===== Placeholder estado vazio ===== */
+    .empty-state{
+      border:1px dashed rgba(255,255,255,0.18);
+      border-radius: 14px;
+      padding: 18px;
+      background: linear-gradient(180deg, rgba(2,6,23,0.55), rgba(2,6,23,0.35));
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 14px;
+      flex-wrap:wrap;
+      margin-top: 12px;
+    }
+    .empty-state .title{
+      font-weight: 900;
+      font-size: 15px;
+      color:#eaf2ff;
+    }
+    .empty-state .desc{color:var(--muted);font-size: 13px;margin-top: 4px}
+    .empty-illus{
+      width: 44px;height: 44px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, rgba(59,130,246,0.25), rgba(139,92,246,0.18));
+      border: 1px solid rgba(59,130,246,0.25);
+      display:flex;align-items:center;justify-content:center;
+      font-weight: 900;
+      color:#dbe7ff;
+      flex-shrink:0;
+    }
+
+    /* ===== Skeleton loaders ===== */
+    .skeleton{
+      position:relative;
+      overflow:hidden;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px;
+      height: 14px;
+    }
+    .skeleton::after{
+      content:"";
+      position:absolute; inset:0;
+      transform: translateX(-100%);
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.10), transparent);
+      animation: shimmer 1.1s infinite;
+    }
+    @keyframes shimmer{
+      100%{ transform: translateX(100%); }
+    }
+    .sk-row{display:grid;grid-template-columns:repeat(12,1fr);gap:10px;margin-top:10px}
+    .sk-col-4{grid-column:span 4}
+    .sk-col-6{grid-column:span 6}
+    .sk-col-12{grid-column:span 12}
+
+    /* ===== Toasts ===== */
+    .toasts{
+      position: fixed;
+      right: 14px;
+      bottom: 14px;
+      z-index: 80;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      pointer-events:none;
+    }
+    .toast{
+      pointer-events:auto;
+      border-radius: 14px;
+      padding: 12px 12px;
+      min-width: 260px;
+      max-width: 360px;
+      border: 1px solid rgba(255,255,255,0.10);
+      background: linear-gradient(180deg, rgba(15,23,42,0.95), rgba(2,6,23,0.92));
+      box-shadow: 0 18px 44px rgba(0,0,0,0.55);
+      color: #eaf2ff;
+      font-size: 13px;
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
+    }
+    .toast .dot{
+      width:10px;height:10px;border-radius:999px;margin-top:4px;flex-shrink:0;
+      background: rgba(245,158,11,0.9);
+    }
+    .toast.success .dot{background: rgba(16,185,129,0.95)}
+    .toast.error .dot{background: rgba(239,68,68,0.95)}
+    .toast .title{font-weight:900}
+    .toast .msg{color: var(--muted); margin-top:2px}
+    .toast button{
+      margin-left:auto;
+      border:none;
+      background: transparent;
+      color: rgba(255,255,255,0.70);
+      cursor:pointer;
+      font-weight:900;
+    }
+
     /* ======= Mobile improvements (overrides) ======= */
     @media (max-width: 960px) {
       .wrap { padding:16px; }
@@ -240,22 +499,20 @@
       .brand { gap:10px; }
       .logo { width:44px; height:44px; }
       .grid { grid-template-columns: 1fr !important; gap:12px; }
-
+      .summary-card{grid-column: span 6}
       .form-grid { grid-template-columns: repeat(6, 1fr); }
       .form-grid input, .form-grid .btn { grid-column: span 6 !important; min-width:0; width:100%; }
-
       .btn { padding:12px 14px; font-size:15px; border-radius:12px; }
       .btn.small { padding:10px 12px; font-size:14px; }
-
       #tradingview_chart { height: 360px; }
       iframe { height: 360px; }
-
       @media (max-width:420px) {
         #tradingview_chart { height: 300px; }
         iframe { height: 300px; }
         .logo { width:40px; height:40px; }
         h1 { font-size:18px; }
         .card { padding:14px; border-radius:12px; }
+        .summary-card{grid-column: span 12}
       }
 
       .table-wrap table { min-width:unset; display:block; }
@@ -272,248 +529,421 @@
       .table-wrap tbody td { display:flex; justify-content:space-between; padding:6px 0; border-bottom:0; }
       .table-wrap tbody td:first-child { font-weight:800; }
       .table-wrap .actions { margin-top:8px; display:flex; gap:8px; flex-wrap:wrap; }
-
       .badge { font-size:13px; padding:6px 8px; }
       .muted-small { font-size:12px; }
-
       .controls { flex-direction:column; align-items:stretch; }
       .controls input, .controls .btn { width:100% !important; }
+      .tabs{gap:8px}
+      .tab-btn{width:100%; justify-content:center}
     }
   </style>
 </head>
 <body>
+  <!-- Disclaimer fixo -->
+  <div class="disclaimer-bar" role="status" aria-live="polite">
+    <span class="pill">⚠️ Educacional</span>
+    <span><strong>Conteúdo educacional.</strong> Não é recomendação de investimento.</span>
+  </div>
+
+  <!-- Toasts -->
+  <div class="toasts" id="toasts" aria-live="polite" aria-atomic="true"></div>
+
   <div class="wrap">
     <header id="mainHeader" class="sticky">
       <div class="brand">
         <div class="logo" aria-hidden="true">AI</div>
         <div>
           <h1 data-i18n="title" id="siteTitle" class="brand-name">Stockg<span class="ai">ai</span>de — dicas para familia e amigos</h1>
-          <div class="meta muted-small">Gráficos TradingView • Alertas em tempo real • Posicões públicas e locais</div>
+          <div class="meta muted-small">Gráficos TradingView • Alertas em tempo real • Posições públicas e locais</div>
         </div>
       </div>
 
-      <div style="display:flex;gap:8px;align-items:center">
-        <div class="muted-small">Tema: Dark — Dashboard</div>
-        <button id="langToggle" class="btn small" title="Switch language">🇧🇷/🇺🇸 <span id="langLabel">PT</span></button>
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+        <div class="muted-small">Atalhos: <code>Ctrl/Cmd+K</code> buscar • <code>A</code> adicionar • <code>R</code> atualizar</div>
+        <button id="langToggle" class="btn small" title="Switch language" aria-label="Switch language">🇧🇷/🇺🇸 <span id="langLabel">PT</span></button>
       </div>
     </header>
 
-    <!-- 1) Dicas rápidas -->
-    <section class="card" style="margin-top:12px">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap">
-        <div>
-          <h2 data-i18n="quick_tips">Dicas rápidas</h2>
-          <p class="muted">Resumo prático para uso diário dos sinais gerados pelo agente.</p>
-        </div>
-        <div class="muted-small">Última leitura: <strong id="lastRefreshTop">—</strong></div>
-      </div>
+    <!-- Tabs principais -->
+    <nav class="tabs" aria-label="Navegação principal">
+      <button class="tab-btn active" data-tab="tab-dashboard" aria-controls="tab-dashboard" aria-selected="true">📊 Dashboard</button>
+      <button class="tab-btn" data-tab="tab-analise" aria-controls="tab-analise" aria-selected="false">📈 Análise AI</button>
+      <button class="tab-btn" data-tab="tab-portfolio" aria-controls="tab-portfolio" aria-selected="false">💼 Portfólio</button>
+      <button class="tab-btn" data-tab="tab-mercados" aria-controls="tab-mercados" aria-selected="false">🌍 Mercados</button>
+    </nav>
 
-      <ul class="tips" style="margin-top:8px">
-        <li>Todos os dias o <strong>Agente</strong> enviará os alertas <strong>após o fechamento</strong> da bolsa de Wall Street.</li>
-        <li>Alertas de <strong>compra (curto prazo)</strong> buscam ganho de <strong>5%</strong>; de <strong>longo prazo</strong> buscam <strong>10%</strong>.</li>
-        <li>Fique ligado aos <strong>alertas de venda</strong> e sempre defina <strong>stop</strong>.</li>
-      </ul>
+    <!-- ===== Painel: Dashboard ===== -->
+    <section id="tab-dashboard" class="tab-panel active">
+
+      <!-- (NOVO) Layout: Quick Tips + Alertas lado a lado -->
+      <div class="grid" style="margin-top:12px; align-items:start">
+        <!-- Dicas rápidas -->
+        <section class="card" style="grid-column: span 6">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap">
+            <div>
+              <h2 data-i18n="quick_tips">Dicas rápidas</h2>
+              <p class="muted">Resumo prático para uso diário dos sinais gerados pelo agente.</p>
+            </div>
+            <div class="muted-small">Status: <strong id="quickStatus">OK</strong></div>
+          </div>
+
+          <!-- (ATUALIZADO) Conteúdo pedido por você -->
+          <ul class="tips" style="margin-top:8px">
+            <li>🎯 Ganho esperado de <span class="highlight">5%</span> em até <span class="highlight">20 dias</span> por transação</li>
+            <li>⏰ Alertas enviados abaixo todos os dias: <span class="highlight">após fechamento</span> de Wall Street.</li>
+            <li>Abaixo dos alertas você pode ver o painel consolidado nas recomendações em busca dos <span class="highlight">5%</span>. Quando o objetivo é atingido a posição segue para o Histórico de transações</li>
+            <li>🛡️ Veja também a opinião da AI para qualquer ação em <span class="highlight">“Análise”</span></li>
+          </ul>
+        </section>
+
+        <!-- Alertas -->
+        <section class="card" style="grid-column: span 6">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap">
+            <div>
+              <h2 data-i18n="alerts_title">Alertas</h2>
+              <div class="muted-small">Janela com alertas do seu Worker (Cloudflare)</div>
+            </div>
+            <span class="badge">⚡ Agent</span>
+          </div>
+
+          <div style="margin-top:10px;border-radius:10px;overflow:hidden">
+            <iframe
+              src="https://shiny-sea-44d3.rafaelnm.workers.dev/"
+              id="alertsFrame"
+              title="Alertas – Cloudflare Worker"
+              loading="lazy"
+              referrerpolicy="no-referrer"
+              style="background:#fff;color:#000;">
+            </iframe>
+          </div>
+
+          <details style="margin-top:10px"><summary class="muted-small">Se a janela não aparecer</summary>
+            <p class="muted-small">No Worker: remova <code>X-Frame-Options</code> e permita <code>frame-ancestors</code> no CSP (inclua seu domínio do GitHub Pages).</p>
+          </details>
+        </section>
+
+        <!-- (NOVO) Recomendações & Histórico abaixo, largura total -->
+        <section class="card" style="grid-column: span 12">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap">
+            <div>
+              <h2>📌 Recomendações &amp; Histórico</h2>
+              <div class="muted-small">Acesse o painel consolidado do Cloudflare e acompanhe abertas e fechadas.</div>
+            </div>
+
+            <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+              <!-- Links (pedido) -->
+              <a class="btn small" href="https://shiny-sea-44d3.rafaelnm.workers.dev/dashboard?view=open" target="_blank" rel="noopener" aria-label="Abrir Recomendações Abertas no Cloudflare">
+                🔓 Recomendações Abertas
+              </a>
+              <a class="btn small ghost" href="https://shiny-sea-44d3.rafaelnm.workers.dev/dashboard?view=closed" target="_blank" rel="noopener" aria-label="Abrir Históricos Fechados no Cloudflare">
+                ✅ Históricos Fechados
+              </a>
+              <a class="btn small" href="https://shiny-sea-44d3.rafaelnm.workers.dev/dashboard" target="_blank" rel="noopener" aria-label="Abrir painel completo do Cloudflare">
+                ↗ Abrir painel completo
+              </a>
+            </div>
+          </div>
+
+          <div style="margin-top:12px;border-radius:10px;overflow:hidden">
+            <iframe
+              src="https://shiny-sea-44d3.rafaelnm.workers.dev/dashboard"
+              id="cfDashboardFrame"
+              title="Dashboard – Recomendações e Histórico (Cloudflare)"
+              loading="lazy"
+              referrerpolicy="no-referrer"
+              style="background:#fff;color:#000;">
+            </iframe>
+          </div>
+        </section>
+      </div>
     </section>
 
-    <!-- 2) Opinião da AI (com Grok) ao lado dos Alertas -->
-    <div class="grid" style="margin-top:16px">
-      <!-- Opinião da AI -->
-      <section class="card" id="ai-opinion" style="grid-column: span 8">
-        <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
-          <div>
-            <h2 id="aiTitle">Opinião da AI (Técnico + Analistas)</h2>
-            <div class="muted-small" id="aiSubtitle">Resultado do worker /analyze + opinião extra via Grok</div>
-          </div>
-          <div class="controls">
-            <div style="display:flex;gap:8px;align-items:center;width:100%">
-              <input id="aiSymbolInput" placeholder="Ex.: NASDAQ:AMZN ou AMZN" style="min-width:220px;flex:1" />
-              <div style="display:flex;gap:8px;flex-shrink:0">
-                <button id="aiAnalyzeBtn" class="btn small">Analisar</button>
-                <button id="aiUseChartBtn" class="btn small ghost">Usar do gráfico</button>
+    <!-- ===== Painel: Análise ===== -->
+    <section id="tab-analise" class="tab-panel">
+      <div class="grid" style="margin-top:16px">
+        <!-- Opinião da AI -->
+        <section class="card" id="ai-opinion" style="grid-column: span 8">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
+            <div>
+              <!-- Comunicação mais clara -->
+              <h2 id="aiTitle">Análise Técnica Automatizada</h2>
+              <div class="muted-small" id="aiSubtitle">Combinação de 15+ indicadores + consenso de analistas</div>
+            </div>
+
+            <div class="controls" style="width:100%">
+              <div style="display:flex;gap:8px;align-items:center;width:100%;flex-wrap:wrap">
+                <label class="muted-small" for="aiSymbolInput" style="min-width:120px">🔍 Símbolo</label>
+                <input id="aiSymbolInput" list="symbolList" placeholder="Ex.: NASDAQ:AMZN ou AMZN" style="min-width:220px;flex:1" aria-label="Campo de símbolo para análise" />
+                <div id="aiSymValid" class="muted-small" style="min-width:110px"></div>
+                <div style="display:flex;gap:8px;flex-shrink:0;flex-wrap:wrap">
+                  <!-- Ação primária mais destacada -->
+                  <button id="aiAnalyzeBtn" class="btn primary" aria-label="Analisar símbolo">Analisar símbolo</button>
+                  <button id="aiUseChartBtn" class="btn small ghost" aria-label="Usar símbolo do gráfico">Usar do gráfico</button>
+                </div>
               </div>
             </div>
           </div>
-        </div>
 
-        <!-- Resultado calculado pelo Worker (/analyze) -->
-        <div id="aiResult" class="card" style="background:linear-gradient(180deg, rgba(15,23,42,0.70), rgba(2,6,23,0.70));border:1px dashed rgba(255,255,255,0.10);min-height:90px;margin-top:12px"></div>
-
-        <!-- Opinião extra via LLM (Grok / OpenRouter) -->
-        <div id="grokBox" class="card" style="margin-top:12px;background:linear-gradient(180deg, rgba(30,41,59,0.55), rgba(2,6,23,0.55));border:1px solid rgba(250,204,21,0.22)">
-          <div style="display:flex;align-items:center;justify-content:space-between">
-            <h3 id="grokTitle" style="margin:0">Opinião extra da IA (Grok)</h3>
-            <div class="muted-small">Resumo conciso gerado pela LLM</div>
+          <!-- Skeleton loader (substitui "carregando...") -->
+          <div id="aiSkeleton" class="card" style="display:none;background:linear-gradient(180deg, rgba(15,23,42,0.70), rgba(2,6,23,0.70));border:1px dashed rgba(255,255,255,0.10);min-height:90px;margin-top:12px">
+            <div class="sk-row">
+              <div class="skeleton sk-col-6"></div>
+              <div class="skeleton sk-col-6"></div>
+              <div class="skeleton sk-col-12" style="height:12px"></div>
+              <div class="skeleton sk-col-12" style="height:12px"></div>
+            </div>
           </div>
-          <div id="grokOpinion" class="status" style="margin-top:10px">—</div>
-        </div>
 
-        <p class="status" id="aiStatus" style="margin-top:10px"></p>
-      </section>
+          <!-- Resultado calculado pelo Worker (/analyze) -->
+          <div id="aiResult" class="card" style="background:linear-gradient(180deg, rgba(15,23,42,0.70), rgba(2,6,23,0.70));border:1px dashed rgba(255,255,255,0.10);min-height:90px;margin-top:12px"></div>
 
-      <!-- Alertas -->
-      <section class="card" style="grid-column: span 4">
-        <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
-          <div>
-            <h2 data-i18n="alerts_title">Alertas</h2>
-            <div class="muted-small">Janela com alertas do seu Worker (Cloudflare)</div>
+          <!-- Opinião extra via LLM (Grok / OpenRouter) -->
+          <details open style="margin-top:12px">
+            <summary class="muted-small" style="cursor:pointer">🤖 Opinião extra da IA (Grok)</summary>
+            <div id="grokBox" class="card" style="margin-top:12px;background:linear-gradient(180deg, rgba(30,41,59,0.55), rgba(2,6,23,0.55));border:1px solid rgba(250,204,21,0.22)">
+              <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
+                <h3 id="grokTitle" style="margin:0">Opinião extra da IA (Grok)</h3>
+                <div class="muted-small">Resumo conciso gerado pela LLM</div>
+              </div>
+              <div id="grokOpinion" class="status" style="margin-top:10px">—</div>
+            </div>
+          </details>
+
+          <p class="status" id="aiStatus" style="margin-top:10px"></p>
+
+          <!-- “Como funciona” (credibilidade/transparência) -->
+          <details style="margin-top:10px">
+            <summary class="muted-small" style="cursor:pointer">ℹ️ Como funciona</summary>
+            <div class="card" style="margin-top:10px;background:linear-gradient(180deg, rgba(2,6,23,0.55), rgba(2,6,23,0.35));border:1px solid rgba(255,255,255,0.10)">
+              <h3 style="margin:0 0 6px 0">🤖 Metodologia</h3>
+              <ul class="tips" style="margin:8px 0">
+                <li>• 15+ indicadores técnicos (SMA, RSI, MACD, etc.)</li>
+                <li>• Consenso de analistas (quando disponível)</li>
+                <li>• Atualização: sob demanda + refresh do portfólio</li>
+                <li>• Objetivo: organização e apoio educacional (não é recomendação)</li>
+              </ul>
+            </div>
+          </details>
+        </section>
+
+        <!-- Gráfico -->
+        <section class="card" style="grid-column: span 4; position:relative;">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
+            <div>
+              <h2 data-i18n="chart_title">Gráfico (TradingView)</h2>
+              <div class="muted-small">Carregue o símbolo e use os controles para adicionar à sua lista.</div>
+            </div>
           </div>
-          <span class="badge">⚡ Agent</span>
-        </div>
 
-        <div style="margin-top:10px;border-radius:10px;overflow:hidden">
-          <iframe
-            src="https://shiny-sea-44d3.rafaelnm.workers.dev/"
-            id="alertsFrame"
-            title="Alertas – Cloudflare Worker"
-            loading="lazy"
-            referrerpolicy="no-referrer"
-            style="background:#fff;color:#000;">
-          </iframe>
-        </div>
+          <div class="controls" style="margin-top:10px">
+            <label class="muted-small" for="chartSymbolInput" style="min-width:120px">📌 Símbolo</label>
+            <input id="chartSymbolInput" list="symbolList" placeholder="Ex.: NASDAQ:NVDA ou BMFBOVESPA:PETR4" style="min-width:240px;flex:1" aria-label="Campo de símbolo do gráfico" />
+            <button id="setChartBtn" class="btn small" data-i18n="set_symbol" aria-label="Carregar símbolo no gráfico">Carregar símbolo</button>
+            <button id="addFromChartBtn" class="btn small ghost" data-i18n="add_from_chart" aria-label="Adicionar símbolo do gráfico ao portfólio">Adicionar à lista</button>
+            <a id="openTV" class="btn small" style="text-align:center" href="https://www.tradingview.com/chart/" target="_blank" rel="noopener" data-i18n="open_tv">Abrir no TradingView</a>
+          </div>
 
-        <details style="margin-top:10px"><summary class="muted-small">Se a janela não aparecer</summary>
-          <p class="muted-small">No Worker: remova <code>X-Frame-Options</code> e permita <code>frame-ancestors</code> no CSP (inclua seu domínio do GitHub Pages).</p>
-        </details>
-      </section>
-    </div>
+          <div id="tradingview_chart" style="margin-top:12px;padding:0" class="card">
+            <div class="chart-topbar" id="chartTopbar">Símbolo: <strong id="chartSymbolLabel">—</strong></div>
+            <div id="tv_container" style="height:100%;width:100%"></div>
+          </div>
+          <p class="status" id="tvStatus" style="margin-top:10px"></p>
 
-    <!-- 3) Minhas posições -->
-    <section class="card" style="margin-top:16px">
-      <div style="display:flex;align-items:center;gap:8px;justify-content:space-between;flex-wrap:wrap">
-        <div>
-          <h2 data-i18n="positions_title">Minhas posições</h2>
-          <div class="muted-small">Combine posições públicas e locais; P/L calculado com últimas cotações.</div>
-        </div>
+          <!-- Cards colapsáveis para seções menos usadas -->
+          <details style="margin-top:10px">
+            <summary class="muted-small" style="cursor:pointer">✅ Boas práticas no gráfico</summary>
+            <div class="card" style="margin-top:10px;background:linear-gradient(180deg, rgba(2,6,23,0.55), rgba(2,6,23,0.35));border:1px solid rgba(255,255,255,0.10)">
+              <ul class="tips">
+                <li>Evite decisões com base em <strong>1 indicador</strong> apenas. Confirme com 2–3 sinais.</li>
+                <li>Observe a <strong>tendência (SMA50 x SMA200)</strong> antes do gatilho.</li>
+                <li>Prefira entrar com <strong>parcial</strong> e completar se o movimento confirmar.</li>
+                <li>Defina um <strong>stop técnico</strong> e um <strong>alvo</strong> antes de clicar.</li>
+                <li>Revise notícias/earnings que possam afetar o papel.</li>
+              </ul>
 
-        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
-          <span class="badge" title="Visitantes veem essas posições">🌐 Público</span>
-          <button id="loadPublicBtn" class="btn small">Atualizar públicas</button>
-          <button id="publishBtn" class="btn small" title="Enviar posições locais para o servidor (admin)">Publicar (admin)</button>
-        </div>
-      </div>
-
-      <div class="form-grid" style="margin-top:12px">
-        <input id="posSymbol" class="col-span-6" placeholder="Ex.: NASDAQ:NVDA ou BMFBOVESPA:PETR4" />
-        <input id="posAvg" class="col-span-3" type="number" inputmode="decimal" step="0.01" placeholder="Preço médio" />
-        <input id="posNote" class="col-span-3" placeholder="Observação (opcional)" />
-      </div>
-
-      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px">
-        <button id="addPosBtn" class="btn">Adicionar posição (local)</button>
-        <button id="refreshBtn" class="btn">Atualizar preços</button>
-        <button id="clearAllBtn" class="btn ghost">Limpar locais</button>
-        <button id="exportBtn" class="btn ghost">Exportar CSV (locais)</button>
-      </div>
-
-      <p class="status" id="quoteStatus"></p>
-
-      <div class="table-wrap" style="margin-top:12px">
-        <table id="posTable" aria-label="positions">
-          <thead>
-            <tr>
-              <th data-i18n="th_symbol">Símbolo</th>
-              <th data-i18n="th_avg">Preço médio</th>
-              <th data-i18n="th_last">Preço atual</th>
-              <th data-i18n="th_pl">P/L %</th>
-              <th data-i18n="th_note">Obs.</th>
-              <th data-i18n="th_actions">Ações</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
-      </div>
-
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px;flex-wrap:wrap;gap:8px">
-        <p id="totals" class="status"></p>
-        <p id="lastRefresh" class="muted-small"></p>
+              <div style="margin-top:12px">
+                <h3 style="margin-bottom:8px">Checklist rápido</h3>
+                <ul class="tips">
+                  <li>Volume confirmando o movimento?</li>
+                  <li>Preço acima da média relevante?</li>
+                  <li>Risco/recompensa favorável &lt; 1:2?</li>
+                </ul>
+              </div>
+            </div>
+          </details>
+        </section>
       </div>
     </section>
 
-    <!-- 4) Gráfico (TradingView) + novo quadro de dicas -->
-    <div class="grid" style="margin-top:16px;align-items:start">
-      <!-- Gráfico -->
-      <section class="card" style="grid-column: span 8; position:relative;">
-        <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
+    <!-- ===== Painel: Portfólio ===== -->
+    <section id="tab-portfolio" class="tab-panel">
+
+      <!-- (MOVIDO) Resumo do Portfólio veio da Dashboard para cá, mantendo IDs e JS -->
+      <section class="card" style="margin-top:16px">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap">
           <div>
-            <h2 data-i18n="chart_title">Gráfico (TradingView)</h2>
-            <div class="muted-small">Carregue o símbolo e use os controles para adicionar à sua lista.</div>
+            <h2>Resumo do Portfólio</h2>
+            <p class="muted">Visão rápida do seu P/L e saúde da carteira (com base no que você cadastrou).</p>
           </div>
+          <div class="muted-small">Última leitura: <strong id="lastRefreshTop">—</strong></div>
+        </div>
 
-          <div class="controls">
-            <input id="chartSymbolInput" placeholder="Ex.: NASDAQ:NVDA ou BMFBOVESPA:PETR4" style="min-width:240px" />
-            <button id="setChartBtn" class="btn small" data-i18n="set_symbol">Carregar símbolo</button>
-            <button id="addFromChartBtn" class="btn small ghost" data-i18n="add_from_chart">Adicionar à lista</button>
-            <a id="openTV" class="btn small" style="text-align:center" href="https://www.tradingview.com/chart/" target="_blank" rel="noopener" data-i18n="open_tv">Abrir no TradingView</a>
+        <div class="summary-grid" aria-label="Métricas do portfólio">
+          <div class="summary-card">
+            <div class="summary-label">Portfolio</div>
+            <div class="summary-value" id="mPortfolioValue">—</div>
+            <div class="summary-sub">Soma do valor atual (aprox.)</div>
+          </div>
+          <div class="summary-card">
+            <div class="summary-label">P/L Médio</div>
+            <div class="summary-value" id="mPLPct">—</div>
+            <div class="summary-sub">Média de P/L % das posições</div>
+          </div>
+          <div class="summary-card">
+            <div class="summary-label">Posições</div>
+            <div class="summary-value" id="mPositions">—</div>
+            <div class="summary-sub">Públicas + locais</div>
+          </div>
+          <div class="summary-card">
+            <div class="summary-label">Em risco</div>
+            <div class="summary-value" id="mRisk">—</div>
+            <div class="summary-sub">P/L abaixo de -3% (ajustável)</div>
           </div>
         </div>
 
-        <div id="tradingview_chart" style="margin-top:12px;padding:0" class="card">
-          <div class="chart-topbar" id="chartTopbar">Símbolo: <strong id="chartSymbolLabel">—</strong></div>
-          <div id="tv_container" style="height:100%;width:100%"></div>
-        </div>
-        <p class="status" id="tvStatus" style="margin-top:10px"></p>
+        <div class="summary-pill" id="mHint">💡 Dica: use <strong>R</strong> para atualizar cotações rapidamente.</div>
       </section>
 
-      <!-- Quadro de dicas -->
-      <section class="card" style="grid-column: span 4">
-        <h2>Boas práticas no gráfico</h2>
-        <ul class="tips">
-          <li>Evite decisões com base em <strong>1 indicador</strong> apenas. Confirme com 2–3 sinais.</li>
-          <li>Observe a <strong>tendência (SMA50 x SMA200)</strong> antes do gatilho.</li>
-          <li>Prefira entrar com <strong>parcial</strong> e completar se o movimento confirmar.</li>
-          <li>Defina um <strong>stop técnico</strong> e um <strong>alvo</strong> antes de clicar.</li>
-          <li>Revise notícias/earnings que possam afetar o papel.</li>
-        </ul>
+      <section class="card" style="margin-top:16px">
+        <div style="display:flex;align-items:center;gap:8px;justify-content:space-between;flex-wrap:wrap">
+          <div>
+            <!-- Comunicação mais clara -->
+            <h2 data-i18n="positions_title">Portfólio</h2>
+            <div class="muted-small">Acompanhe seu P/L em tempo real</div>
+          </div>
 
-        <div style="margin-top:12px">
-          <h3 style="margin-bottom:8px">Checklist rápido</h3>
-          <ul class="tips">
-            <li>Volume confirmando o movimento?</li>
-            <li>Preço acima da média relevante?</li>
-            <li>Risco/recompensa favorável &lt; 1:2?</li>
-          </ul>
+          <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+            <span class="badge" title="Visitantes veem essas posições">🌐 Público</span>
+            <button id="loadPublicBtn" class="btn small" aria-label="Atualizar posições públicas">Atualizar públicas</button>
+            <button id="publishBtn" class="btn small" title="Enviar posições locais para o servidor (admin)" aria-label="Publicar posições locais (admin)">Publicar (admin)</button>
+          </div>
+        </div>
+
+        <div class="form-grid" style="margin-top:12px">
+          <input id="posSymbol" list="symbolList" class="col-span-6" placeholder="Ex.: NASDAQ:NVDA ou BMFBOVESPA:PETR4" aria-label="Símbolo da posição" />
+          <input id="posAvg" class="col-span-3" type="number" inputmode="decimal" step="0.01" placeholder="Preço médio" aria-label="Preço médio da posição" />
+          <input id="posNote" class="col-span-3" placeholder="Observação (opcional)" aria-label="Observação da posição" />
+        </div>
+
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px">
+          <button id="addPosBtn" class="btn primary" aria-label="Adicionar posição local">+ Adicionar ação</button>
+          <button id="refreshBtn" class="btn" aria-label="Atualizar preços do portfólio">Atualizar preços</button>
+          <button id="clearAllBtn" class="btn ghost" aria-label="Limpar posições locais">Limpar locais</button>
+          <button id="exportBtn" class="btn ghost" aria-label="Exportar posições locais para CSV">Exportar CSV (locais)</button>
+        </div>
+
+        <p class="status" id="quoteStatus"></p>
+
+        <!-- Placeholder ilustrado (estado vazio) -->
+        <div id="emptyPositions" class="empty-state" style="display:none">
+          <div style="display:flex;gap:12px;align-items:flex-start">
+            <div class="empty-illus">📈</div>
+            <div>
+              <div class="title">Adicione sua primeira posição</div>
+              <div class="desc">Comece pelo símbolo e preço médio — o P/L será calculado automaticamente.</div>
+            </div>
+          </div>
+          <button id="emptyCTA" class="btn primary" aria-label="Adicionar primeira posição">+ Adicionar ação</button>
+        </div>
+
+        <!-- Skeleton da tabela durante fetch -->
+        <div id="tableSkeleton" class="card" style="display:none;margin-top:12px;background:linear-gradient(180deg, rgba(2,6,23,0.55), rgba(2,6,23,0.35));border:1px solid rgba(255,255,255,0.10)">
+          <div class="sk-row">
+            <div class="skeleton sk-col-12" style="height:16px"></div>
+            <div class="skeleton sk-col-12" style="height:16px"></div>
+            <div class="skeleton sk-col-12" style="height:16px"></div>
+            <div class="skeleton sk-col-12" style="height:16px"></div>
+          </div>
+        </div>
+
+        <div class="table-wrap" style="margin-top:12px" id="posTableWrap">
+          <table id="posTable" aria-label="positions">
+            <thead>
+              <tr>
+                <th data-i18n="th_symbol">Símbolo</th>
+                <th data-i18n="th_avg">Preço médio</th>
+                <th data-i18n="th_last">Preço atual</th>
+                <th data-i18n="th_pl">P/L %</th>
+                <th data-i18n="th_note">Obs.</th>
+                <th data-i18n="th_actions">Ações</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px;flex-wrap:wrap;gap:8px">
+          <p id="totals" class="status"></p>
+          <p id="lastRefresh" class="muted-small"></p>
         </div>
       </section>
-    </div>
+    </section>
 
-    <!-- Ticker global -->
-    <section class="card" style="margin-top:16px">
-      <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
-        <h2>Mercados Globais &amp; Magnificent 7</h2>
-        <div class="muted-small">Acompanhe os índices e mega-cap tech</div>
-      </div>
+    <!-- ===== Painel: Mercados ===== -->
+    <section id="tab-mercados" class="tab-panel">
+      <section class="card" style="margin-top:16px">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
+          <h2>Mercados Globais &amp; Magnificent 7</h2>
+          <div class="muted-small">Acompanhe os índices e mega-cap tech</div>
+        </div>
 
-      <div class="tradingview-widget-container" style="margin-top:12px">
-        <div class="tradingview-widget-container__widget"></div>
-        <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
-          {
-            "symbols": [
-              {"proName": "FOREXCOM:US30",  "title": "Dow Jones"},
-              {"proName": "FOREXCOM:US100", "title": "Nasdaq 100"},
-              {"proName": "FOREXCOM:US500", "title": "S&P 500"},
-              {"proName": "BMFBOVESPA:IBOV", "title": "Ibovespa"},
-              {"proName": "FOREXCOM:EU50",  "title": "Euro Stoxx 50"},
-              {"proName": "FOREXCOM:UK100", "title": "FTSE 100"},
+        <div class="tradingview-widget-container" style="margin-top:12px">
+          <div class="tradingview-widget-container__widget"></div>
+          <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
+            {
+              "symbols": [
+                {"proName": "FOREXCOM:US30",  "title": "Dow Jones"},
+                {"proName": "FOREXCOM:US100", "title": "Nasdaq 100"},
+                {"proName": "FOREXCOM:US500", "title": "S&P 500"},
+                {"proName": "BMFBOVESPA:IBOV", "title": "Ibovespa"},
+                {"proName": "FOREXCOM:EU50",  "title": "Euro Stoxx 50"},
+                {"proName": "FOREXCOM:UK100", "title": "FTSE 100"},
 
-              {"proName": "NASDAQ:AAPL",  "title": "Apple"},
-              {"proName": "NASDAQ:MSFT",  "title": "Microsoft"},
-              {"proName": "NASDAQ:GOOGL", "title": "Alphabet"},
-              {"proName": "NASDAQ:AMZN",  "title": "Amazon"},
-              {"proName": "NASDAQ:NVDA",  "title": "NVIDIA"},
-              {"proName": "NASDAQ:META",  "title": "Meta"},
-              {"proName": "NASDAQ:TSLA",  "title": "Tesla"}
-            ],
-            "showSymbolLogo": true,
-            "isTransparent": false,
-            "displayMode": "adaptive",
-            "colorTheme": "light"
-          }
-        </script>
-      </div>
+                {"proName": "NASDAQ:AAPL",  "title": "Apple"},
+                {"proName": "NASDAQ:MSFT",  "title": "Microsoft"},
+                {"proName": "NASDAQ:GOOGL", "title": "Alphabet"},
+                {"proName": "NASDAQ:AMZN",  "title": "Amazon"},
+                {"proName": "NASDAQ:NVDA",  "title": "NVIDIA"},
+                {"proName": "NASDAQ:META",  "title": "Meta"},
+                {"proName": "NASDAQ:TSLA",  "title": "Tesla"}
+              ],
+              "showSymbolLogo": true,
+              "isTransparent": false,
+              "displayMode": "adaptive",
+              "colorTheme": "light"
+            }
+          </script>
+        </div>
+      </section>
     </section>
 
     <footer>© <span id="y"></span> • <span data-i18n="disclaimer">Site educacional, não é recomendação de investimento.</span></footer>
   </div>
+
+  <!-- Autocomplete (símbolos populares) -->
+  <datalist id="symbolList">
+    <option value="NASDAQ:NVDA"></option>
+    <option value="NASDAQ:AAPL"></option>
+    <option value="NASDAQ:MSFT"></option>
+    <option value="NASDAQ:AMZN"></option>
+    <option value="NASDAQ:GOOGL"></option>
+    <option value="NASDAQ:META"></option>
+    <option value="NASDAQ:TSLA"></option>
+    <option value="NYSE:BRK.B"></option>
+    <option value="BMFBOVESPA:PETR4"></option>
+    <option value="BMFBOVESPA:VALE3"></option>
+    <option value="BMFBOVESPA:ITUB4"></option>
+  </datalist>
 
   <!-- TradingView library -->
   <script src="https://s3.tradingview.com/tv.js"></script>
@@ -560,6 +990,90 @@
   };
 
   document.addEventListener('DOMContentLoaded', () => {
+
+    // ===================== Tabs (UX) =====================
+    (function initTabs(){
+      const btns = Array.from(document.querySelectorAll('.tab-btn'));
+      const panels = Array.from(document.querySelectorAll('.tab-panel'));
+
+      function activate(tabId){
+        btns.forEach(b=>{
+          const on = b.getAttribute('data-tab') === tabId;
+          b.classList.toggle('active', on);
+          b.setAttribute('aria-selected', on ? 'true' : 'false');
+        });
+        panels.forEach(p=> p.classList.toggle('active', p.id === tabId));
+
+        // acessibilidade: foco no início do painel
+        const panel = document.getElementById(tabId);
+        if(panel){
+          const focusable = panel.querySelector('input,button,a,summary');
+          if(focusable) focusable.focus({preventScroll:true});
+        }
+      }
+
+      btns.forEach(b=> b.addEventListener('click', ()=> activate(b.getAttribute('data-tab'))));
+
+      // expõe helper (opcional)
+      window._activateTab = activate;
+    })();
+
+    // ===================== Toasts (UX feedback) =====================
+    function toast(type, title, msg, ttl=3500){
+      const root = document.getElementById('toasts');
+      if(!root) return;
+      const el = document.createElement('div');
+      el.className = 'toast ' + (type || '');
+      el.innerHTML = `
+        <div class="dot" aria-hidden="true"></div>
+        <div>
+          <div class="title">${escapeHtml(title || '')}</div>
+          <div class="msg">${escapeHtml(msg || '')}</div>
+        </div>
+        <button aria-label="Fechar">×</button>
+      `;
+      const btn = el.querySelector('button');
+      btn.addEventListener('click', ()=> el.remove());
+      root.appendChild(el);
+      setTimeout(()=> { if(el && el.parentNode) el.remove(); }, ttl);
+    }
+
+    function escapeHtml(s){
+      return String(s||'')
+        .replace(/&/g,'&amp;')
+        .replace(/</g,'&lt;')
+        .replace(/>/g,'&gt;')
+        .replace(/"/g,'&quot;')
+        .replace(/'/g,'&#039;');
+    }
+
+    // ===================== Input inteligente (validação simples + debounce) =====================
+    function isLikelySymbol(v){
+      const s = String(v||'').trim();
+      if(!s) return false;
+      // aceita: NASDAQ:AMZN, NYSE:BRK.B, AMZN, PETR4, BMFBOVESPA:PETR4
+      return /^[A-Za-z]{1,12}(:[A-Za-z0-9.\-]{1,18})?$/.test(s) || /^[A-Za-z]{4}\d{1,2}$/.test(s);
+    }
+    function debounce(fn, wait=500){
+      let t=null;
+      return (...args)=>{
+        clearTimeout(t);
+        t=setTimeout(()=> fn(...args), wait);
+      }
+    }
+
+    const aiInput = document.getElementById('aiSymbolInput');
+    const aiValid = document.getElementById('aiSymValid');
+    if(aiInput && aiValid){
+      const validate = debounce(()=>{
+        const ok = isLikelySymbol(aiInput.value);
+        aiValid.innerHTML = ok ? '<span class="text-green">✓ válido</span>' : '<span class="text-red">✗ inválido</span>';
+      }, 450);
+      aiInput.addEventListener('input', validate, {passive:true});
+      validate();
+    }
+
+    // ===================== I18N =====================
     function detectLang(){ const nav = navigator.language || 'pt-BR'; return String(nav).toLowerCase().startsWith('en') ? 'en' : 'pt'; }
     let currentLang = (localStorage.getItem('lang') || detectLang());
     const langLabel = document.getElementById('langLabel');
@@ -578,6 +1092,7 @@
     }
     document.getElementById('langToggle').addEventListener('click', ()=>{
       currentLang = currentLang === 'en' ? 'pt' : 'en'; localStorage.setItem('lang', currentLang); applyI18n();
+      toast('success', 'Idioma', currentLang === 'en' ? 'English enabled' : 'Português ativado');
     });
 
     // ===================== TradingView =====================
@@ -638,9 +1153,12 @@
     }
     document.getElementById('setChartBtn').addEventListener('click', ()=>{
       const s = document.getElementById('chartSymbolInput').value.trim(); if(!s){ alert(currentLang==='en'?'Enter a symbol':'Informe um símbolo'); return; } loadChart(s);
+      toast('success', 'Gráfico', 'Símbolo carregado: ' + s);
     });
     document.getElementById('addFromChartBtn').addEventListener('click', ()=>{
       document.getElementById('posSymbol').value = getCurrentSymbol(); document.getElementById('posAvg').focus();
+      toast('success', 'Portfólio', 'Símbolo enviado para adicionar posição');
+      if(typeof window._activateTab === 'function') window._activateTab('tab-portfolio');
     });
 
     // ===================== Opinião da AI (Worker /analyze + Grok via /kimi) =====================
@@ -768,6 +1286,15 @@ Avoid personalization and keep an educational tone.`;
     async function runAIAnalysis(symbol){
       const d = aiDict();
       const aiStatus = document.getElementById('aiStatus');
+      const btn = document.getElementById('aiAnalyzeBtn');
+
+      // loading states
+      const sk = document.getElementById('aiSkeleton');
+      const result = document.getElementById('aiResult');
+      if(sk) sk.style.display = 'block';
+      if(result) result.style.display = 'none';
+      if(btn) btn.classList.add('loading');
+
       aiStatus.textContent = d.refresh+"…";
       try{
         const resp = await fetch(AI_API + "?symbol=" + encodeURIComponent(symbol), { cache:'no-store' });
@@ -776,15 +1303,25 @@ Avoid personalization and keep an educational tone.`;
         renderAIResult(json);
         askGrok(symbol, json);
         aiStatus.textContent = d.ai_last_update+': '+new Date().toLocaleString(document.documentElement.lang==='en'?'en-US':'pt-BR',{hour12:false});
+        toast('success', 'Análise', 'Resultado atualizado para ' + symbol);
       }catch(e){
         console.error('AI analyze error', e);
         aiStatus.textContent = (document.documentElement.lang==='en'?'Could not analyze now.':'Não foi possível analisar agora.');
+        toast('error', 'Análise', 'Falha ao analisar (ver console).');
+      }finally{
+        if(sk) sk.style.display = 'none';
+        if(result) result.style.display = 'block';
+        if(btn) btn.classList.remove('loading');
       }
     }
 
     document.getElementById('aiAnalyzeBtn').addEventListener('click', ()=>{
       const s = document.getElementById('aiSymbolInput').value.trim() || getCurrentSymbol();
       if(!s) return;
+      if(!isLikelySymbol(s)){
+        toast('error', 'Símbolo', 'Formato inválido. Ex.: NASDAQ:AMZN ou AMZN');
+        return;
+      }
       runAIAnalysis(s);
       document.getElementById('chartSymbolInput').value = s;
       const chartLabel = document.getElementById('chartSymbolLabel');
@@ -795,6 +1332,7 @@ Avoid personalization and keep an educational tone.`;
     document.getElementById('aiUseChartBtn').addEventListener('click', ()=>{
       const s = getCurrentSymbol();
       document.getElementById('aiSymbolInput').value = s;
+      toast('success', 'Símbolo', 'Usando símbolo do gráfico: ' + s);
     });
 
     // ===================== Posições: público + local =====================
@@ -820,25 +1358,81 @@ Avoid personalization and keep an educational tone.`;
     }
 
     let latestQuotesMap = {};
+
+    // ===== Métricas topo (Dashboard/Portfólio) =====
+    function updateSummaryMetrics(quotesMap={}){
+      const rows = getAllPositions();
+      const riskThreshold = -3; // %
+      let count = rows.length;
+      let risk = 0;
+      let plSum = 0;
+      let plCount = 0;
+      let portfolioValue = 0;
+
+      rows.forEach(r=>{
+        const last = (typeof quotesMap[r.symbol] === 'number') ? quotesMap[r.symbol] : null;
+        if(last && r.avg > 0){
+          const pl = ((last/r.avg-1)*100);
+          plSum += pl;
+          plCount += 1;
+          if(pl < riskThreshold) risk += 1;
+
+          // Aproximação: sem quantidade -> assume 1 unidade (só para dar visual)
+          portfolioValue += last;
+        }
+      });
+
+      const elPV = document.getElementById('mPortfolioValue');
+      const elPL = document.getElementById('mPLPct');
+      const elPos = document.getElementById('mPositions');
+      const elRisk = document.getElementById('mRisk');
+
+      if(elPV) elPV.textContent = count ? ('R$ ' + fmt(portfolioValue, 2)) : '—';
+      if(elPL){
+        if(plCount){
+          const avgPL = plSum/plCount;
+          elPL.textContent = fmtPct(avgPL);
+          elPL.style.color = avgPL >= 0 ? 'var(--bullish)' : 'var(--bearish)';
+          elPL.style.fontWeight = '900';
+        } else {
+          elPL.textContent = '—';
+          elPL.style.color = '#eaf2ff';
+        }
+      }
+      if(elPos) elPos.textContent = String(count || 0);
+      if(elRisk) elRisk.textContent = String(risk || 0);
+    }
+
+    function setEmptyStateVisible(isEmpty){
+      const empty = document.getElementById('emptyPositions');
+      const tableWrap = document.getElementById('posTableWrap');
+      if(empty) empty.style.display = isEmpty ? 'flex' : 'none';
+      if(tableWrap) tableWrap.style.display = isEmpty ? 'none' : 'block';
+    }
+
     function renderPositions(quotesMap={}){
       latestQuotesMap = quotesMap;
       const dict = I18N[currentLang] || I18N.pt;
       const data = getAllPositions();
       $tbody.innerHTML = '';
+
+      setEmptyStateVisible(data.length === 0);
+      updateSummaryMetrics(quotesMap);
+
       data.forEach((row, idx)=>{
         const last = (typeof quotesMap[row.symbol] === 'number') ? quotesMap[row.symbol] : null;
         const pl = (last && row.avg>0) ? ((last/row.avg-1)*100) : null;
         const badge = row.__public ? ' <span class="badge" title="Visível para todos">🌐</span>' : '';
         const actions = row.__public
           ? '<span class="muted-small">—</span>'
-          : `<button class="btn small" data-act="edit" data-idx="${idx}">${dict.edit}</button>
-             <button class="btn small ghost" data-act="del" data-idx="${idx}">${dict.del}</button>`;
+          : `<button class="btn small" data-act="edit" data-idx="${idx}" aria-label="Editar posição">${dict.edit}</button>
+             <button class="btn small ghost" data-act="del" data-idx="${idx}" aria-label="Excluir posição">${dict.del}</button>`;
         const tr = document.createElement('tr');
         tr.innerHTML = `
-          <td><button class="btn small" data-act="show" data-idx="${idx}" title="Mostrar no gráfico">${row.symbol}</button>${badge}</td>
+          <td><button class="btn small" data-act="show" data-idx="${idx}" title="Mostrar no gráfico" aria-label="Mostrar no gráfico">${row.symbol}</button>${badge}</td>
           <td>${fmt(row.avg)}</td>
           <td>${last===null?'-':fmt(last)}</td>
-          <td style="font-weight:800; color:${pl===null?'#cbd5e1':(pl>=0?'#22c55e':'#ef4444')}">${pl===null?'-':fmtPct(pl)}</td>
+          <td style="font-weight:900; color:${pl===null?'#cbd5e1':(pl>=0?'var(--bullish)':'var(--bearish)')}">${pl===null?'-':fmtPct(pl)}</td>
           <td>${row.note||''}</td>
           <td class="actions">${actions}</td>`;
         $tbody.appendChild(tr);
@@ -847,14 +1441,23 @@ Avoid personalization and keep an educational tone.`;
     }
 
     async function loadPublicPositions(){
+      const btn = document.getElementById('loadPublicBtn');
+      const sk = document.getElementById('tableSkeleton');
+      if(btn) btn.classList.add('loading');
+      if(sk) sk.style.display = 'block';
       try{
         const r = await fetch(POS_API, { cache:'no-store' });
         if(!r.ok) throw new Error('HTTP '+r.status);
         const j = await r.json();
         publicPositions = Array.isArray(j.positions) ? j.positions : [];
+        toast('success', 'Público', 'Posições públicas atualizadas');
       }catch(e){
         console.error('loadPublicPositions', e);
         publicPositions = [];
+        toast('error', 'Público', 'Falha ao carregar posições públicas');
+      }finally{
+        if(btn) btn.classList.remove('loading');
+        if(sk) sk.style.display = 'none';
       }
       await refreshPrices();
     }
@@ -873,6 +1476,7 @@ Avoid personalization and keep an educational tone.`;
       document.getElementById('posSymbol').value='';
       document.getElementById('posAvg').value='';
       document.getElementById('posNote').value='';
+      toast('success', 'Portfólio', 'Posição adicionada (local)');
       refreshPrices();
     }
 
@@ -881,6 +1485,8 @@ Avoid personalization and keep an educational tone.`;
       if(!token){ return; }
       localStorage.setItem('admin_token', token);
       const list = readPositionsLocal();
+      const btn = document.getElementById('publishBtn');
+      if(btn) btn.classList.add('loading');
       try{
         const r = await fetch(POS_API, {
           method:'POST',
@@ -891,11 +1497,13 @@ Avoid personalization and keep an educational tone.`;
           const t = await r.text().catch(()=> '');
           throw new Error(`HTTP ${r.status} ${t}`);
         }
-        alert('Posições publicadas com sucesso!');
+        toast('success', 'Publicar', 'Posições publicadas com sucesso!');
         await loadPublicPositions();
       }catch(e){
         console.error('publishLocalPositions', e);
-        alert('Falha ao publicar. Verifique o token em ADMIN_TOKEN no Worker.');
+        toast('error', 'Publicar', 'Falha ao publicar. Verifique o token em ADMIN_TOKEN no Worker.');
+      }finally{
+        if(btn) btn.classList.remove('loading');
       }
     }
 
@@ -903,9 +1511,18 @@ Avoid personalization and keep an educational tone.`;
     document.getElementById('publishBtn').addEventListener('click', publishLocalPositions);
     document.getElementById('loadPublicBtn').addEventListener('click', loadPublicPositions);
 
+    // CTA do estado vazio
+    const emptyCTA = document.getElementById('emptyCTA');
+    if(emptyCTA){
+      emptyCTA.addEventListener('click', ()=>{
+        document.getElementById('posSymbol').focus();
+      });
+    }
+
     document.getElementById('clearAllBtn').addEventListener('click', ()=>{
       if(confirm(document.documentElement.lang==='en' ? 'Clear all LOCAL positions?' : 'Limpar as posições LOCAIS?')){
         writePositionsLocal([]); renderPositions(latestQuotesMap);
+        toast('success', 'Portfólio', 'Posições locais limpas');
       }
     });
     document.getElementById('exportBtn').addEventListener('click', ()=>{
@@ -916,6 +1533,7 @@ Avoid personalization and keep an educational tone.`;
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a'); a.href = url; a.download = 'positions_local.csv'; a.click();
       URL.revokeObjectURL(url);
+      toast('success', 'Exportar', 'CSV gerado com posições locais');
     });
 
     document.querySelector('#posTable tbody').addEventListener('click', (e)=>{
@@ -928,7 +1546,7 @@ Avoid personalization and keep an educational tone.`;
         if(row.__public){ alert('Posição pública não pode ser apagada por aqui. Use o botão "Publicar..." para sobrescrever.'); return; }
         const locals = readPositionsLocal();
         const found = locals.findIndex(x=> x.symbol===row.symbol && x.avg===row.avg && x.note===row.note);
-        if(found>-1){ locals.splice(found,1); writePositionsLocal(locals); refreshPrices(); }
+        if(found>-1){ locals.splice(found,1); writePositionsLocal(locals); refreshPrices(); toast('success','Portfólio','Posição removida'); }
       }else if(act==='edit'){
         if(row.__public){ alert('Posição pública não pode ser editada por aqui. Edite local e publique.'); return; }
         const locals = readPositionsLocal();
@@ -938,9 +1556,11 @@ Avoid personalization and keep an educational tone.`;
         const avg = parseFloat(prompt(document.documentElement.lang==='en'?'Avg. price:':'Preço médio:', row.avg)) || row.avg;
         const note = prompt(document.documentElement.lang==='en'?'Note:':'Observação:', row.note||'') || row.note;
         locals[found] = {symbol, avg, note};
-        writePositionsLocal(locals); refreshPrices();
+        writePositionsLocal(locals); refreshPrices(); toast('success','Portfólio','Posição atualizada');
       }else if(act==='show'){
         document.getElementById('chartSymbolInput').value = row.symbol; loadChart(row.symbol);
+        toast('success','Gráfico','Mostrando: ' + row.symbol);
+        if(typeof window._activateTab === 'function') window._activateTab('tab-analise');
       }
     });
 
@@ -948,11 +1568,20 @@ Avoid personalization and keep an educational tone.`;
     async function refreshPrices(){
       const rows = getAllPositions();
       const symbols = [...new Set(rows.map(r => (r.symbol||'').trim()).filter(Boolean))];
+
+      const btn = document.getElementById('refreshBtn');
+      const sk = document.getElementById('tableSkeleton');
+
       if (symbols.length === 0) {
         renderPositions({}); quoteStatus.textContent = (document.documentElement.lang==='en' ? 'No positions.' : 'Sem posições.');
-        lastRefreshEl.textContent = ''; document.getElementById('lastRefreshTop').textContent = '—'; return;
+        lastRefreshEl.textContent = ''; document.getElementById('lastRefreshTop').textContent = '—';
+        return;
       }
+
       quoteStatus.textContent = (document.documentElement.lang==='en' ? 'Updating prices…' : 'Atualizando preços…');
+      if(btn) btn.classList.add('loading');
+      if(sk) sk.style.display = 'block';
+
       try{
         const url = QUOTE_API + "?symbols=" + encodeURIComponent(symbols.join(','));
         const resp = await fetch(url, { cache: 'no-store' });
@@ -967,10 +1596,15 @@ Avoid personalization and keep an educational tone.`;
         lastRefreshEl.textContent = (document.documentElement.lang==='en' ? 'Last update: ' : 'Última atualização: ') + formatted;
         document.getElementById('lastRefreshTop').textContent = formatted;
         writeCache(out);
+        toast('success', 'Cotações', 'Atualizadas (' + symbols.length + ' símbolos)');
       }catch(e){
         console.error('quotes error', e);
         renderPositions(readCache());
         quoteStatus.textContent = (document.documentElement.lang==='en' ? 'Could not update quotes.' : 'Não foi possível atualizar as cotações.');
+        toast('error', 'Cotações', 'Falha ao atualizar. Usando cache local.');
+      }finally{
+        if(btn) btn.classList.remove('loading');
+        if(sk) sk.style.display = 'none';
       }
     }
 
@@ -1022,6 +1656,38 @@ Avoid personalization and keep an educational tone.`;
       setTimeout(adjustChartForViewport, 300);
     })();
 
+    // ===================== Atalhos de teclado (UX) =====================
+    document.addEventListener('keydown', (e)=>{
+      const key = (e.key || '').toLowerCase();
+      const isMac = /mac/i.test(navigator.platform);
+      const mod = isMac ? e.metaKey : e.ctrlKey;
+
+      // Ctrl/Cmd + K: foca campo de busca (Análise)
+      if(mod && key === 'k'){
+        e.preventDefault();
+        if(typeof window._activateTab === 'function') window._activateTab('tab-analise');
+        const el = document.getElementById('aiSymbolInput');
+        if(el) el.focus();
+        return;
+      }
+
+      // A: adicionar posição rápida
+      if(!e.ctrlKey && !e.metaKey && key === 'a' && !/input|textarea/i.test((e.target && e.target.tagName)||'')){
+        e.preventDefault();
+        if(typeof window._activateTab === 'function') window._activateTab('tab-portfolio');
+        const el = document.getElementById('posSymbol');
+        if(el) el.focus();
+        return;
+      }
+
+      // R: refresh preços
+      if(!e.ctrlKey && !e.metaKey && key === 'r' && !/input|textarea/i.test((e.target && e.target.tagName)||'')){
+        e.preventDefault();
+        refreshPrices();
+        return;
+      }
+    }, {passive:false});
+
     // ===================== Inicialização =====================
     document.getElementById('y').textContent = new Date().getFullYear();
     applyI18n();
@@ -1045,6 +1711,11 @@ Avoid personalization and keep an educational tone.`;
 
     window._refreshPrices = refreshPrices;
     window._loadPublicPositions = loadPublicPositions;
+
+    // primeira render com cache
+    renderPositions(readCache());
+    updateSummaryMetrics(readCache());
+
   });
   </script>
 </body>
