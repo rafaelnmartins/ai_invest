@@ -1,0 +1,638 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>StockAnalyst AI</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg:#080c10; --surface:#0d1219; --border:rgba(255,255,255,.07);
+      --ink:#dde4ee; --muted:#5a6680;
+      --gold:#ffb932; --gold2:#ffd980;
+      --green:#22c55e; --red:#f87171; --blue:#38bdf8;
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%}
+    body{background:var(--bg);color:var(--ink);font-family:'Syne',sans-serif;min-height:100vh;overflow-x:hidden}
+    body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");pointer-events:none;z-index:0}
+    body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(255,185,50,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,185,50,.025) 1px,transparent 1px);background-size:48px 48px;pointer-events:none;z-index:0}
+
+    .wrap{max-width:880px;margin:0 auto;padding:32px 20px 72px;position:relative;z-index:1}
+
+    header{display:flex;align-items:center;justify-content:space-between;margin-bottom:40px;padding-bottom:20px;border-bottom:1px solid var(--border)}
+    .logo{display:flex;align-items:center;gap:12px}
+    .logo-hex{width:38px;height:38px;background:var(--gold);flex-shrink:0;clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);display:flex;align-items:center;justify-content:center}
+    .logo-hex svg{width:18px;height:18px;fill:var(--bg)}
+    .logo-name{font-size:18px;font-weight:800;letter-spacing:-.02em}
+    .logo-name span{color:var(--gold)}
+    .hdr-badge{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);border:1px solid var(--border);padding:4px 12px;border-radius:999px;letter-spacing:.04em}
+    .hdr-badge em{color:var(--gold);font-style:normal}
+
+    .card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:24px;margin-bottom:16px}
+    .card-label{font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:16px}
+
+    .input-row{display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap}
+    .input-col{display:flex;flex-direction:column;gap:6px}
+    .input-col.grow{flex:1;min-width:160px}
+    .field-lbl{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:.07em}
+    .ticker-inp{background:var(--bg);border:1px solid var(--border);border-radius:10px;color:var(--ink);font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:500;padding:12px 16px;width:100%;text-transform:uppercase;letter-spacing:.06em;outline:none;transition:border-color .2s}
+    .ticker-inp:focus{border-color:var(--gold)}
+    .ticker-inp::placeholder{color:var(--muted);opacity:.4}
+    .analyze-btn{width:100%;margin-top:16px;background:var(--gold);color:var(--bg);font-family:'Syne',sans-serif;font-size:14px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;border:none;border-radius:12px;padding:15px;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:10px}
+    .analyze-btn:hover:not(:disabled){background:var(--gold2);transform:translateY(-1px)}
+    .analyze-btn:disabled{background:rgba(255,185,50,.18);color:var(--muted);cursor:not-allowed;transform:none}
+
+    .status-row{display:flex;align-items:center;gap:8px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);min-height:30px;padding:4px 0}
+    .dot{width:6px;height:6px;border-radius:50%;background:var(--muted);flex-shrink:0;transition:background .3s}
+    .dot.load{background:var(--gold);animation:blink 1s infinite}
+    .dot.ok{background:var(--green)}
+    .dot.err{background:var(--red)}
+    @keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+
+    .steps{display:none;flex-direction:column;gap:0;margin-bottom:16px}
+    .steps.visible{display:flex}
+    .step{display:flex;align-items:center;gap:10px;padding:8px 12px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);border-left:2px solid var(--border);transition:all .3s}
+    .step.active{color:var(--gold);border-left-color:var(--gold)}
+    .step.done{color:var(--green);border-left-color:var(--green)}
+    .step.fail{color:var(--red);border-left-color:var(--red)}
+    .step-icon{font-size:13px;width:16px;text-align:center;flex-shrink:0}
+
+    .metrics{display:none;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-bottom:16px}
+    .metrics.visible{display:grid;animation:slideUp .4s}
+    .metric{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px}
+    .metric-l{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:.08em;margin-bottom:4px;text-transform:uppercase}
+    .metric-v{font-family:'JetBrains Mono',monospace;font-size:15px;font-weight:500;color:var(--gold)}
+    .metric-v.pos{color:var(--green)}
+    .metric-v.neg{color:var(--red)}
+    .metric-v.blue{color:var(--blue)}
+
+    .analysis-wrap{display:none}
+    .analysis-wrap.visible{display:block;animation:slideUp .4s}
+    .analysis-header{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:20px;flex-wrap:wrap}
+    .sym-ticker{font-size:32px;font-weight:800;letter-spacing:-.02em;color:var(--gold);line-height:1}
+    .sym-name{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted);margin-top:4px}
+    .reco-badge{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;padding:8px 20px;border-radius:999px;border:1px solid;white-space:nowrap;align-self:flex-start}
+    .reco-badge.buy{color:var(--green);border-color:var(--green);background:rgba(34,197,94,.1)}
+    .reco-badge.hold{color:var(--gold);border-color:var(--gold);background:rgba(255,185,50,.1)}
+    .reco-badge.sell{color:var(--red);border-color:var(--red);background:rgba(248,113,113,.1)}
+    .divider{height:1px;background:var(--border);margin:18px 0}
+    .analysis-body{font-family:'JetBrains Mono',monospace;font-size:13px;line-height:1.8;color:#9eb0cc;white-space:pre-wrap;word-break:break-word}
+    .analysis-body .h1{display:block;margin:24px 0 8px;font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:var(--gold);border-bottom:1px solid rgba(255,185,50,.2);padding-bottom:6px}
+    .analysis-body .h1:first-child{margin-top:0}
+    .analysis-body .h2{display:block;margin:14px 0 5px;font-family:'Syne',sans-serif;font-size:13px;font-weight:600;color:var(--ink)}
+    .analysis-body .bullet{display:block;padding-left:18px;position:relative;margin-bottom:2px}
+    .analysis-body .bullet::before{content:'▸';position:absolute;left:0;color:var(--gold);opacity:.5}
+    .analysis-body strong{color:var(--ink);font-weight:600}
+    .cursor{display:inline-block;width:7px;height:13px;background:var(--gold);margin-left:2px;animation:cur .7s steps(1) infinite;vertical-align:text-bottom}
+    @keyframes cur{0%,100%{opacity:1}50%{opacity:0}}
+
+    .src-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:14px;padding-top:12px;border-top:1px solid var(--border)}
+    .src-tag{font-family:'JetBrains Mono',monospace;font-size:10px;padding:3px 10px;border-radius:999px;border:1px solid var(--border);color:var(--muted)}
+
+    @keyframes slideUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+    .spin{width:15px;height:15px;border:2px solid rgba(8,12,16,.5);border-top-color:var(--bg);border-radius:50%;animation:sp .6s linear infinite;display:none;flex-shrink:0}
+    .spin.on{display:block}
+    @keyframes sp{to{transform:rotate(360deg)}}
+
+    footer{margin-top:52px;text-align:center;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);letter-spacing:.04em}
+    footer a{color:var(--gold);text-decoration:none}
+
+    @media(max-width:560px){
+      .input-row{flex-direction:column}
+    .sym-ticker{font-size:24px}
+    }
+  </style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="logo">
+      <div class="logo-hex">
+        <svg viewBox="0 0 24 24"><polyline points="3 17 7 9 11 13 15 7 19 13"/><circle cx="19" cy="13" r="2"/></svg>
+      </div>
+      <div class="logo-name">Stock<span>Analyst</span></div>
+    </div>
+    <div class="hdr-badge">via <em>NVIDIA Nemotron</em> · <em>StockGaide Worker</em></div>
+  </header>
+
+  <div class="card">
+    <div class="card-label">Análise de Ação com IA</div>
+    <div class="input-row">
+      <div class="input-col grow">
+        <span class="field-lbl">Ticker / Código</span>
+        <input id="ticker" class="ticker-inp" type="text" placeholder="VALE3 · PETR4 · AAPL · NVDA" maxlength="12" autocomplete="off" spellcheck="false"/>
+      </div>
+      <div class="input-col">
+        <span class="field-lbl">Mercado detectado</span>
+        <div id="mktBadge" style="
+          display:flex; align-items:center; gap:8px;
+          background:var(--bg); border:1px solid var(--border);
+          border-radius:10px; padding:10px 16px;
+          font-family:'JetBrains Mono',monospace;
+          font-size:14px; font-weight:600;
+          color:var(--gold); min-width:120px;
+          transition: all .2s;
+        ">🇧🇷 B3</div>
+      </div>
+    </div>
+    <button class="analyze-btn" id="analyzeBtn">
+      <div class="spin" id="spin"></div>
+      <span id="btnTxt">⚡ Analisar</span>
+    </button>
+  </div>
+
+  <div class="status-row">
+    <div class="dot" id="dot"></div>
+    <span id="statusMsg">Insira um ticker e clique em Analisar.</span>
+  </div>
+
+  <div class="steps" id="steps">
+    <div class="step" id="s1"><span class="step-icon">○</span><span id="s1t">Buscando dados fundamentais...</span></div>
+    <div class="step" id="s2"><span class="step-icon">○</span><span id="s2t">Buscando técnicos via Worker /analyze...</span></div>
+    <div class="step" id="s3"><span class="step-icon">○</span><span id="s3t">Enviando para IA (Nemotron)...</span></div>
+    <div class="step" id="s4"><span class="step-icon">○</span><span id="s4t">Gerando recomendação...</span></div>
+  </div>
+
+  <div class="metrics" id="metrics"></div>
+
+  <div class="analysis-wrap" id="analysisWrap">
+    <div class="card">
+      <div class="analysis-header">
+        <div>
+          <div class="sym-ticker" id="outTicker">—</div>
+          <div class="sym-name"   id="outName">—</div>
+        </div>
+        <div class="reco-badge hold" id="recoBadge">Aguardando</div>
+      </div>
+      <div class="divider"></div>
+      <div class="analysis-body" id="analysisBody"></div>
+      <div class="src-tags" id="srcTags"></div>
+    </div>
+  </div>
+
+  <footer>
+    © <span id="yr"></span> StockGaide ·
+    Worker: <a href="https://stockgaide.rafaelnm.workers.dev" target="_blank">stockgaide</a> ·
+    Dados: brapi.dev · Yahoo Finance · Worker /analyze
+  </footer>
+</div>
+
+<script>
+document.getElementById('yr').textContent = new Date().getFullYear();
+
+const WORKER  = 'https://stockgaide.rafaelnm.workers.dev';
+const KIMI_EP = WORKER + '/kimi';
+const MODEL   = 'nvidia/nemotron-3-nano-30b-a3b:free';
+
+// ── Auto market detection ─────────────────────────────────────────
+// Same logic as stockgaide/index.html
+let market = 'BR';
+
+const B3_PATTERN = /^[A-Z]{4}[0-9]{1,2}$/i;      // VALE3, PETR4, ITUB4, MGLU3, etc.
+const B3_PREFIX  = /^(BMFBOVESPA|BVMF|B3):/i;     // BMFBOVESPA:VALE3
+
+function detectMarket(raw) {
+  const s = (raw || '').trim();
+  if (!s) return 'BR';
+  if (B3_PREFIX.test(s)) return 'BR';
+  // Strip exchange prefix for pattern test
+  const ticker = s.includes(':') ? s.split(':')[1] : s;
+  if (B3_PATTERN.test(ticker)) return 'BR';
+  return 'US';
+}
+
+function setMkt(m) {
+  market = m;
+  const badge = document.getElementById('mktBadge');
+  if (!badge) return;
+  if (m === 'BR') {
+    badge.textContent = '🇧🇷 B3';
+    badge.style.color = 'var(--gold)';
+    badge.style.borderColor = 'rgba(255,185,50,.35)';
+  } else {
+    badge.textContent = '🇺🇸 NYSE / NASDAQ';
+    badge.style.color = 'var(--blue)';
+    badge.style.borderColor = 'rgba(56,189,248,.35)';
+  }
+}
+
+document.getElementById('ticker').addEventListener('input', function(){
+  const v = this.value.toUpperCase().trim();
+  this.value = v;
+  setMkt(detectMarket(v));
+});
+
+// ── UI helpers ─────────────────────────────────────────────────────
+const $dot = document.getElementById('dot');
+const $msg = document.getElementById('statusMsg');
+function setStatus(msg, state=''){
+  $msg.textContent = msg;
+  $dot.className = 'dot' + (state ? ' '+state : '');
+}
+function stepDo(id, state, label){
+  const el = document.getElementById(id);
+  el.className = 'step ' + state;
+  const icons = {active:'◎', done:'✔', fail:'✖'};
+  el.querySelector('.step-icon').textContent = icons[state] || '○';
+  if(label) document.getElementById(id+'t').textContent = label;
+}
+
+// ── Fetch BR: brapi.dev ────────────────────────────────────────────
+async function fetchBR(ticker){
+  const r = await fetch(`https://brapi.dev/api/quote/${ticker}?fundamental=true`);
+  if(!r.ok) throw new Error(`brapi.dev HTTP ${r.status}`);
+  const j = await r.json();
+  const d = j?.results?.[0];
+  if(!d || !d.regularMarketPrice) throw new Error('Ticker não encontrado na brapi.dev');
+  return d;
+}
+
+// ── Fetch /analyze from worker (technicals + analyst consensus) ────
+// Worker auto-converte B3 tickers (ex: VALE3 → VALE3.SA internamente)
+async function fetchAnalyze(ticker){
+  const r = await fetch(`${WORKER}/analyze?symbol=${encodeURIComponent(ticker)}`);
+  if(!r.ok) throw new Error(`Worker /analyze HTTP ${r.status}`);
+  return r.json();
+}
+
+// ── Fetch current price via worker /quotes ─────────────────────────
+async function fetchQuote(ticker){
+  const r = await fetch(`${WORKER}/quotes?symbols=${encodeURIComponent(ticker)}`);
+  if(!r.ok) throw new Error(`Worker /quotes HTTP ${r.status}`);
+  const j = await r.json();
+  return j?.prices?.[ticker] ?? null;
+}
+
+// ── Fetch US fundamentals via Worker /fundamentals ───────────────────
+// Worker faz a chamada ao Yahoo Finance server-side (sem CORS)
+async function fetchFundamentalsUS(ticker){
+  try{
+    const r = await fetch(`${WORKER}/fundamentals?symbol=${encodeURIComponent(ticker)}`);
+    if(!r.ok) throw new Error(`HTTP ${r.status}`);
+    const j = await r.json();
+    if(j.error) throw new Error(j.error);
+    return j;
+  }catch(e){
+    console.warn('fetchFundamentalsUS failed:', e.message);
+    return null;
+  }
+}
+
+// ── Build data string for LLM ──────────────────────────────────────
+function buildData(ticker, price, brData, ana, usF){
+  const t = ana?.technicals || {};
+  const a = ana?.analysts   || {};
+
+  let s = `Ticker: ${ticker}\n`;
+  if(brData){
+    const d = brData;
+    s += `Nome: ${d.longName || d.shortName || ''}\n`;
+    s += `Mercado: B3 (Brasil) · Moeda: BRL\n`;
+    s += `Preço Atual: R$ ${d.regularMarketPrice}\n`;
+    s += `Variação Hoje: ${d.regularMarketChangePercent?.toFixed(2)}% (R$ ${d.regularMarketChange?.toFixed(2)})\n`;
+    s += `Máx do Dia: R$ ${d.regularMarketDayHigh} · Mín do Dia: R$ ${d.regularMarketDayLow}\n`;
+    s += `Fechamento Anterior: R$ ${d.regularMarketPreviousClose}\n`;
+    s += `Máxima 52 Semanas: R$ ${d.fiftyTwoWeekHigh}\n`;
+    s += `Mínima 52 Semanas: R$ ${d.fiftyTwoWeekLow}\n`;
+    s += `Volume: ${d.regularMarketVolume?.toLocaleString('pt-BR')}\n`;
+    s += `Market Cap: R$ ${d.marketCap?.toLocaleString('pt-BR')}\n`;
+    s += `P/L (Price/Earnings): ${d.priceEarnings ?? 'N/A'}\n`;
+    s += `EPS (Lucro por Ação): R$ ${d.earningsPerShare ?? 'N/A'}\n`;
+  } else {
+    s += `Mercado: NYSE/NASDAQ (EUA) · Moeda: USD\n`;
+    s += `Preço Atual: $${price ?? 'N/A'}\n`;
+    if(usF){
+      if(usF.name)           s += `Nome: ${usF.name}\n`;
+      if(usF.marketCap)      s += `Market Cap: $${(usF.marketCap/1e9).toFixed(2)}B\n`;
+      if(usF.fiftyTwoHigh)   s += `Máxima 52 Semanas: $${usF.fiftyTwoHigh}\n`;
+      if(usF.fiftyTwoLow)    s += `Mínima 52 Semanas: $${usF.fiftyTwoLow}\n`;
+      s += `\n--- Valuation ---\n`;
+      s += `P/L Trailing (TTM): ${usF.trailingPE?.toFixed(1) ?? 'N/A'}\n`;
+      s += `P/L Forward: ${usF.forwardPE?.toFixed(1) ?? 'N/A'}\n`;
+      s += `P/VPA (Price/Book): ${usF.priceToBook?.toFixed(2) ?? 'N/A'}\n`;
+      s += `EPS (TTM): $${usF.eps?.toFixed(2) ?? 'N/A'}\n`;
+      if(usF.dividendYield) s += `Dividend Yield: ${(usF.dividendYield*100).toFixed(2)}%\n`;
+      if(usF.revenueGrowth)  s += `Crescimento de Receita (YoY): ${(usF.revenueGrowth*100).toFixed(1)}%\n`;
+      if(usF.earningsGrowth) s += `Crescimento de Lucro (YoY): ${(usF.earningsGrowth*100).toFixed(1)}%\n`;
+      s += `\n--- Saúde Financeira ---\n`;
+      s += `Debt/Equity: ${usF.debtToEquity?.toFixed(2) ?? 'N/A'}\n`;
+      s += `Current Ratio: ${usF.currentRatio?.toFixed(2) ?? 'N/A'}\n`;
+      if(usF.totalDebt)    s += `Dívida Total: $${(usF.totalDebt/1e9).toFixed(2)}B\n`;
+      if(usF.totalCash)    s += `Caixa Total: $${(usF.totalCash/1e9).toFixed(2)}B\n`;
+      if(usF.freeCashflow) s += `Free Cash Flow: $${(usF.freeCashflow/1e9).toFixed(2)}B\n`;
+      if(usF.grossMargins)  s += `Margem Bruta: ${(usF.grossMargins*100).toFixed(1)}%\n`;
+      if(usF.profitMargins) s += `Margem Líquida: ${(usF.profitMargins*100).toFixed(1)}%\n`;
+    }
+  }
+
+  if(t.sma50 || t.sma200 || t.rsi){
+    s += `\n--- Indicadores Técnicos (calculados pelo Worker via histórico diário) ---\n`;
+    if(t.sma50  != null) s += `SMA50: ${t.sma50}\n`;
+    if(t.sma200 != null) s += `SMA200: ${t.sma200}\n`;
+    if(t.rsi    != null) s += `RSI (14): ${t.rsi}\n`;
+    if(t.macd?.macd   != null) s += `MACD Line: ${t.macd.macd}\n`;
+    if(t.macd?.signal != null) s += `MACD Signal: ${t.macd.signal}\n`;
+    if(t.macd?.hist   != null) s += `MACD Histograma: ${t.macd.hist}\n`;
+    s += `Score Técnico Worker: ${ana?.score ?? 'N/A'}/100 → Sinal: ${ana?.decision ?? 'N/A'}\n`;
+    if(ana?.reasons?.length) s += `Razões Worker: ${ana.reasons.join(' | ')}\n`;
+  } else {
+    s += `\nObs: Dados técnicos não disponíveis (histórico insuficiente)\n`;
+  }
+
+  if(a.mean != null){
+    s += `\n--- Consenso de Analistas ---\n`;
+    s += `Média de recomendação: ${a.mean} (escala 1=Compra forte até 5=Venda forte)\n`;
+    if(a.trend) s += `Compra: ${a.trend.buy} analistas | Neutro: ${a.trend.hold} | Venda: ${a.trend.sell}\n`;
+    s += `Fonte: ${a.source || 'Yahoo Finance'}\n`;
+  } else {
+    s += `\nObs: Sem dados de consenso de analistas disponíveis.\n`;
+  }
+
+  return s;
+}
+
+// ── Render metrics grid ────────────────────────────────────────────
+function renderMetrics(items){
+  const g = document.getElementById('metrics');
+  g.innerHTML = '';
+  items.filter(x => x.value != null && x.value !== 'N/A' && x.value !== 'undefined' && x.value !== 'null').forEach(({l,v,cls})=>{
+    const d = document.createElement('div');
+    d.className = 'metric';
+    d.innerHTML = `<div class="metric-l">${l}</div><div class="metric-v ${cls||''}">${v}</div>`;
+    g.appendChild(d);
+  });
+  g.classList.add('visible');
+}
+
+// ── Detect recommendation — reads ONLY from Conclusão block ─────────
+function detectReco(text){
+  // Extract only the Conclusão Estratégica section (first section now)
+  const concMatch = text.match(/##\s*Conclus[aã]o Estrat[eé]gica([\s\S]*?)(?=\n##\s*\d|$)/i);
+  const scope = concMatch ? concMatch[1] : text;
+
+  const t = scope.toUpperCase();
+
+  // Match the explicit "Recomendação: <word>" line
+  const m = t.match(/RECOMENDA[ÇC][ÃA]O\s*:\s*\*{0,2}\s*(COMPRAR?|MANTER?|VEND\w*|BUY|HOLD|SELL)/);
+  if(m){
+    const r = m[1];
+    if(/^VEND|^SELL/.test(r)) return 'sell';
+    if(/^COMPR|^BUY/.test(r)) return 'buy';
+    return 'hold';
+  }
+
+  // Fallback: first occurrence of the decision word in the conclusion block
+  if(/\bVENDER\b|\bVENDA\b|\bSELL\b/.test(t))  return 'sell';
+  if(/\bCOMPRAR\b|\bCOMPRA\b|\bBUY\b/.test(t)) return 'buy';
+  return 'hold';
+}
+
+// ── Render markdown ────────────────────────────────────────────────
+function renderMD(text){
+  return text
+    .replace(/^#{1,2}\s+(.+)$/gm, (_,t)=>`<span class="h1">${t}</span>`)
+    .replace(/^###\s+(.+)$/gm,    (_,t)=>`<span class="h2">${t}</span>`)
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/^[\*\-]\s+(.+)$/gm, '<span class="bullet">$1</span>');
+}
+
+// ── Main analyze ───────────────────────────────────────────────────
+async function analyze(){
+  const ticker = document.getElementById('ticker').value.trim().toUpperCase();
+  if(!ticker){ setStatus('Por favor, insira um ticker.','err'); return; }
+
+  const btn = document.getElementById('analyzeBtn');
+  const spin = document.getElementById('spin');
+  const btnTxt = document.getElementById('btnTxt');
+  btn.disabled = true; spin.classList.add('on'); btnTxt.textContent = 'Analisando...';
+
+  document.getElementById('metrics').classList.remove('visible');
+  document.getElementById('analysisWrap').classList.remove('visible');
+  document.getElementById('steps').classList.add('visible');
+  ['s1','s2','s3','s4'].forEach(id => { document.getElementById(id).className = 'step'; document.getElementById(id).querySelector('.step-icon').textContent = '○'; });
+  setStatus('Iniciando...','load');
+
+  let brData = null, anaData = null, price = null;
+  const sources = [];
+
+  // Step 1 — fundamentals
+  stepDo('s1','active', market === 'BR' ? `brapi.dev → ${ticker}...` : `Worker /quotes → ${ticker}...`);
+  try {
+    if(market === 'BR'){
+      brData = await fetchBR(ticker);
+      price  = brData.regularMarketPrice;
+      sources.push('brapi.dev');
+      stepDo('s1','done', `brapi.dev ✔ R$ ${price}`);
+    } else {
+      price = await fetchQuote(ticker);
+      sources.push('Worker /quotes');
+      stepDo('s1','done', `Preço: $${price ?? 'N/A'}`);
+    }
+  } catch(e){
+    stepDo('s1','fail','Erro: '+e.message);
+    setStatus('Erro ao buscar dados: '+e.message,'err');
+    btn.disabled = false; spin.classList.remove('on'); btnTxt.textContent = '⚡ Analisar';
+    return;
+  }
+
+  // Step 2 — worker /analyze (technicals + analyst consensus)
+  stepDo('s2','active',`Worker /analyze → ${ticker}...`);
+  try {
+    anaData = await fetchAnalyze(ticker);
+    const src = anaData?.analysts?.source || 'sem consenso';
+    stepDo('s2','done', `Técnicos ✔ · Sinal: ${anaData?.decision}(${anaData?.score}) · Analistas: ${src}`);
+    sources.push(`Worker /analyze (${src})`);
+  } catch(e){
+    stepDo('s2','fail','Worker /analyze falhou — '+e.message+' (continuando)');
+    anaData = null;
+  }
+
+  // Step 2b — US fundamentals (P/L, market cap, financial health)
+  let usFund = null;
+  if(market === 'US'){
+    try{
+      usFund = await fetchFundamentalsUS(ticker);
+      if(usFund){
+        stepDo('s2','done', `Técnicos ✔ · P/L: ${usFund.trailingPE?.toFixed(1) ?? 'N/A'} · Analistas: ${anaData?.analysts?.source || 'n/a'}`);
+        sources.push('Yahoo Finance (fundamentals)');
+      }
+    }catch(e){ /* silent — not critical */ }
+  }
+
+  // Build summary for LLM
+  const rawData = buildData(ticker, price, brData, anaData, usFund);
+
+  // Render metrics
+  if(market === 'BR' && brData){
+    const d = brData; const chg = d.regularMarketChangePercent ?? 0;
+    renderMetrics([
+      {l:'Preço',     v:`R$ ${d.regularMarketPrice}`,   cls:''},
+      {l:'Variação',  v:`${chg>=0?'+':''}${chg?.toFixed(2)}%`, cls:chg>=0?'pos':'neg'},
+      {l:'Máx 52S',   v:`R$ ${d.fiftyTwoWeekHigh}`,     cls:''},
+      {l:'Mín 52S',   v:`R$ ${d.fiftyTwoWeekLow}`,      cls:''},
+      {l:'P/L',       v:d.priceEarnings,                 cls:''},
+      {l:'EPS',       v:d.earningsPerShare?`R$ ${d.earningsPerShare}`:null, cls:''},
+      {l:'RSI (14)',  v:anaData?.technicals?.rsi,        cls:''},
+      {l:'SMA50',     v:anaData?.technicals?.sma50,      cls:''},
+      {l:'Sinal',     v:anaData?`${anaData.decision}(${anaData.score})`:null, cls:anaData?.decision==='BUY'?'pos':anaData?.decision==='SELL'?'neg':'blue'},
+    ]);
+  } else {
+    const t = anaData?.technicals || {};
+    const f = usFund || {};
+    const fmtB = v => v ? `$${(v/1e9).toFixed(1)}B` : null;
+    renderMetrics([
+      {l:'Preço',       v:price!=null?`$${price}`:null,                    cls:''},
+      {l:'P/L TTM',     v:f.trailingPE!=null?f.trailingPE.toFixed(1):null, cls:''},
+      {l:'P/L Forward', v:f.forwardPE!=null?f.forwardPE.toFixed(1):null,   cls:''},
+      {l:'EPS TTM',     v:f.eps!=null?`$${f.eps.toFixed(2)}`:null,          cls:''},
+      {l:'P/VPA',       v:f.priceToBook!=null?f.priceToBook.toFixed(2):null,cls:''},
+      {l:'Mkt Cap',     v:fmtB(f.marketCap),                                cls:''},
+      {l:'D/E',         v:f.debtToEquity!=null?f.debtToEquity.toFixed(1):null, cls:''},
+      {l:'Máx 52S',     v:f.fiftyTwoHigh!=null?`$${f.fiftyTwoHigh}`:null,  cls:''},
+      {l:'Mín 52S',     v:f.fiftyTwoLow!=null?`$${f.fiftyTwoLow}`:null,    cls:''},
+      {l:'RSI (14)',     v:t.rsi,                                            cls:''},
+      {l:'SMA50',        v:t.sma50,                                          cls:''},
+      {l:'Analistas',    v:anaData?.analysts?.mean,                          cls:''},
+      {l:'Sinal',        v:anaData?`${anaData.decision}(${anaData.score})`:null, cls:anaData?.decision==='BUY'?'pos':anaData?.decision==='SELL'?'neg':'blue'},
+    ]);
+  }
+
+  // Setup output card
+  const name = (market==='BR' ? (brData?.longName||brData?.shortName) : (usFund?.name || anaData?.symbol || ticker)) || ticker;
+  document.getElementById('outTicker').textContent = ticker;
+  document.getElementById('outName').textContent   = name;
+  const bodyEl = document.getElementById('analysisBody');
+  bodyEl.innerHTML = '';
+  const cursor = document.createElement('span');
+  cursor.className = 'cursor';
+  document.getElementById('analysisWrap').classList.add('visible');
+
+  // Step 3 — LLM call
+  stepDo('s3','active',`Enviando para ${MODEL}...`);
+  setStatus(`IA processando ${ticker}...`,'load');
+
+  const SYSTEM = `Você é um analista financeiro experiente com foco em ações e mercado de capitais.
+Analise a ação fornecida e estruture sua resposta EXATAMENTE nesta ordem:
+
+## Conclusão Estratégica
+* Recomendação: [escreva SOMENTE UMA palavra: Comprar | Manter | Vender]
+* Por quê? Explique em 3-5 linhas o racional principal da decisão — seja direto e mencione os fatores mais decisivos (técnico, valuation, analistas, contexto macro)
+* Perfil ideal: (trader curto prazo, investidor longo prazo, ou evitar — seja específico)
+* Faixa de preço: (entrada e/ou saída com valores concretos, stop-loss sugerido se relevante)
+* Ação prática: (o que fazer agora — comprar em qual nível, aguardar correção até X, reduzir posição se Y, etc.)
+
+## 1. Preço e Momentum Recentes
+* Avalie o preço atual em relação à máxima e mínima de 52 semanas
+* Identifique se está próximo de topo, fundo ou lateral
+* Indique cenários prováveis de curto prazo (alta, correção, rompimento)
+
+## 2. Valoração (P/L)
+* Interprete o múltiplo P/L e compare com o setor
+* Avalie se o preço já precifica crescimento futuro
+* Destaque risco de sobrevalorização ou oportunidade de desconto
+
+## 3. Análise Técnica
+* SMA50 vs SMA200 — tendência de médio/longo prazo
+* RSI — sobrecomprado, sobrevendido ou neutro
+* MACD — cruzamento, histograma, momentum
+* Score técnico calculado pelo sistema
+
+## 4. Consenso de Analistas
+* Interprete a média de recomendação dos analistas
+* Aponte alinhamento ou divergência com os técnicos
+
+Regras:
+* A linha "Recomendação:" deve conter SOMENTE a palavra: Comprar, Manter ou Vender
+* Sem linguagem genérica — seja direto e acionável
+* Não invente dados, use apenas os fornecidos`;
+
+  let fullText = '';
+  try {
+    const resp = await fetch(`${KIMI_EP}?model=${encodeURIComponent(MODEL)}`, {
+      method: 'POST',
+      headers: {'content-type':'application/json'},
+      body: JSON.stringify({
+        model: MODEL,
+        messages: [
+          {role:'system', content: SYSTEM},
+          {role:'user',   content: `Dados da ação:\n\n${rawData}`}
+        ]
+      }),
+      mode: 'cors',
+    });
+
+    if(!resp.ok){
+      const t = await resp.text().catch(()=>'');
+      throw new Error(`HTTP ${resp.status}: ${t}`);
+    }
+
+    stepDo('s3','done','Resposta recebida — streamando...');
+    stepDo('s4','active','Gerando recomendação...');
+    bodyEl.appendChild(cursor);
+
+    const ctype = (resp.headers.get('content-type')||'').toLowerCase();
+
+    if(ctype.includes('text/')||ctype.includes('event-stream')){
+      const reader = resp.body.getReader();
+      const dec = new TextDecoder();
+      let buf = '';
+      while(true){
+        const {value, done} = await reader.read();
+        if(done) break;
+        buf += dec.decode(value, {stream:true});
+        const lines = buf.split(/\r?\n/);
+        buf = lines.pop() || '';
+        for(const line of lines){
+          const s = line.trim();
+          if(!s || s === '[DONE]') continue;
+          const payload = s.startsWith('data:') ? s.slice(5).trim() : s;
+          if(payload === '[DONE]') continue;
+          try {
+            const j = JSON.parse(payload);
+            const delta = j.choices?.[0]?.delta?.content ?? j.choices?.[0]?.message?.content ?? '';
+            if(delta) fullText += delta;
+          } catch {
+            if(payload && !payload.startsWith('{')) fullText += payload;
+          }
+          cursor.remove();
+          bodyEl.innerHTML = renderMD(fullText);
+          bodyEl.appendChild(cursor);
+        }
+      }
+    } else {
+      const j = await resp.json();
+      fullText = j?.choices?.[0]?.message?.content ?? '(sem conteúdo)';
+    }
+
+    cursor.remove();
+    bodyEl.innerHTML = renderMD(fullText);
+
+    const reco = detectReco(fullText);
+    const badge = document.getElementById('recoBadge');
+    badge.className = 'reco-badge ' + reco;
+    badge.textContent = reco==='buy'?'🟢 Comprar':reco==='sell'?'🔴 Vender':'🟡 Manter';
+
+    stepDo('s4','done', `${badge.textContent}`);
+    const el = document.getElementById('srcTags');
+    el.innerHTML = [...sources, `IA: ${MODEL}`].map(s=>`<span class="src-tag">${s}</span>`).join('');
+    setStatus(`Análise completa para ${ticker}`,'ok');
+
+  } catch(e){
+    cursor.remove();
+    stepDo('s3','fail','Erro IA: '+e.message);
+    setStatus('Erro na IA: '+e.message,'err');
+    bodyEl.textContent = 'Erro: ' + e.message;
+  }
+
+  btn.disabled = false; spin.classList.remove('on'); btnTxt.textContent = '⚡ Analisar';
+}
+
+document.getElementById('analyzeBtn').addEventListener('click', analyze);
+document.getElementById('ticker').addEventListener('keydown', e=>{ if(e.key==='Enter') analyze(); });
+</script>
+</body>
+</html>
