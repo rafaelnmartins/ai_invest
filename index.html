@@ -199,9 +199,6 @@
     .ai-cursor{display:inline-block;width:7px;height:12px;background:var(--accent);margin-left:2px;animation:aiCur .7s steps(1) infinite;vertical-align:text-bottom}
     @keyframes aiCur{0%,100%{opacity:1}50%{opacity:0}}
 
-    .src-tags{display:flex;gap:5px;flex-wrap:wrap;margin-top:12px;padding-top:10px;border-top:1px solid rgba(255,255,255,0.06)}
-    .src-tag{font-family:'Space Mono',monospace;font-size:10px;padding:2px 8px;border-radius:999px;border:1px solid rgba(255,255,255,0.08);color:var(--muted)}
-
     .ai-spin{width:14px;height:14px;border:2px solid rgba(3,17,31,.5);border-top-color:rgba(3,17,31,1);border-radius:50%;animation:spin .6s linear infinite;display:none;flex-shrink:0}
     .ai-spin.on{display:block}
 
@@ -276,14 +273,14 @@
   </header>
 
   <nav class="tabs" aria-label="Navegação principal">
-    <button class="tab-btn active" data-tab="tab-dashboard">📊 <span data-i18n="tab_dashboard">Dashboard</span></button>
-    <button class="tab-btn" data-tab="tab-analise">📈 <span data-i18n="tab_analise">Análise AI</span></button>
+    <button class="tab-btn" data-tab="tab-dashboard">📊 <span data-i18n="tab_dashboard">Dashboard</span></button>
+    <button class="tab-btn active" data-tab="tab-analise">📈 <span data-i18n="tab_analise">Análise AI</span></button>
     <button class="tab-btn" data-tab="tab-portfolio">💼 <span data-i18n="tab_portfolio">Portfólio</span></button>
     <button class="tab-btn" data-tab="tab-mercados">🌍 <span data-i18n="tab_mercados">Mercados</span></button>
   </nav>
 
   <!-- DASHBOARD TAB -->
-  <section id="tab-dashboard" class="tab-panel active">
+  <section id="tab-dashboard" class="tab-panel">
     <div class="dash-topbar">
       <div class="dash-topbar-left">
         <div class="status-dot"></div>
@@ -305,13 +302,13 @@
   </section>
 
   <!-- ANÁLISE AI TAB — NEW -->
-  <section id="tab-analise" class="tab-panel">
+  <section id="tab-analise" class="tab-panel active">
     <div class="grid" style="margin-top:16px">
 
       <!-- Left: new AI Analyst -->
       <section class="card" style="grid-column:span 8">
         <h2 data-i18n="ai_page_title">Análise de Ação com IA</h2>
-        <div class="muted-small" style="margin-top:2px" data-i18n="ai_page_sub">Dados fundamentais + técnicos + consenso · recomendação via Nemotron</div>
+        <div class="muted-small" style="margin-top:2px" data-i18n="ai_page_sub">Dados fundamentais + técnicos + consenso · análise avançada com IA</div>
 
         <!-- Input -->
         <div class="ai-input-row">
@@ -330,8 +327,8 @@
         </div>
         <div class="ai-steps" id="steps">
           <div class="ai-step" id="s1"><span class="ai-step-icon">○</span><span id="s1t">Buscando dados fundamentais...</span></div>
-          <div class="ai-step" id="s2"><span class="ai-step-icon">○</span><span id="s2t">Buscando técnicos (Worker /analyze)...</span></div>
-          <div class="ai-step" id="s3"><span class="ai-step-icon">○</span><span id="s3t">Enviando para Nemotron...</span></div>
+          <div class="ai-step" id="s2"><span class="ai-step-icon">○</span><span id="s2t">Calculando indicadores...</span></div>
+          <div class="ai-step" id="s3"><span class="ai-step-icon">○</span><span id="s3t">Processando...</span></div>
           <div class="ai-step" id="s4"><span class="ai-step-icon">○</span><span id="s4t">Gerando recomendação...</span></div>
         </div>
 
@@ -349,7 +346,7 @@
           </div>
           <div class="ai-divider"></div>
           <div class="ai-body" id="analysisBody"></div>
-          <div class="src-tags" id="srcTags"></div>
+
         </div>
       </section>
 
@@ -484,7 +481,7 @@ const I18N = {
     tab_dashboard:"Dashboard",tab_analise:"Análise AI",tab_portfolio:"Portfólio",tab_mercados:"Mercados",
     dash_title:"Recomendações &amp; Histórico",dash_sub:"Painel consolidado · posições abertas e fechadas",
     btn_see_alerts:"Ver alertas",btn_open_pos:"Abertas",btn_closed_pos:"Fechadas",btn_full_panel:"Painel completo",
-    ai_page_title:"Análise de Ação com IA",ai_page_sub:"Dados fundamentais + técnicos + consenso · recomendação via Nemotron",
+    ai_page_title:"Análise de Ação com IA",ai_page_sub:"Dados fundamentais + técnicos + consenso · análise avançada com IA",
     chart_title:"Gráfico (TradingView)",btn_load:"Carregar",
     summary_title:"Resumo do Portfólio",summary_sub:"Visão rápida do P/L com base nas posições cadastradas",
     last_read:"Última leitura:",lbl_portfolio:"Portfolio",lbl_portfolio_sub:"Valor atual (aprox.)",
@@ -519,7 +516,7 @@ const I18N = {
     tab_dashboard:"Dashboard",tab_analise:"AI Analysis",tab_portfolio:"Portfolio",tab_mercados:"Markets",
     dash_title:"Recommendations &amp; History",dash_sub:"Consolidated panel · open and closed positions",
     btn_see_alerts:"See alerts",btn_open_pos:"Open",btn_closed_pos:"Closed",btn_full_panel:"Full panel",
-    ai_page_title:"AI Stock Analysis",ai_page_sub:"Fundamentals + technicals + consensus · recommendation via Nemotron",
+    ai_page_title:"AI Stock Analysis",ai_page_sub:"Fundamentals + technicals + analyst consensus",
     chart_title:"Chart (TradingView)",btn_load:"Load",
     summary_title:"Portfolio Summary",summary_sub:"Quick P/L view based on registered positions",
     last_read:"Last read:",lbl_portfolio:"Portfolio",lbl_portfolio_sub:"Current value (approx.)",
@@ -655,21 +652,53 @@ document.addEventListener('DOMContentLoaded', ()=>{
   }
 
   // Fetch functions
+  // fetchBR: Worker /brapi proxy (token stays server-side) → fallback to Worker /quotes+/fundamentals
   async function fetchBR(ticker){
-    const r=await fetch(`https://brapi.dev/api/quote/${ticker}?fundamental=true`);
-    if(!r.ok)throw new Error(`brapi.dev HTTP ${r.status}`);
-    const j=await r.json();const d=j?.results?.[0];
-    if(!d||!d.regularMarketPrice)throw new Error('Ticker não encontrado na brapi.dev');
-    return d;
+    // Primary: Worker /brapi proxy (uses BRAPI_TOKEN env var on Cloudflare)
+    try{
+      const r = await fetch(`${WORKER}/brapi?ticker=${encodeURIComponent(ticker)}`);
+      if(r.ok){
+        const j = await r.json();
+        const d = j?.results?.[0];
+        if(d && d.regularMarketPrice) return d;
+      }
+    }catch(e){}
+    // Fallback: Worker /quotes (price) + /fundamentals (P/L etc via Finnhub)
+    const [priceRes, fundRes] = await Promise.allSettled([
+      fetchQuote(ticker),
+      fetchFundamentalsUS(ticker)
+    ]);
+    const price = priceRes.status==='fulfilled' ? priceRes.value : null;
+    const fund  = fundRes.status ==='fulfilled' ? fundRes.value  : null;
+    if(!price && !fund) throw new Error(`Dados não encontrados para ${ticker}`);
+    return {
+      symbol:                     ticker,
+      shortName:                  fund?.name || ticker,
+      longName:                   fund?.name || ticker,
+      regularMarketPrice:         price,
+      regularMarketChange:        null,
+      regularMarketChangePercent: null,
+      regularMarketDayHigh:       null,
+      regularMarketDayLow:        null,
+      regularMarketPreviousClose: null,
+      regularMarketVolume:        null,
+      fiftyTwoWeekHigh:           fund?.fiftyTwoHigh ?? null,
+      fiftyTwoWeekLow:            fund?.fiftyTwoLow  ?? null,
+      marketCap:                  fund?.marketCap    ?? null,
+      priceEarnings:              fund?.trailingPE   ?? null,
+      earningsPerShare:           fund?.eps          ?? null,
+      __fromWorker: true,
+    };
   }
+
   async function fetchAnalyze(ticker){
     const r=await fetch(`${WORKER}/analyze?symbol=${encodeURIComponent(ticker)}`);
-    if(!r.ok)throw new Error(`Worker /analyze HTTP ${r.status}`);
+    if(!r.ok)throw new Error(`Erro HTTP ${r.status}`);
     return r.json();
   }
   async function fetchQuote(ticker){
     const r=await fetch(`${WORKER}/quotes?symbols=${encodeURIComponent(ticker)}`);
-    if(!r.ok)throw new Error(`Worker /quotes HTTP ${r.status}`);
+    if(!r.ok)throw new Error(`Erro HTTP ${r.status}`);
     const j=await r.json();return j?.prices?.[ticker]??null;
   }
   async function fetchFundamentalsUS(ticker){
@@ -721,7 +750,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
       s+=`\n--- Consenso Analistas ---\n`;
       s+=`Média: ${a.mean} (1=Compra forte, 5=Venda forte)\n`;
       if(a.trend)s+=`Compra: ${a.trend.buy} | Neutro: ${a.trend.hold} | Venda: ${a.trend.sell}\n`;
-      s+=`Fonte: ${a.source||'Yahoo/Finnhub'}\n`;
+      s+=``;
     }
     return s;
   }
@@ -786,17 +815,17 @@ document.addEventListener('DOMContentLoaded', ()=>{
     setAiStatus('Iniciando...','load');
 
     let brData=null,anaData=null,price=null,usFund=null;
-    const sources=[];
 
     // Step 1: fundamentals
-    stepDo('s1','active',market==='BR'?`brapi.dev → ${ticker}...`:`Worker /quotes → ${ticker}...`);
+    stepDo('s1','active','Buscando dados...');
     try{
       if(market==='BR'){
-        brData=await fetchBR(ticker);price=brData.regularMarketPrice;sources.push('brapi.dev');
-        stepDo('s1','done',`brapi.dev ✔ R$ ${price}`);
+        brData = await fetchBR(ticker);
+        price  = brData.regularMarketPrice;
+        stepDo('s1','done','Dados BR ✔');
       }else{
-        price=await fetchQuote(ticker);sources.push('Worker /quotes');
-        stepDo('s1','done',`Preço: $${price??'N/A'}`);
+        price = await fetchQuote(ticker);
+        stepDo('s1','done','Dados US ✔');
       }
     }catch(e){
       stepDo('s1','fail','Erro: '+e.message);setAiStatus('Erro: '+e.message,'err');
@@ -804,13 +833,12 @@ document.addEventListener('DOMContentLoaded', ()=>{
     }
 
     // Step 2: technicals
-    stepDo('s2','active',`Worker /analyze → ${ticker}...`);
+    stepDo('s2','active',`${ticker}...`);
     try{
       anaData=await fetchAnalyze(ticker);
       const src=anaData?.analysts?.source||'sem consenso';
-      stepDo('s2','done',`Técnicos ✔ · ${anaData?.decision}(${anaData?.score}) · ${src}`);
-      sources.push(`Worker /analyze (${src})`);
-    }catch(e){stepDo('s2','fail','Worker /analyze: '+e.message+' (continuando)');anaData=null;}
+      stepDo('s2','done',`Score técnico: ${anaData?.decision}(${anaData?.score})`);
+    }catch(e){stepDo('s2','fail','Indicadores: '+e.message+' (continuando)');anaData=null;}
 
     // Step 2b: US fundamentals
     if(market==='US'){
@@ -818,7 +846,6 @@ document.addEventListener('DOMContentLoaded', ()=>{
         usFund=await fetchFundamentalsUS(ticker);
         if(usFund){
           stepDo('s2','done',`Técnicos ✔ · P/L: ${usFund.trailingPE?.toFixed(1)??'N/A'} · ${anaData?.analysts?.source||'n/a'}`);
-          sources.push('Worker /fundamentals (Finnhub)');
         }
       }catch(e){}
     }
@@ -869,8 +896,8 @@ document.addEventListener('DOMContentLoaded', ()=>{
     loadChart(ticker,currentLang==='en'?'en':'br');
 
     // Step 3: LLM
-    stepDo('s3','active',`Enviando para ${MODEL}...`);
-    setAiStatus(`IA processando ${ticker}...`,'load');
+    stepDo('s3','active','Processando...');
+    setAiStatus(`Analisando ${ticker}...`,'load');
 
     const SYSTEM=`Você é um analista financeiro experiente com foco em ações e mercado de capitais.
 Analise a ação fornecida e estruture sua resposta EXATAMENTE assim:
@@ -912,7 +939,7 @@ REGRAS ABSOLUTAS:
         mode:'cors',
       });
       if(!resp.ok){const t=await resp.text().catch(()=>'');throw new Error(`HTTP ${resp.status}: ${t}`);}
-      stepDo('s3','done','Resposta recebida — streamando...');
+      stepDo('s3','done','Processando...');
       stepDo('s4','active','Gerando recomendação...');
       bodyEl.appendChild(cursor);
       const ctype=(resp.headers.get('content-type')||'').toLowerCase();
@@ -938,7 +965,6 @@ REGRAS ABSOLUTAS:
       badge.className='reco-badge '+reco;
       badge.textContent=reco==='buy'?'🟢 Comprar':reco==='sell'?'🔴 Vender':'🟡 Manter';
       stepDo('s4','done',`${badge.textContent}`);
-      document.getElementById('srcTags').innerHTML=[...sources,`IA: ${MODEL}`].map(s=>`<span class="src-tag">${s}</span>`).join('');
       setAiStatus(`Análise completa para ${ticker}`,'ok');
     }catch(e){
       cursor.remove();stepDo('s3','fail','Erro IA: '+e.message);
