@@ -1,0 +1,158 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 160" width="520" height="160">
+  <defs>
+    <!-- Dark background gradient -->
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0a0f1e;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#0f1d35;stop-opacity:1"/>
+    </linearGradient>
+
+    <!-- AI letters glow gradient -->
+    <linearGradient id="aiGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#00e5ff;stop-opacity:1"/>
+      <stop offset="50%" style="stop-color:#00b4ff;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#7b2fff;stop-opacity:1"/>
+    </linearGradient>
+
+    <!-- Regular text gradient -->
+    <linearGradient id="textGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#e8f4ff;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#a8c8e8;stop-opacity:1"/>
+    </linearGradient>
+
+    <!-- Chart line gradient -->
+    <linearGradient id="chartGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#00e5ff;stop-opacity:0.3"/>
+      <stop offset="60%" style="stop-color:#00e5ff;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#7b2fff;stop-opacity:1"/>
+    </linearGradient>
+
+    <!-- Chart fill gradient -->
+    <linearGradient id="chartFill" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#00b4ff;stop-opacity:0.25"/>
+      <stop offset="100%" style="stop-color:#00b4ff;stop-opacity:0"/>
+    </linearGradient>
+
+    <!-- AI glow filter -->
+    <filter id="aiGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <!-- Subtle outer glow for whole logo -->
+    <filter id="softGlow" x="-5%" y="-5%" width="110%" height="110%">
+      <feGaussianBlur stdDeviation="1.5" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <!-- Clip for chart area -->
+    <clipPath id="chartClip">
+      <rect x="16" y="16" width="88" height="72" rx="4"/>
+    </clipPath>
+  </defs>
+
+  <!-- Background card -->
+  <rect width="520" height="160" rx="16" fill="url(#bgGrad)"/>
+
+  <!-- Subtle grid lines -->
+  <line x1="16" y1="40"  x2="104" y2="40"  stroke="#ffffff" stroke-width="0.3" stroke-opacity="0.06"/>
+  <line x1="16" y1="56"  x2="104" y2="56"  stroke="#ffffff" stroke-width="0.3" stroke-opacity="0.06"/>
+  <line x1="16" y1="72"  x2="104" y2="72"  stroke="#ffffff" stroke-width="0.3" stroke-opacity="0.06"/>
+  <line x1="40" y1="16"  x2="40"  y2="88"  stroke="#ffffff" stroke-width="0.3" stroke-opacity="0.06"/>
+  <line x1="64" y1="16"  x2="64"  y2="88"  stroke="#ffffff" stroke-width="0.3" stroke-opacity="0.06"/>
+  <line x1="88" y1="16"  x2="88"  y2="88"  stroke="#ffffff" stroke-width="0.3" stroke-opacity="0.06"/>
+
+  <!-- Stock chart area fill -->
+  <path d="M16,72 L28,64 L40,70 L52,52 L64,48 L76,38 L88,28 L104,22 L104,88 L16,88 Z"
+        fill="url(#chartFill)" clip-path="url(#chartClip)"/>
+
+  <!-- Stock chart line -->
+  <polyline
+    points="16,72 28,64 40,70 52,52 64,48 76,38 88,28 104,22"
+    fill="none"
+    stroke="url(#chartGrad)"
+    stroke-width="2.5"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    clip-path="url(#chartClip)"/>
+
+  <!-- Chart candlestick dots -->
+  <circle cx="28" cy="64" r="2" fill="#00e5ff" opacity="0.7"/>
+  <circle cx="52" cy="52" r="2" fill="#00e5ff" opacity="0.7"/>
+  <circle cx="76" cy="38" r="2" fill="#00e5ff" opacity="0.85"/>
+  <circle cx="104" cy="22" r="3" fill="#00e5ff"/>
+
+  <!-- Upward arrow tip at end of chart -->
+  <polygon points="104,16 100,24 108,24" fill="#00e5ff" opacity="0.9"/>
+
+  <!-- Divider line between chart and text -->
+  <line x1="118" y1="20" x2="118" y2="130" stroke="#ffffff" stroke-width="0.5" stroke-opacity="0.12"/>
+
+  <!-- ── LOGOTYPE ── -->
+  <!-- "stock" — standalone, setor de atuação -->
+  <text x="136" y="98"
+        font-family="'Georgia', 'Times New Roman', serif"
+        font-size="54"
+        font-weight="700"
+        letter-spacing="-1"
+        fill="url(#textGrad)"
+        filter="url(#softGlow)">stock</text>
+
+  <!-- "g" — inicia o grupo "gAIde" (guide) -->
+  <text x="298" y="98"
+        font-family="'Georgia', 'Times New Roman', serif"
+        font-size="54"
+        font-weight="700"
+        letter-spacing="-1"
+        fill="url(#textGrad)"
+        filter="url(#softGlow)">g</text>
+
+  <!-- "AI" — highlighted com glow -->
+  <text x="328" y="98"
+        font-family="'Georgia', 'Times New Roman', serif"
+        font-size="54"
+        font-weight="700"
+        letter-spacing="-1"
+        fill="url(#aiGrad)"
+        filter="url(#aiGlow)">AI</text>
+
+  <!-- "de" — fecha o grupo "gAIde" -->
+  <text x="389" y="98"
+        font-family="'Georgia', 'Times New Roman', serif"
+        font-size="54"
+        font-weight="700"
+        letter-spacing="-1"
+        fill="url(#textGrad)"
+        filter="url(#softGlow)">de</text>
+
+  <!-- Underline accent under AI only -->
+  <rect x="328" y="104" width="60" height="3" rx="1.5" fill="url(#aiGrad)" opacity="0.85"/>
+
+  <!-- AI pill badge -->
+  <rect x="328" y="112" width="60" height="18" rx="9" fill="url(#aiGrad)" opacity="0.15"/>
+  <rect x="328" y="112" width="60" height="18" rx="9" fill="none" stroke="url(#aiGrad)" stroke-width="0.8" opacity="0.6"/>
+  <text x="358" y="125"
+        font-family="'Arial', sans-serif"
+        font-size="9"
+        font-weight="700"
+        letter-spacing="1.5"
+        text-anchor="middle"
+        fill="url(#aiGrad)">POWERED</text>
+
+  <!-- Tagline -->
+  <text x="136" y="148"
+        font-family="'Arial', 'Helvetica', sans-serif"
+        font-size="11"
+        letter-spacing="3"
+        fill="#4a8ab5"
+        opacity="0.9">INTELLIGENT STOCK ANALYSIS</text>
+
+  <!-- Subtle border -->
+  <rect width="520" height="160" rx="16" fill="none" stroke="#1a3a5c" stroke-width="1" opacity="0.8"/>
+</svg>
