@@ -6,7 +6,7 @@
   <title>Stockgaide - Dicas para familia e amigos</title>
   <meta name="description" content="Site Stockgaide com dicas, gráfico TradingView, alertas embutidos e minhas posições com P/L %." />
   <link rel="preconnect" href="https://s3.tradingview.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,500;0,9..40,700;0,9..40,900;1,9..40,300&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,500;0,9..40,700;0,9..40,900;1,9..40,300&family=Space+Mono:wght@400;700&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
   <style>
     :root{
       --page-bg:#04080f; --panel:#080e1a; --panel-2:#0c1525;
@@ -30,11 +30,50 @@
     .disclaimer-bar .pill{display:inline-flex;align-items:center;gap:5px;padding:2px 9px;border-radius:999px;border:1px solid rgba(255,180,71,0.4);background:rgba(255,180,71,0.10);color:#ffe5a8;font-weight:700;font-size:11px;letter-spacing:0.04em}
 
     .site-header{display:grid;grid-template-columns:auto 1fr auto;gap:18px;align-items:start;padding:18px 20px;background:rgba(8,14,26,0.85);border:1px solid var(--card-border);border-radius:20px;backdrop-filter:blur(16px);box-shadow:var(--shadow-1);margin-bottom:6px;position:sticky;top:58px;z-index:40}
+
+    /* ── NEW LOGO STYLING ── */
     .brand{display:flex;gap:14px;align-items:center}
-    .logo{width:48px;height:48px;border-radius:14px;flex-shrink:0;background:linear-gradient(135deg,var(--accent),var(--accent-2));box-shadow:0 0 28px rgba(0,200,255,0.25),0 8px 24px rgba(0,0,0,0.4);display:flex;align-items:center;justify-content:center;color:#03111f;font-weight:900;font-family:'Space Mono',monospace;font-size:15px}
-    .brand-name{font-size:clamp(17px,2.2vw,23px);font-weight:700;letter-spacing:-0.3px;color:var(--ink);line-height:1.2}
-    .brand-name .ai{color:var(--accent);font-weight:900;text-shadow:0 0 20px rgba(0,200,255,0.4)}
-    .brand-sub{color:var(--muted);font-size:12px;margin-top:3px}
+    .logo-mark{
+      width:52px;height:52px;border-radius:14px;flex-shrink:0;
+      background:linear-gradient(135deg,#0a0f1e 0%,#0f1d35 100%);
+      border:1px solid rgba(0,200,255,0.25);
+      box-shadow:0 0 28px rgba(0,200,255,0.20),0 8px 24px rgba(0,0,0,0.4),inset 0 1px 0 rgba(255,255,255,0.05);
+      display:flex;align-items:center;justify-content:center;
+      position:relative;overflow:hidden;
+    }
+    .logo-mark svg{width:100%;height:100%;display:block}
+    .logo-mark::after{
+      content:'';position:absolute;inset:0;
+      background:radial-gradient(circle at 70% 30%,rgba(0,229,255,0.15),transparent 60%);
+      pointer-events:none;
+    }
+    .brand-text{display:flex;flex-direction:column;gap:2px}
+    .brand-name{
+      font-family:'Playfair Display','Georgia',serif;
+      font-size:clamp(22px,2.4vw,28px);
+      font-weight:900;letter-spacing:-0.01em;
+      color:var(--ink);line-height:1;
+      display:flex;align-items:baseline;
+    }
+    .brand-name .stock{color:#e8f4ff}
+    .brand-name .g{color:#e8f4ff}
+    .brand-name .ai{
+      background:linear-gradient(135deg,#00e5ff 0%,#00b4ff 50%,#7b2fff 100%);
+      -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+      text-shadow:0 0 24px rgba(0,229,255,0.5);
+      font-weight:900;
+      position:relative;
+      padding:0 1px;
+    }
+    .brand-name .ai::after{
+      content:'';position:absolute;left:0;right:0;bottom:-3px;height:2px;
+      background:linear-gradient(90deg,#00e5ff,#7b2fff);
+      border-radius:2px;opacity:0.85;
+    }
+    .brand-name .de{color:#e8f4ff}
+    .brand-sub{color:var(--muted);font-size:11.5px;letter-spacing:0.06em;text-transform:uppercase;font-weight:500;margin-top:4px}
+    .brand-sub .powered{color:var(--accent);font-weight:700}
+
     .quick-tips-inline{background:linear-gradient(135deg,rgba(0,200,255,0.06),rgba(92,90,240,0.06));border:1px solid rgba(0,200,255,0.15);border-radius:12px;padding:10px 14px;font-size:12.5px;color:var(--ink);max-width:340px;align-self:center}
     .quick-tips-inline .qt-title{font-weight:700;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--accent);margin-bottom:7px;display:flex;align-items:center;gap:6px}
     .quick-tips-inline ul{list-style:none;display:flex;flex-direction:column;gap:4px}
@@ -167,6 +206,21 @@
     .ai-step.fail{color:var(--danger);border-left-color:var(--danger)}
     .ai-step-icon{font-size:12px;width:14px;text-align:center;flex-shrink:0}
 
+    /* ── AI Progress Bar ── */
+    .ai-progress{display:none;margin-top:12px;padding:12px 14px;background:linear-gradient(135deg,rgba(0,200,255,0.05),rgba(45,126,247,0.04));border:1px solid rgba(0,200,255,0.18);border-radius:12px}
+    .ai-progress.visible{display:block;animation:fadeUp .3s}
+    .ai-progress-header{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+    .ai-progress-pulse{width:10px;height:10px;border-radius:50%;background:var(--accent);box-shadow:0 0 10px rgba(0,200,255,0.6);animation:aiPulseRing 1.2s ease-in-out infinite;flex-shrink:0}
+    @keyframes aiPulseRing{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.3);opacity:.6}}
+    .ai-progress-msg{font-family:'Space Mono',monospace;font-size:12px;color:var(--accent);font-weight:600;letter-spacing:.02em;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;transition:opacity .25s}
+    .ai-progress-msg.fade{opacity:0}
+    .ai-progress-pct{font-family:'Space Mono',monospace;font-size:11px;color:var(--muted);flex-shrink:0}
+    .ai-progress-bar{height:6px;background:rgba(0,200,255,0.08);border-radius:999px;overflow:hidden;position:relative}
+    .ai-progress-bar-fill{position:absolute;left:0;top:0;bottom:0;width:0%;background:linear-gradient(90deg,rgba(0,200,255,0.6),rgba(92,90,240,0.9));border-radius:999px;transition:width .5s cubic-bezier(0.25,0.46,0.45,0.94);box-shadow:0 0 12px rgba(0,200,255,0.4)}
+    .ai-progress-bar-fill::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent 40%,rgba(255,255,255,0.25) 50%,transparent 60%);animation:aiShimmer 1.8s ease-in-out infinite;border-radius:999px}
+    @keyframes aiShimmer{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
+    .ai-progress-hint{font-family:'DM Sans',sans-serif;font-size:10.5px;color:var(--muted);margin-top:6px;display:flex;align-items:center;gap:5px}
+
     .ai-metrics{display:none;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px;margin-top:12px}
     .ai-metrics.visible{display:grid;animation:fadeUp .4s}
     .ai-metric{background:rgba(8,14,26,0.7);border:1px solid rgba(255,255,255,0.07);border-radius:10px;padding:10px}
@@ -199,6 +253,9 @@
     .ai-cursor{display:inline-block;width:7px;height:12px;background:var(--accent);margin-left:2px;animation:aiCur .7s steps(1) infinite;vertical-align:text-bottom}
     @keyframes aiCur{0%,100%{opacity:1}50%{opacity:0}}
 
+    .src-tags{display:flex;gap:5px;flex-wrap:wrap;margin-top:12px;padding-top:10px;border-top:1px solid rgba(255,255,255,0.06)}
+    .src-tag{font-family:'Space Mono',monospace;font-size:10px;padding:2px 8px;border-radius:999px;border:1px solid rgba(255,255,255,0.08);color:var(--muted)}
+
     .ai-spin{width:14px;height:14px;border:2px solid rgba(3,17,31,.5);border-top-color:rgba(3,17,31,1);border-radius:50%;animation:spin .6s linear infinite;display:none;flex-shrink:0}
     .ai-spin.on{display:block}
 
@@ -215,11 +272,14 @@
       #tradingview_chart{height:340px}
       .tabs{gap:6px}
       .tab-btn{padding:9px 14px;font-size:13px}
+      .logo-mark{width:46px;height:46px}
+      .brand-name{font-size:22px}
     }
     @media(max-width:480px){
       .summary-grid{grid-template-columns:repeat(2,1fr)}
       .cf-dashboard-wrap iframe{height:360px}
       .ai-sym-ticker{font-size:20px}
+      .brand-sub{font-size:10px;letter-spacing:0.04em}
     }
   </style>
 </head>
@@ -251,10 +311,40 @@
 <div class="wrap">
   <header class="site-header">
     <div class="brand">
-      <div class="logo" aria-hidden="true">AI</div>
-      <div>
-        <div class="brand-name">Stockg<span class="ai">ai</span>de</div>
-        <div class="brand-sub" data-i18n="brand_sub">Gráficos TradingView • Posições públicas e locais</div>
+      <!-- ── LOGO MARK (ícone compacto) ── -->
+      <div class="logo-mark" aria-hidden="true">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+          <defs>
+            <linearGradient id="hLogoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" style="stop-color:#00e5ff"/>
+              <stop offset="50%" style="stop-color:#00b4ff"/>
+              <stop offset="100%" style="stop-color:#7b2fff"/>
+            </linearGradient>
+            <linearGradient id="hChartFill" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" style="stop-color:#00b4ff;stop-opacity:0.3"/>
+              <stop offset="100%" style="stop-color:#00b4ff;stop-opacity:0"/>
+            </linearGradient>
+          </defs>
+          <!-- chart area fill -->
+          <path d="M8,34 L14,28 L20,31 L26,22 L32,18 L38,12 L44,8 L44,44 L8,44 Z" fill="url(#hChartFill)"/>
+          <!-- chart line -->
+          <polyline points="8,34 14,28 20,31 26,22 32,18 38,12 44,8" fill="none" stroke="url(#hLogoGrad)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <!-- candle dots -->
+          <circle cx="20" cy="31" r="1.5" fill="#00e5ff" opacity="0.7"/>
+          <circle cx="32" cy="18" r="1.5" fill="#00e5ff" opacity="0.85"/>
+          <circle cx="44" cy="8" r="2" fill="#00e5ff"/>
+          <!-- arrow tip -->
+          <polygon points="44,4 41,10 47,10" fill="#00e5ff"/>
+          <!-- AI letters at bottom -->
+          <text x="26" y="48" font-family="Georgia,serif" font-size="8" font-weight="900" text-anchor="middle" fill="url(#hLogoGrad)" letter-spacing="0.5">AI</text>
+        </svg>
+      </div>
+      <!-- ── LOGOTYPE ── -->
+      <div class="brand-text">
+        <div class="brand-name">
+          <span class="stock">stock</span><span style="display:inline-block;width:.22em"></span><span class="g">g</span><span class="ai">AI</span><span class="de">de</span>
+        </div>
+        <div class="brand-sub"><span class="powered">AI</span> · <span data-i18n="brand_sub">Intelligent Stock Analysis</span></div>
       </div>
     </div>
     <div class="quick-tips-inline">
@@ -301,56 +391,61 @@
     </div>
   </section>
 
-  <!-- ANÁLISE AI TAB — NEW -->
+  <!-- ANÁLISE AI TAB -->
   <section id="tab-analise" class="tab-panel active">
     <div class="grid" style="margin-top:16px">
 
-      <!-- Left: new AI Analyst -->
       <section class="card" style="grid-column:span 8">
         <h2 data-i18n="ai_page_title">Análise de Ação com IA</h2>
         <div class="muted-small" style="margin-top:2px" data-i18n="ai_page_sub">Dados fundamentais + técnicos + consenso · análise avançada com IA</div>
 
-        <!-- Input -->
         <div class="ai-input-row">
           <input id="ticker" class="ai-ticker-inp" type="text" placeholder="VALE3 · PETR4 · AAPL · NVDA" maxlength="12" autocomplete="off" spellcheck="false"/>
           <div id="mktBadge">🇧🇷 B3</div>
           <button class="ai-analyze-btn" id="analyzeBtn">
             <div class="ai-spin" id="spin"></div>
-            <span id="btnTxt">⚡ Analisar</span>
+            <span id="btnTxt" data-i18n="ai_btn_analyze">⚡ Analisar</span>
           </button>
         </div>
 
-        <!-- Status + Steps -->
         <div class="ai-status-row">
           <div class="ai-dot" id="dot"></div>
-          <span id="statusMsg">Insira um ticker e clique em Analisar.</span>
+          <span id="statusMsg" data-i18n="ai_status_init">Insira um ticker e clique em Analisar.</span>
         </div>
         <div class="ai-steps" id="steps">
-          <div class="ai-step" id="s1"><span class="ai-step-icon">○</span><span id="s1t">Buscando dados fundamentais...</span></div>
-          <div class="ai-step" id="s2"><span class="ai-step-icon">○</span><span id="s2t">Calculando indicadores...</span></div>
-          <div class="ai-step" id="s3"><span class="ai-step-icon">○</span><span id="s3t">Processando...</span></div>
-          <div class="ai-step" id="s4"><span class="ai-step-icon">○</span><span id="s4t">Gerando recomendação...</span></div>
+          <div class="ai-step" id="s1"><span class="ai-step-icon">○</span><span id="s1t" data-i18n="ai_s1_init">Buscando dados fundamentais...</span></div>
+          <div class="ai-step" id="s2"><span class="ai-step-icon">○</span><span id="s2t" data-i18n="ai_s2_init">Buscando técnicos (Worker /analyze)...</span></div>
+          <div class="ai-step" id="s3"><span class="ai-step-icon">○</span><span id="s3t" data-i18n="ai_s3_init">Enviando para Nemotron...</span></div>
+          <div class="ai-step" id="s4"><span class="ai-step-icon">○</span><span id="s4t" data-i18n="ai_s4_init">Gerando recomendação...</span></div>
         </div>
 
-        <!-- Metrics -->
+        <!-- Progress Bar (shows during AI processing) -->
+        <div class="ai-progress" id="aiProgress">
+          <div class="ai-progress-header">
+            <div class="ai-progress-pulse"></div>
+            <div class="ai-progress-msg" id="aiProgressMsg">Consultando IA...</div>
+            <div class="ai-progress-pct" id="aiProgressPct">0%</div>
+          </div>
+          <div class="ai-progress-bar"><div class="ai-progress-bar-fill" id="aiProgressFill"></div></div>
+          <div class="ai-progress-hint" id="aiProgressHint">⏱ <span id="aiProgressHintTxt" data-i18n="ai_prog_hint">Análise completa em 15-25 segundos — aguarde</span></div>
+        </div>
+
         <div class="ai-metrics" id="metrics"></div>
 
-        <!-- Result -->
         <div class="ai-result-wrap" id="analysisWrap">
           <div class="ai-result-header">
             <div>
               <div class="ai-sym-ticker" id="outTicker">—</div>
               <div class="ai-sym-name" id="outName">—</div>
             </div>
-            <div class="reco-badge hold" id="recoBadge">Aguardando</div>
+            <div class="reco-badge hold" id="recoBadge" data-i18n="ai_reco_wait">Aguardando</div>
           </div>
           <div class="ai-divider"></div>
           <div class="ai-body" id="analysisBody"></div>
-
+          <div class="src-tags" id="srcTags"></div>
         </div>
       </section>
 
-      <!-- Right: TradingView chart (unchanged) -->
       <section class="card" style="grid-column:span 4;position:relative">
         <h2 data-i18n="chart_title">Gráfico (TradingView)</h2>
         <div class="controls" style="margin-top:12px">
@@ -471,7 +566,7 @@ const I18N = {
   pt:{
     disc_pill:"⚠️ Educacional",disc_bold:"Conteúdo educacional.",disc_text:"Não é recomendação de investimento.",
     modal_alerts_title:"Trading Alerts",modal_open_sep:"↗ Abrir separado",
-    brand_sub:"Gráficos TradingView • Posições públicas e locais",
+    brand_sub:"Análise inteligente de ações",
     tips_title:"Quick Tips",
     tip1:'Ganho esperado de <span class="hl">5%</span> em até <span class="hl">20 dias</span>',
     tip2:'Alertas enviados <span class="hl">após fechamento</span> de Wall Street',
@@ -502,11 +597,35 @@ const I18N = {
     toast_publish_ok:"Posições publicadas!",toast_publish_err:"Falha ao publicar.",
     toast_quotes_ok:"Cotações atualizadas",toast_quotes_err:"Usando cache local.",toast_export:"CSV gerado",
     edit:"Editar",del:"Excluir",prompt_token:"Admin token:",prompt_symbol:"Símbolo:",prompt_avg:"Preço médio:",prompt_note:"Observação:",
+    // AI Analyst
+    ai_btn_analyze:"⚡ Analisar",ai_btn_analyzing:"Analisando...",
+    ai_status_init:"Insira um ticker e clique em Analisar.",
+    ai_s1_init:"Buscando dados fundamentais...",ai_s2_init:"Calculando indicadores...",
+    ai_s3_init:"Processando...",ai_s4_init:"Gerando recomendação...",
+    ai_starting:"Iniciando...",ai_fetching:"Buscando dados...",
+    ai_data_br_ok:"Dados BR ✔",ai_data_us_ok:"Dados US ✔",
+    ai_score_label:"Score técnico:",ai_error:"Erro:",
+    ai_analyzing:"Analisando",ai_gen_reco:"Gerando recomendação...",
+    ai_complete:"Análise completa para",ai_ai_error:"Erro na IA:",
+    ai_reco_wait:"Aguardando",ai_reco_buy:"🟢 Comprar",ai_reco_sell:"🔴 Vender",ai_reco_hold:"🟡 Manter",
+    ai_no_ticker:"Por favor, insira um ticker.",
+    ai_resp_received:"Resposta recebida — streamando...",ai_no_content:"(sem conteúdo)",
+    ai_indicators_err:"Indicadores:",ai_continuing:"continuando",
+    ai_prog_hint:"Análise completa em 15-25 segundos — aguarde",
+    ai_prog_msg_0:"Consultando IA...",
+    ai_prog_msg_1:"Analisando dados fundamentais...",
+    ai_prog_msg_2:"Interpretando indicadores técnicos...",
+    ai_prog_msg_3:"Cruzando consenso de analistas...",
+    ai_prog_msg_4:"Formatando recomendação estratégica...",
+    ai_prog_msg_done:"Resposta chegando — renderizando...",
+    ai_price:"Preço",ai_change:"Variação",ai_high52:"Máx 52S",ai_low52:"Mín 52S",
+    ai_pe:"P/L",ai_pe_ttm:"P/L TTM",ai_pe_fwd:"P/L Fwd",
+    ai_eps:"EPS",ai_eps_ttm:"EPS TTM",ai_pbv:"P/VPA",ai_mkt_cap:"Mkt Cap",ai_sig_tec:"Sinal Téc.",
   },
   en:{
     disc_pill:"⚠️ Educational",disc_bold:"Educational content.",disc_text:"Not investment advice.",
     modal_alerts_title:"Trading Alerts",modal_open_sep:"↗ Open separately",
-    brand_sub:"TradingView Charts • Public & local positions",
+    brand_sub:"Intelligent stock analysis",
     tips_title:"Quick Tips",
     tip1:'Expected gain of <span class="hl">5%</span> within <span class="hl">20 days</span>',
     tip2:'Alerts sent <span class="hl">after close</span> of Wall Street',
@@ -537,8 +656,101 @@ const I18N = {
     toast_publish_ok:"Positions published!",toast_publish_err:"Failed to publish.",
     toast_quotes_ok:"Quotes updated",toast_quotes_err:"Using local cache.",toast_export:"CSV generated",
     edit:"Edit",del:"Delete",prompt_token:"Admin token:",prompt_symbol:"Symbol:",prompt_avg:"Avg. price:",prompt_note:"Note:",
+    // AI Analyst
+    ai_btn_analyze:"⚡ Analyze",ai_btn_analyzing:"Analyzing...",
+    ai_status_init:"Enter a ticker and click Analyze.",
+    ai_s1_init:"Fetching fundamental data...",ai_s2_init:"Computing indicators...",
+    ai_s3_init:"Processing...",ai_s4_init:"Generating recommendation...",
+    ai_starting:"Starting...",ai_fetching:"Fetching data...",
+    ai_data_br_ok:"BR data ✔",ai_data_us_ok:"US data ✔",
+    ai_score_label:"Technical score:",ai_error:"Error:",
+    ai_analyzing:"Analyzing",ai_gen_reco:"Generating recommendation...",
+    ai_complete:"Analysis complete for",ai_ai_error:"AI Error:",
+    ai_reco_wait:"Waiting",ai_reco_buy:"🟢 Buy",ai_reco_sell:"🔴 Sell",ai_reco_hold:"🟡 Hold",
+    ai_no_ticker:"Please enter a ticker.",
+    ai_resp_received:"Response received — streaming...",ai_no_content:"(no content)",
+    ai_indicators_err:"Indicators:",ai_continuing:"continuing",
+    ai_prog_hint:"Full analysis in 15-25 seconds — please wait",
+    ai_prog_msg_0:"Consulting AI...",
+    ai_prog_msg_1:"Analyzing fundamental data...",
+    ai_prog_msg_2:"Interpreting technical indicators...",
+    ai_prog_msg_3:"Cross-checking analyst consensus...",
+    ai_prog_msg_4:"Formatting strategic recommendation...",
+    ai_prog_msg_done:"Response arriving — rendering...",
+    ai_price:"Price",ai_change:"Change",ai_high52:"52W High",ai_low52:"52W Low",
+    ai_pe:"P/E",ai_pe_ttm:"P/E TTM",ai_pe_fwd:"P/E Fwd",
+    ai_eps:"EPS",ai_eps_ttm:"EPS TTM",ai_pbv:"P/B",ai_mkt_cap:"Mkt Cap",ai_sig_tec:"Tech Signal",
   }
 };
+
+// ══════════════════════════════════════════════════════════════
+// ── LLM SYSTEM PROMPTS (bilingual) ─────────────────────────
+// ══════════════════════════════════════════════════════════════
+const SYSTEM_PROMPT_PT = `Você é um analista financeiro experiente com foco em ações e mercado de capitais.
+Analise a ação fornecida e estruture sua resposta EXATAMENTE assim:
+
+DECISÃO: [escreva SOMENTE UMA palavra: Comprar | Manter | Vender]
+
+## Conclusão Estratégica
+* Recomendação: [repita a mesma palavra acima: Comprar | Manter | Vender]
+* Por quê? Explique em 3-5 linhas o racional principal — seja direto e mencione os fatores mais decisivos (técnico, valuation, analistas, contexto macro)
+* Perfil ideal: (trader curto prazo, investidor longo prazo, ou evitar — seja específico)
+* Faixa de preço: (entrada e/ou saída com valores concretos, stop-loss sugerido se relevante)
+* Ação prática: (o que fazer agora — comprar em qual nível, aguardar correção até X, reduzir posição se Y, etc.)
+
+## 1. Preço e Momentum Recentes
+* Avalie o preço atual em relação à máxima e mínima de 52 semanas
+* Identifique se está próximo de topo, fundo ou lateral
+* Indique cenários prováveis de curto prazo
+
+## 2. Valoração (P/L)
+* Interprete o múltiplo P/L e compare com o setor
+* Avalie se o preço já precifica crescimento futuro
+
+## 3. Análise Técnica
+* SMA50 vs SMA200 · RSI · MACD · Score técnico
+
+## 4. Consenso de Analistas
+* Interprete a média de recomendação e aponte alinhamento ou divergência com os técnicos
+
+REGRAS ABSOLUTAS:
+* A PRIMEIRA linha da resposta DEVE ser "DECISÃO: Comprar" ou "DECISÃO: Manter" ou "DECISÃO: Vender" — nada mais
+* A linha "Recomendação:" na Conclusão deve conter a MESMA palavra que DECISÃO
+* Toda a resposta deve ser em PORTUGUÊS
+* Sem linguagem genérica. Não invente dados.`;
+
+const SYSTEM_PROMPT_EN = `You are an experienced financial analyst focused on stocks and capital markets.
+Analyze the stock provided and structure your response EXACTLY like this:
+
+DECISION: [write ONLY ONE word: Buy | Hold | Sell]
+
+## Strategic Conclusion
+* Recommendation: [repeat the same word above: Buy | Hold | Sell]
+* Why? Explain in 3-5 lines the main rationale — be direct and mention the most decisive factors (technicals, valuation, analysts, macro context)
+* Ideal profile: (short-term trader, long-term investor, or avoid — be specific)
+* Price range: (entry and/or exit with concrete values, suggested stop-loss if relevant)
+* Practical action: (what to do now — buy at what level, wait for correction to X, reduce position if Y, etc.)
+
+## 1. Recent Price & Momentum
+* Evaluate the current price relative to the 52-week high and low
+* Identify whether it is near the top, bottom, or sideways
+* Point out likely short-term scenarios
+
+## 2. Valuation (P/E)
+* Interpret the P/E multiple and compare with the sector
+* Assess whether the price already reflects future growth
+
+## 3. Technical Analysis
+* SMA50 vs SMA200 · RSI · MACD · Technical score
+
+## 4. Analyst Consensus
+* Interpret the recommendation average and point out alignment or divergence with the technicals
+
+ABSOLUTE RULES:
+* The FIRST line of the response MUST be "DECISION: Buy" or "DECISION: Hold" or "DECISION: Sell" — nothing more
+* The "Recommendation:" line in the Conclusion must contain the SAME word as DECISION
+* The entire response must be in ENGLISH
+* No generic language. Do not invent data.`;
 
 document.addEventListener('DOMContentLoaded', ()=>{
 
@@ -617,7 +829,6 @@ document.addEventListener('DOMContentLoaded', ()=>{
   // ── AI ANALYST ENGINE ─────────────────────────────────
   // ═══════════════════════════════════════════════════════
 
-  // Market auto-detection
   let market='BR';
   const B3_PATTERN=/^[A-Z]{4}[0-9]{1,2}$/i;
   const B3_PREFIX=/^(BMFBOVESPA|BVMF|B3):/i;
@@ -639,7 +850,6 @@ document.addEventListener('DOMContentLoaded', ()=>{
     const v=this.value.toUpperCase().trim();this.value=v;setMkt(detectMarket(v));
   });
 
-  // UI helpers
   const $dot=document.getElementById('dot');
   const $msg=document.getElementById('statusMsg');
   function setAiStatus(msg,state=''){$msg.textContent=msg;$dot.className='ai-dot'+(state?' '+state:'');}
@@ -651,10 +861,87 @@ document.addEventListener('DOMContentLoaded', ()=>{
     if(label)document.getElementById(id+'t').textContent=label;
   }
 
-  // Fetch functions
-  // fetchBR: Worker /brapi proxy (token stays server-side) → fallback to Worker /quotes+/fundamentals
+  // ── Progress Bar Controller ───────────────────────────────
+  // Shows an animated progress bar with rotating messages during the LLM wait,
+  // so the user sees continuous activity instead of a frozen screen.
+  const _prog = { interval: null, step: 0, startTime: 0, streaming: false };
+  function startProgress(){
+    const dict = d();
+    const messages = [
+      dict.ai_prog_msg_0, dict.ai_prog_msg_1, dict.ai_prog_msg_2,
+      dict.ai_prog_msg_3, dict.ai_prog_msg_4
+    ];
+    const wrap  = document.getElementById('aiProgress');
+    const fill  = document.getElementById('aiProgressFill');
+    const msgEl = document.getElementById('aiProgressMsg');
+    const pctEl = document.getElementById('aiProgressPct');
+    const hintEl = document.getElementById('aiProgressHintTxt');
+    if(hintEl) hintEl.textContent = dict.ai_prog_hint;
+    wrap.classList.add('visible');
+    _prog.step = 0;
+    _prog.streaming = false;
+    _prog.startTime = Date.now();
+    fill.style.width = '0%';
+    pctEl.textContent = '0%';
+    msgEl.textContent = messages[0];
+
+    const CAP        = 88;     // cap at 88% while waiting
+    const DURATION   = 22000;  // reach cap over ~22s
+    const TICK       = 200;
+    const MSG_CYCLE  = 3200;   // rotate message every 3.2s
+
+    _prog.interval = setInterval(() => {
+      const elapsed = Date.now() - _prog.startTime;
+      if(!_prog.streaming){
+        // Ease-out curve up to CAP, then gently holds
+        const t = Math.min(1, elapsed / DURATION);
+        const pct = CAP * (1 - Math.pow(1 - t, 2));
+        fill.style.width = pct.toFixed(1) + '%';
+        pctEl.textContent = Math.round(pct) + '%';
+      }
+      const desiredStep = Math.floor(elapsed / MSG_CYCLE) % messages.length;
+      if(desiredStep !== _prog.step){
+        _prog.step = desiredStep;
+        // Fade-in effect for the new message
+        msgEl.classList.add('fade');
+        setTimeout(() => {
+          msgEl.textContent = messages[desiredStep];
+          msgEl.classList.remove('fade');
+        }, 200);
+      }
+    }, TICK);
+  }
+  function progressStreaming(){
+    // Called when streaming chunks start arriving — jump to ~95% with "rendering" label
+    if(!_prog.interval) return;
+    _prog.streaming = true;
+    const dict = d();
+    const fill = document.getElementById('aiProgressFill');
+    const pctEl = document.getElementById('aiProgressPct');
+    const msgEl = document.getElementById('aiProgressMsg');
+    fill.style.width = '95%';
+    pctEl.textContent = '95%';
+    msgEl.classList.add('fade');
+    setTimeout(() => {
+      msgEl.textContent = dict.ai_prog_msg_done;
+      msgEl.classList.remove('fade');
+    }, 150);
+  }
+  function completeProgress(){
+    if(_prog.interval){ clearInterval(_prog.interval); _prog.interval = null; }
+    const wrap = document.getElementById('aiProgress');
+    const fill = document.getElementById('aiProgressFill');
+    const pctEl = document.getElementById('aiProgressPct');
+    fill.style.width = '100%';
+    pctEl.textContent = '100%';
+    setTimeout(() => wrap.classList.remove('visible'), 700);
+  }
+  function stopProgress(){
+    if(_prog.interval){ clearInterval(_prog.interval); _prog.interval = null; }
+    document.getElementById('aiProgress').classList.remove('visible');
+  }
+
   async function fetchBR(ticker){
-    // Primary: Worker /brapi proxy (uses BRAPI_TOKEN env var on Cloudflare)
     try{
       const r = await fetch(`${WORKER}/brapi?ticker=${encodeURIComponent(ticker)}`);
       if(r.ok){
@@ -663,7 +950,6 @@ document.addEventListener('DOMContentLoaded', ()=>{
         if(d && d.regularMarketPrice) return d;
       }
     }catch(e){}
-    // Fallback: Worker /quotes (price) + /fundamentals (P/L etc via Finnhub)
     const [priceRes, fundRes] = await Promise.allSettled([
       fetchQuote(ticker),
       fetchFundamentalsUS(ticker)
@@ -672,21 +958,21 @@ document.addEventListener('DOMContentLoaded', ()=>{
     const fund  = fundRes.status ==='fulfilled' ? fundRes.value  : null;
     if(!price && !fund) throw new Error(`Dados não encontrados para ${ticker}`);
     return {
-      symbol:                     ticker,
-      shortName:                  fund?.name || ticker,
-      longName:                   fund?.name || ticker,
-      regularMarketPrice:         price,
-      regularMarketChange:        null,
+      symbol: ticker,
+      shortName: fund?.name || ticker,
+      longName: fund?.name || ticker,
+      regularMarketPrice: price,
+      regularMarketChange: null,
       regularMarketChangePercent: null,
-      regularMarketDayHigh:       null,
-      regularMarketDayLow:        null,
+      regularMarketDayHigh: null,
+      regularMarketDayLow: null,
       regularMarketPreviousClose: null,
-      regularMarketVolume:        null,
-      fiftyTwoWeekHigh:           fund?.fiftyTwoHigh ?? null,
-      fiftyTwoWeekLow:            fund?.fiftyTwoLow  ?? null,
-      marketCap:                  fund?.marketCap    ?? null,
-      priceEarnings:              fund?.trailingPE   ?? null,
-      earningsPerShare:           fund?.eps          ?? null,
+      regularMarketVolume: null,
+      fiftyTwoWeekHigh: fund?.fiftyTwoHigh ?? null,
+      fiftyTwoWeekLow: fund?.fiftyTwoLow ?? null,
+      marketCap: fund?.marketCap ?? null,
+      priceEarnings: fund?.trailingPE ?? null,
+      earningsPerShare: fund?.eps ?? null,
       __fromWorker: true,
     };
   }
@@ -709,53 +995,74 @@ document.addEventListener('DOMContentLoaded', ()=>{
     }catch(e){console.warn('fetchFundamentalsUS:',e.message);return null;}
   }
 
-  // Build LLM data string
   function buildData(ticker,price,brData,ana,usF){
     const t=ana?.technicals||{};const a=ana?.analysts||{};
+    const EN=currentLang==='en';
     let s=`Ticker: ${ticker}\n`;
     if(brData){
       const d=brData;
-      s+=`Nome: ${d.longName||d.shortName||''}\nMercado: B3 (Brasil) · Moeda: BRL\n`;
-      s+=`Preço Atual: R$ ${d.regularMarketPrice}\n`;
-      s+=`Variação Hoje: ${d.regularMarketChangePercent?.toFixed(2)}% (R$ ${d.regularMarketChange?.toFixed(2)})\n`;
-      s+=`Máx do Dia: R$ ${d.regularMarketDayHigh} · Mín: R$ ${d.regularMarketDayLow}\n`;
-      s+=`Máxima 52S: R$ ${d.fiftyTwoWeekHigh} · Mínima 52S: R$ ${d.fiftyTwoWeekLow}\n`;
-      s+=`Market Cap: R$ ${d.marketCap?.toLocaleString('pt-BR')}\n`;
-      s+=`P/L: ${d.priceEarnings??'N/A'} · EPS: R$ ${d.earningsPerShare??'N/A'}\n`;
+      if(EN){
+        s+=`Name: ${d.longName||d.shortName||''}\nMarket: B3 (Brazil) · Currency: BRL\n`;
+        s+=`Current Price: R$ ${d.regularMarketPrice}\n`;
+        if(d.regularMarketChangePercent!=null)s+=`Today's Change: ${d.regularMarketChangePercent?.toFixed(2)}% (R$ ${d.regularMarketChange?.toFixed(2)})\n`;
+        if(d.regularMarketDayHigh!=null)s+=`Day High: R$ ${d.regularMarketDayHigh} · Low: R$ ${d.regularMarketDayLow}\n`;
+        s+=`52W High: R$ ${d.fiftyTwoWeekHigh} · 52W Low: R$ ${d.fiftyTwoWeekLow}\n`;
+        if(d.marketCap)s+=`Market Cap: R$ ${d.marketCap?.toLocaleString('en-US')}\n`;
+        s+=`P/E: ${d.priceEarnings??'N/A'} · EPS: R$ ${d.earningsPerShare??'N/A'}\n`;
+      }else{
+        s+=`Nome: ${d.longName||d.shortName||''}\nMercado: B3 (Brasil) · Moeda: BRL\n`;
+        s+=`Preço Atual: R$ ${d.regularMarketPrice}\n`;
+        if(d.regularMarketChangePercent!=null)s+=`Variação Hoje: ${d.regularMarketChangePercent?.toFixed(2)}% (R$ ${d.regularMarketChange?.toFixed(2)})\n`;
+        if(d.regularMarketDayHigh!=null)s+=`Máx do Dia: R$ ${d.regularMarketDayHigh} · Mín: R$ ${d.regularMarketDayLow}\n`;
+        s+=`Máxima 52S: R$ ${d.fiftyTwoWeekHigh} · Mínima 52S: R$ ${d.fiftyTwoWeekLow}\n`;
+        if(d.marketCap)s+=`Market Cap: R$ ${d.marketCap?.toLocaleString('pt-BR')}\n`;
+        s+=`P/L: ${d.priceEarnings??'N/A'} · EPS: R$ ${d.earningsPerShare??'N/A'}\n`;
+      }
     }else{
-      s+=`Mercado: NYSE/NASDAQ (EUA) · Moeda: USD\nPreço Atual: $${price??'N/A'}\n`;
+      if(EN){
+        s+=`Market: NYSE/NASDAQ (USA) · Currency: USD\nCurrent Price: $${price??'N/A'}\n`;
+      }else{
+        s+=`Mercado: NYSE/NASDAQ (EUA) · Moeda: USD\nPreço Atual: $${price??'N/A'}\n`;
+      }
       if(usF){
-        if(usF.name)s+=`Nome: ${usF.name}\n`;
+        if(usF.name)s+=(EN?`Name: `:`Nome: `)+usF.name+`\n`;
         if(usF.marketCap)s+=`Market Cap: $${(usF.marketCap/1e9).toFixed(2)}B\n`;
-        if(usF.fiftyTwoHigh)s+=`Máxima 52S: $${usF.fiftyTwoHigh} · Mínima 52S: $${usF.fiftyTwoLow}\n`;
-        s+=`P/L TTM: ${usF.trailingPE?.toFixed(1)??'N/A'} · P/L Forward: ${usF.forwardPE?.toFixed(1)??'N/A'}\n`;
-        s+=`EPS TTM: $${usF.eps?.toFixed(2)??'N/A'} · P/VPA: ${usF.priceToBook?.toFixed(2)??'N/A'}\n`;
+        if(usF.fiftyTwoHigh)s+=(EN?`52W High: `:`Máxima 52S: `)+`$${usF.fiftyTwoHigh} · `+(EN?`52W Low: `:`Mínima 52S: `)+`$${usF.fiftyTwoLow}\n`;
+        s+=(EN?`P/E TTM: `:`P/L TTM: `)+`${usF.trailingPE?.toFixed(1)??'N/A'} · `+(EN?`P/E Forward: `:`P/L Forward: `)+`${usF.forwardPE?.toFixed(1)??'N/A'}\n`;
+        s+=`EPS TTM: $${usF.eps?.toFixed(2)??'N/A'} · `+(EN?`P/B: `:`P/VPA: `)+`${usF.priceToBook?.toFixed(2)??'N/A'}\n`;
         if(usF.dividendYield)s+=`Dividend Yield: ${(usF.dividendYield*100).toFixed(2)}%\n`;
         if(usF.debtToEquity)s+=`Debt/Equity: ${usF.debtToEquity.toFixed(2)}\n`;
         if(usF.freeCashflow)s+=`Free Cash Flow: $${(usF.freeCashflow/1e9).toFixed(2)}B\n`;
-        if(usF.profitMargins)s+=`Margem Líquida: ${(usF.profitMargins*100).toFixed(1)}%\n`;
-        if(usF.revenueGrowth)s+=`Crescimento Receita YoY: ${(usF.revenueGrowth*100).toFixed(1)}%\n`;
+        if(usF.profitMargins)s+=(EN?`Net Margin: `:`Margem Líquida: `)+`${(usF.profitMargins*100).toFixed(1)}%\n`;
+        if(usF.revenueGrowth)s+=(EN?`Revenue Growth YoY: `:`Crescimento Receita YoY: `)+`${(usF.revenueGrowth*100).toFixed(1)}%\n`;
       }
     }
     if(t.sma50||t.sma200||t.rsi){
-      s+=`\n--- Indicadores Técnicos ---\n`;
+      s+=EN?`\n--- Technical Indicators ---\n`:`\n--- Indicadores Técnicos ---\n`;
       if(t.sma50!=null)s+=`SMA50: ${t.sma50}\n`;
       if(t.sma200!=null)s+=`SMA200: ${t.sma200}\n`;
       if(t.rsi!=null)s+=`RSI(14): ${t.rsi}\n`;
       if(t.macd?.macd!=null)s+=`MACD: ${t.macd.macd} · Signal: ${t.macd.signal} · Hist: ${t.macd.hist}\n`;
-      s+=`Score Técnico: ${ana?.score??'N/A'}/100 → ${ana?.decision??'N/A'}\n`;
-      if(ana?.reasons?.length)s+=`Razões: ${ana.reasons.join(' | ')}\n`;
+      s+=(EN?`Technical Score: `:`Score Técnico: `)+`${ana?.score??'N/A'}/100 → ${ana?.decision??'N/A'}\n`;
+      if(ana?.reasons?.length)s+=(EN?`Reasons: `:`Razões: `)+ana.reasons.join(' | ')+`\n`;
     }
     if(a.mean!=null){
-      s+=`\n--- Consenso Analistas ---\n`;
-      s+=`Média: ${a.mean} (1=Compra forte, 5=Venda forte)\n`;
-      if(a.trend)s+=`Compra: ${a.trend.buy} | Neutro: ${a.trend.hold} | Venda: ${a.trend.sell}\n`;
-      s+=``;
+      s+=EN?`\n--- Analyst Consensus ---\n`:`\n--- Consenso Analistas ---\n`;
+      if(EN){
+        s+=`Mean: ${a.mean} (1=Strong Buy, 5=Strong Sell)\n`;
+        if(a.trend)s+=`Buy: ${a.trend.buy} | Hold: ${a.trend.hold} | Sell: ${a.trend.sell}\n`;
+        if(a.adrUsed)s+=`⚠️ Consensus obtained via U.S. ADR ${a.adrUsed} (NYSE listing of the same company). Reflects international analysts' view.\n`;
+        s+=`Source: ${a.source||'Yahoo/Finnhub'}\n`;
+      }else{
+        s+=`Média: ${a.mean} (1=Compra forte, 5=Venda forte)\n`;
+        if(a.trend)s+=`Compra: ${a.trend.buy} | Neutro: ${a.trend.hold} | Venda: ${a.trend.sell}\n`;
+        if(a.adrUsed)s+=`⚠️ Consenso obtido via ADR americano ${a.adrUsed} (listagem NYSE da mesma empresa). Reflete visão de analistas internacionais.\n`;
+        s+=`Fonte: ${a.source||'Yahoo/Finnhub'}\n`;
+      }
     }
     return s;
   }
 
-  // Render metrics
   function renderMetrics(items){
     const g=document.getElementById('metrics');g.innerHTML='';
     items.filter(x=>x.v!=null&&x.v!=='N/A'&&x.v!=='undefined'&&x.v!=='null').forEach(({l,v,cls})=>{
@@ -766,33 +1073,30 @@ document.addEventListener('DOMContentLoaded', ()=>{
     g.classList.add('visible');
   }
 
-  // detectReco — reads DECISÃO: tag (first line) then falls back to Conclusão block
   function detectReco(text){
-    // Priority 1: explicit DECISÃO: tag on first line (most reliable)
     const firstLine = text.split('\n')[0].toUpperCase();
-    const tagMatch  = firstLine.match(/DECIS[ÃA]O\s*:\s*(COMPRAR?|MANTER?|VEND\w*|BUY|HOLD|SELL)/);
+    // Match DECISÃO: (PT) or DECISION: (EN)
+    const tagMatch  = firstLine.match(/(?:DECIS[ÃA]O|DECISION)\s*:\s*(COMPRAR?|MANTER?|VEND\w*|BUY|HOLD|SELL)/);
     if(tagMatch){
       const r=tagMatch[1];
       if(/^VEND|^SELL/.test(r))return'sell';
       if(/^COMPR|^BUY/.test(r)) return'buy';
       return'hold';
     }
-    // Priority 2: "Recomendação: X" inside the Conclusão block only
-    const concMatch=text.match(/##\s*Conclus[aã]o Estrat[eé]gica([\s\S]*?)(?=\n##\s*\d|$)/i);
+    // Conclusion block (PT: Conclusão Estratégica / EN: Strategic Conclusion)
+    const concMatch=text.match(/##\s*(?:Conclus[aã]o Estrat[eé]gica|Strategic Conclusion)([\s\S]*?)(?=\n##\s*\d|$)/i);
     const scope=concMatch?concMatch[1]:text.slice(0,800);
     const t=scope.toUpperCase();
-    const m=t.match(/RECOMENDA[ÇC][ÃA]O\s*:\s*\*{0,2}\s*(COMPRAR?|MANTER?|VEND\w*|BUY|HOLD|SELL)/);
+    const m=t.match(/(?:RECOMENDA[ÇC][ÃA]O|RECOMMENDATION)\s*:\s*\*{0,2}\s*(COMPRAR?|MANTER?|VEND\w*|BUY|HOLD|SELL)/);
     if(m){const r=m[1];if(/^VEND|^SELL/.test(r))return'sell';if(/^COMPR|^BUY/.test(r))return'buy';return'hold';}
-    // Priority 3: any word in the conclusion scope (no body noise)
     if(/\bVENDER\b|\bVENDA\b|\bSELL\b/.test(t))return'sell';
     if(/\bCOMPRAR\b|\bCOMPRA\b|\bBUY\b/.test(t))return'buy';
     return'hold';
   }
 
-  // renderMD
   function renderMD(text){
-    // Remove the machine-tag DECISÃO line before rendering
-    text = text.replace(/^DECIS[ÃA]O\s*:[^\n]*\n?/im, '').trim();
+    // Strip DECISÃO or DECISION machine-tag line
+    text = text.replace(/^(?:DECIS[ÃA]O|DECISION)\s*:[^\n]*\n?/im, '').trim();
     return text
       .replace(/^#{1,2}\s+(.+)$/gm,(_,t)=>`<span class="h1">${t}</span>`)
       .replace(/^###\s+(.+)$/gm,(_,t)=>`<span class="h2">${t}</span>`)
@@ -800,90 +1104,101 @@ document.addEventListener('DOMContentLoaded', ()=>{
       .replace(/^[\*\-]\s+(.+)$/gm,'<span class="bullet">$1</span>');
   }
 
-  // Main analyze function
   async function analyze(){
+    const dict=d();
     const ticker=document.getElementById('ticker').value.trim().toUpperCase();
-    if(!ticker){setAiStatus('Por favor, insira um ticker.','err');return;}
+    if(!ticker){setAiStatus(dict.ai_no_ticker,'err');return;}
     const btn=document.getElementById('analyzeBtn');
     const spin=document.getElementById('spin');
     const btnTxt=document.getElementById('btnTxt');
-    btn.disabled=true;spin.classList.add('on');btnTxt.textContent='Analisando...';
+    btn.disabled=true;spin.classList.add('on');btnTxt.textContent=dict.ai_btn_analyzing;
     document.getElementById('metrics').classList.remove('visible');
     document.getElementById('analysisWrap').classList.remove('visible');
     document.getElementById('steps').classList.add('visible');
     ['s1','s2','s3','s4'].forEach(id=>{const el=document.getElementById(id);if(el){el.className='ai-step';el.querySelector('.ai-step-icon').textContent='○';}});
-    setAiStatus('Iniciando...','load');
+    stopProgress(); // reset any previous progress bar
+    setAiStatus(dict.ai_starting,'load');
 
     let brData=null,anaData=null,price=null,usFund=null;
+    const sources=[];
 
     // Step 1: fundamentals
-    stepDo('s1','active','Buscando dados...');
+    stepDo('s1','active',market==='BR'?`brapi.dev → ${ticker}...`:`Worker /quotes → ${ticker}...`);
     try{
       if(market==='BR'){
         brData = await fetchBR(ticker);
         price  = brData.regularMarketPrice;
-        stepDo('s1','done','Dados BR ✔');
+        sources.push(brData.__fromWorker?'Worker /brapi':'brapi.dev');
+        stepDo('s1','done',`${dict.ai_data_br_ok} R$ ${price}`);
       }else{
         price = await fetchQuote(ticker);
-        stepDo('s1','done','Dados US ✔');
+        sources.push('Worker /quotes');
+        stepDo('s1','done',`${dict.ai_price}: $${price??'N/A'}`);
       }
     }catch(e){
-      stepDo('s1','fail','Erro: '+e.message);setAiStatus('Erro: '+e.message,'err');
-      btn.disabled=false;spin.classList.remove('on');btnTxt.textContent='⚡ Analisar';return;
+      stepDo('s1','fail',`${dict.ai_error} ${e.message}`);
+      setAiStatus(`${dict.ai_error} ${e.message}`,'err');
+      btn.disabled=false;spin.classList.remove('on');btnTxt.textContent=dict.ai_btn_analyze;return;
     }
 
     // Step 2: technicals
-    stepDo('s2','active',`${ticker}...`);
+    stepDo('s2','active',`Worker /analyze → ${ticker}...`);
     try{
       anaData=await fetchAnalyze(ticker);
-      const src=anaData?.analysts?.source||'sem consenso';
-      stepDo('s2','done',`Score técnico: ${anaData?.decision}(${anaData?.score})`);
-    }catch(e){stepDo('s2','fail','Indicadores: '+e.message+' (continuando)');anaData=null;}
+      const src=anaData?.analysts?.source||(currentLang==='en'?'no consensus':'sem consenso');
+      const techLabel=currentLang==='en'?'Technicals':'Técnicos';
+      stepDo('s2','done',`${techLabel} ✔ · ${anaData?.decision}(${anaData?.score}) · ${src}`);
+      sources.push(`Worker /analyze (${src})`);
+    }catch(e){
+      stepDo('s2','fail',`Worker /analyze: ${e.message} (${dict.ai_continuing})`);
+      anaData=null;
+    }
 
     // Step 2b: US fundamentals
     if(market==='US'){
       try{
         usFund=await fetchFundamentalsUS(ticker);
         if(usFund){
-          stepDo('s2','done',`Técnicos ✔ · P/L: ${usFund.trailingPE?.toFixed(1)??'N/A'} · ${anaData?.analysts?.source||'n/a'}`);
+          const techLabel=currentLang==='en'?'Technicals':'Técnicos';
+          stepDo('s2','done',`${techLabel} ✔ · ${dict.ai_pe}: ${usFund.trailingPE?.toFixed(1)??'N/A'} · ${anaData?.analysts?.source||'n/a'}`);
+          sources.push('Worker /fundamentals (Finnhub)');
         }
       }catch(e){}
     }
 
     const rawData=buildData(ticker,price,brData,anaData,usFund);
 
-    // Render metrics
+    // Render metrics with translated labels
     if(market==='BR'&&brData){
-      const d=brData;const chg=d.regularMarketChangePercent??0;
+      const d2=brData;const chg=d2.regularMarketChangePercent??0;
       renderMetrics([
-        {l:'Preço',v:`R$ ${d.regularMarketPrice}`,cls:''},
-        {l:'Variação',v:`${chg>=0?'+':''}${chg?.toFixed(2)}%`,cls:chg>=0?'pos':'neg'},
-        {l:'Máx 52S',v:`R$ ${d.fiftyTwoWeekHigh}`,cls:''},
-        {l:'Mín 52S',v:`R$ ${d.fiftyTwoWeekLow}`,cls:''},
-        {l:'P/L',v:d.priceEarnings,cls:''},
-        {l:'EPS',v:d.earningsPerShare?`R$ ${d.earningsPerShare}`:null,cls:''},
+        {l:dict.ai_price,v:`R$ ${d2.regularMarketPrice}`,cls:''},
+        {l:dict.ai_change,v:d2.regularMarketChangePercent!=null?`${chg>=0?'+':''}${chg?.toFixed(2)}%`:null,cls:chg>=0?'pos':'neg'},
+        {l:dict.ai_high52,v:d2.fiftyTwoWeekHigh?`R$ ${d2.fiftyTwoWeekHigh}`:null,cls:''},
+        {l:dict.ai_low52,v:d2.fiftyTwoWeekLow?`R$ ${d2.fiftyTwoWeekLow}`:null,cls:''},
+        {l:dict.ai_pe,v:d2.priceEarnings,cls:''},
+        {l:dict.ai_eps,v:d2.earningsPerShare?`R$ ${d2.earningsPerShare}`:null,cls:''},
         {l:'RSI(14)',v:anaData?.technicals?.rsi,cls:''},
         {l:'SMA50',v:anaData?.technicals?.sma50,cls:''},
-        {l:'Sinal Téc.',v:anaData?`${anaData.decision}(${anaData.score})`:null,cls:anaData?.decision==='BUY'?'pos':anaData?.decision==='SELL'?'neg':'blue'},
+        {l:dict.ai_sig_tec,v:anaData?`${anaData.decision}(${anaData.score})`:null,cls:anaData?.decision==='BUY'?'pos':anaData?.decision==='SELL'?'neg':'blue'},
       ]);
     }else{
       const t=anaData?.technicals||{};const f=usFund||{};
       const fmtB=v=>v?`$${(v/1e9).toFixed(1)}B`:null;
       renderMetrics([
-        {l:'Preço',v:price!=null?`$${price}`:null,cls:''},
-        {l:'P/L TTM',v:f.trailingPE!=null?f.trailingPE.toFixed(1):null,cls:''},
-        {l:'P/L Fwd',v:f.forwardPE!=null?f.forwardPE.toFixed(1):null,cls:''},
-        {l:'EPS TTM',v:f.eps!=null?`$${f.eps.toFixed(2)}`:null,cls:''},
-        {l:'P/VPA',v:f.priceToBook!=null?f.priceToBook.toFixed(2):null,cls:''},
-        {l:'Mkt Cap',v:fmtB(f.marketCap),cls:''},
-        {l:'Máx 52S',v:f.fiftyTwoHigh!=null?`$${f.fiftyTwoHigh}`:null,cls:''},
-        {l:'Mín 52S',v:f.fiftyTwoLow!=null?`$${f.fiftyTwoLow}`:null,cls:''},
+        {l:dict.ai_price,v:price!=null?`$${price}`:null,cls:''},
+        {l:dict.ai_pe_ttm,v:f.trailingPE!=null?f.trailingPE.toFixed(1):null,cls:''},
+        {l:dict.ai_pe_fwd,v:f.forwardPE!=null?f.forwardPE.toFixed(1):null,cls:''},
+        {l:dict.ai_eps_ttm,v:f.eps!=null?`$${f.eps.toFixed(2)}`:null,cls:''},
+        {l:dict.ai_pbv,v:f.priceToBook!=null?f.priceToBook.toFixed(2):null,cls:''},
+        {l:dict.ai_mkt_cap,v:fmtB(f.marketCap),cls:''},
+        {l:dict.ai_high52,v:f.fiftyTwoHigh!=null?`$${f.fiftyTwoHigh}`:null,cls:''},
+        {l:dict.ai_low52,v:f.fiftyTwoLow!=null?`$${f.fiftyTwoLow}`:null,cls:''},
         {l:'RSI(14)',v:t.rsi,cls:''},
-        {l:'Sinal Téc.',v:anaData?`${anaData.decision}(${anaData.score})`:null,cls:anaData?.decision==='BUY'?'pos':anaData?.decision==='SELL'?'neg':'blue'},
+        {l:dict.ai_sig_tec,v:anaData?`${anaData.decision}(${anaData.score})`:null,cls:anaData?.decision==='BUY'?'pos':anaData?.decision==='SELL'?'neg':'blue'},
       ]);
     }
 
-    // Setup output
     const name=(market==='BR'?(brData?.longName||brData?.shortName):(usFund?.name||anaData?.symbol||ticker))||ticker;
     document.getElementById('outTicker').textContent=ticker;
     document.getElementById('outName').textContent=name;
@@ -892,55 +1207,30 @@ document.addEventListener('DOMContentLoaded', ()=>{
     const cursor=document.createElement('span');cursor.className='ai-cursor';
     document.getElementById('analysisWrap').classList.add('visible');
 
-    // Sync chart
     loadChart(ticker,currentLang==='en'?'en':'br');
 
-    // Step 3: LLM
-    stepDo('s3','active','Processando...');
-    setAiStatus(`Analisando ${ticker}...`,'load');
+    // Step 3: LLM — pick SYSTEM prompt based on current language
+    stepDo('s3','active',`${currentLang==='en'?'Sending to':'Enviando para'} ${MODEL}...`);
+    setAiStatus(`${currentLang==='en'?'AI processing':'IA processando'} ${ticker}...`,'load');
 
-    const SYSTEM=`Você é um analista financeiro experiente com foco em ações e mercado de capitais.
-Analise a ação fornecida e estruture sua resposta EXATAMENTE assim:
+    // Start progress bar — keeps user engaged during the 15-25s LLM wait
+    startProgress();
 
-DECISÃO: [escreva SOMENTE UMA palavra: Comprar | Manter | Vender]
-
-## Conclusão Estratégica
-* Recomendação: [repita a mesma palavra acima: Comprar | Manter | Vender]
-* Por quê? Explique em 3-5 linhas o racional principal — seja direto e mencione os fatores mais decisivos (técnico, valuation, analistas, contexto macro)
-* Perfil ideal: (trader curto prazo, investidor longo prazo, ou evitar — seja específico)
-* Faixa de preço: (entrada e/ou saída com valores concretos, stop-loss sugerido se relevante)
-* Ação prática: (o que fazer agora — comprar em qual nível, aguardar correção até X, reduzir posição se Y, etc.)
-
-## 1. Preço e Momentum Recentes
-* Avalie o preço atual em relação à máxima e mínima de 52 semanas
-* Identifique se está próximo de topo, fundo ou lateral
-* Indique cenários prováveis de curto prazo
-
-## 2. Valoração (P/L)
-* Interprete o múltiplo P/L e compare com o setor
-* Avalie se o preço já precifica crescimento futuro
-
-## 3. Análise Técnica
-* SMA50 vs SMA200 · RSI · MACD · Score técnico
-
-## 4. Consenso de Analistas
-* Interprete a média de recomendação e aponte alinhamento ou divergência com os técnicos
-
-REGRAS ABSOLUTAS:
-* A PRIMEIRA linha da resposta DEVE ser "DECISÃO: Comprar" ou "DECISÃO: Manter" ou "DECISÃO: Vender" — nada mais
-* A linha "Recomendação:" na Conclusão deve conter a MESMA palavra que DECISÃO
-* Sem linguagem genérica. Não invente dados.`;
+    const SYSTEM = currentLang==='en' ? SYSTEM_PROMPT_EN : SYSTEM_PROMPT_PT;
+    const userMsg = currentLang==='en' ? `Stock data:\n\n${rawData}` : `Dados da ação:\n\n${rawData}`;
 
     let fullText='';
     try{
       const resp=await fetch(`${KIMI_EP}?model=${encodeURIComponent(MODEL)}`,{
         method:'POST',headers:{'content-type':'application/json'},
-        body:JSON.stringify({model:MODEL,temperature:0.1,messages:[{role:'system',content:SYSTEM},{role:'user',content:`Dados da ação:\n\n${rawData}`}]}),
+        body:JSON.stringify({model:MODEL,temperature:0.1,messages:[{role:'system',content:SYSTEM},{role:'user',content:userMsg}]}),
         mode:'cors',
       });
       if(!resp.ok){const t=await resp.text().catch(()=>'');throw new Error(`HTTP ${resp.status}: ${t}`);}
-      stepDo('s3','done','Processando...');
-      stepDo('s4','active','Gerando recomendação...');
+      stepDo('s3','done',dict.ai_resp_received);
+      stepDo('s4','active',dict.ai_gen_reco);
+      // Jump progress to 95% and switch to "rendering" message
+      progressStreaming();
       bodyEl.appendChild(cursor);
       const ctype=(resp.headers.get('content-type')||'').toLowerCase();
       if(ctype.includes('text/')||ctype.includes('event-stream')){
@@ -958,19 +1248,26 @@ REGRAS ABSOLUTAS:
             cursor.remove();bodyEl.innerHTML=renderMD(fullText);bodyEl.appendChild(cursor);
           }
         }
-      }else{const j=await resp.json();fullText=j?.choices?.[0]?.message?.content??'(sem conteúdo)';}
+      }else{const j=await resp.json();fullText=j?.choices?.[0]?.message?.content??dict.ai_no_content;}
       cursor.remove();bodyEl.innerHTML=renderMD(fullText);
       const reco=detectReco(fullText);
       const badge=document.getElementById('recoBadge');
       badge.className='reco-badge '+reco;
-      badge.textContent=reco==='buy'?'🟢 Comprar':reco==='sell'?'🔴 Vender':'🟡 Manter';
+      badge.textContent=reco==='buy'?dict.ai_reco_buy:reco==='sell'?dict.ai_reco_sell:dict.ai_reco_hold;
       stepDo('s4','done',`${badge.textContent}`);
-      setAiStatus(`Análise completa para ${ticker}`,'ok');
+      const aiLabel=currentLang==='en'?'AI':'IA';
+      document.getElementById('srcTags').innerHTML=[...sources,`${aiLabel}: ${MODEL}`].map(s=>`<span class="src-tag">${s}</span>`).join('');
+      setAiStatus(`${dict.ai_complete} ${ticker}`,'ok');
+      // Progress: fill to 100% and fade out
+      completeProgress();
     }catch(e){
-      cursor.remove();stepDo('s3','fail','Erro IA: '+e.message);
-      setAiStatus('Erro na IA: '+e.message,'err');bodyEl.textContent='Erro: '+e.message;
+      cursor.remove();stepDo('s3','fail',`${dict.ai_ai_error} ${e.message}`);
+      setAiStatus(`${dict.ai_ai_error} ${e.message}`,'err');
+      bodyEl.textContent=`${dict.ai_error} ${e.message}`;
+      // Progress: hide immediately on error
+      stopProgress();
     }
-    btn.disabled=false;spin.classList.remove('on');btnTxt.textContent='⚡ Analisar';
+    btn.disabled=false;spin.classList.remove('on');btnTxt.textContent=dict.ai_btn_analyze;
   }
 
   document.getElementById('analyzeBtn').addEventListener('click',analyze);
