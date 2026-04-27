@@ -7,6 +7,8 @@
   <meta name="description" content="Site Stockgaide com dicas, gráfico TradingView, alertas embutidos e minhas posições com P/L %." />
   <link rel="preconnect" href="https://s3.tradingview.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,500;0,9..40,700;0,9..40,900;1,9..40,300&family=Space+Mono:wght@400;700&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+  <!-- Umami Analytics — privacy-friendly, no cookies, no consent banner needed -->
+  <script defer src="https://cloud.umami.is/script.js" data-website-id="05564937-0fa0-43e2-80ed-3da454f6970c"></script>
   <style>
     :root{
       --page-bg:#04080f; --panel:#080e1a; --panel-2:#0c1525;
@@ -267,8 +269,7 @@
     .ai-cursor{display:inline-block;width:7px;height:12px;background:var(--accent);margin-left:2px;animation:aiCur .7s steps(1) infinite;vertical-align:text-bottom}
     @keyframes aiCur{0%,100%{opacity:1}50%{opacity:0}}
 
-    .src-tags{display:flex;gap:5px;flex-wrap:wrap;margin-top:12px;padding-top:10px;border-top:1px solid rgba(255,255,255,0.06)}
-    .src-tag{font-family:'Space Mono',monospace;font-size:10px;padding:2px 8px;border-radius:999px;border:1px solid rgba(255,255,255,0.08);color:var(--muted)}
+    .src-tags{display:none}
 
     .ai-spin{width:14px;height:14px;border:2px solid rgba(3,17,31,.5);border-top-color:rgba(3,17,31,1);border-radius:50%;animation:spin .6s linear infinite;display:none;flex-shrink:0}
     .ai-spin.on{display:block}
@@ -443,7 +444,7 @@
         <div class="ai-steps" id="steps">
           <div class="ai-step" id="s1"><span class="ai-step-icon">○</span><span id="s1t" data-i18n="ai_s1_init">Buscando dados fundamentais...</span></div>
           <div class="ai-step" id="s2"><span class="ai-step-icon">○</span><span id="s2t" data-i18n="ai_s2_init">Buscando técnicos (Worker /analyze)...</span></div>
-          <div class="ai-step" id="s3"><span class="ai-step-icon">○</span><span id="s3t" data-i18n="ai_s3_init">Enviando para Nemotron...</span></div>
+          <div class="ai-step" id="s3"><span class="ai-step-icon">○</span><span id="s3t" data-i18n="ai_s3_init">Enviando para NVIDIA Nemotron...</span></div>
           <div class="ai-step" id="s4"><span class="ai-step-icon">○</span><span id="s4t" data-i18n="ai_s4_init">Gerando recomendação...</span></div>
         </div>
 
@@ -470,12 +471,11 @@
           </div>
           <div class="ai-divider"></div>
           <div class="ai-body" id="analysisBody"></div>
-          <div class="src-tags" id="srcTags"></div>
         </div>
       </section>
 
       <section class="card" style="grid-column:span 4;position:relative">
-        <h2 data-i18n="chart_title">Gráfico (TradingView)</h2>
+        <h2 data-i18n="chart_title">Gráfico</h2>
         <div class="controls" style="margin-top:12px">
           <input id="chartSymbolInput" list="symbolList" placeholder="Ex.: NASDAQ:NVDA" style="flex:1;min-width:140px"/>
           <button id="setChartBtn" class="btn small" data-i18n="btn_load">Carregar</button>
@@ -483,10 +483,6 @@
         <div id="tradingview_chart" style="margin-top:12px">
           <div class="chart-topbar"><span>Símbolo:</span> <strong id="chartSymbolLabel">—</strong></div>
           <div id="tv_container" style="height:100%;width:100%"></div>
-        </div>
-        <p class="muted-small" style="margin-top:8px"></p>
-        <div style="margin-top:8px;display:flex;gap:8px">
-          <a id="openTV" class="btn small" href="https://www.tradingview.com/chart/" target="_blank" rel="noopener">↗ TradingView</a>
         </div>
       </section>
     </div>
@@ -606,7 +602,7 @@ const I18N = {
     dash_title:"Recomendações &amp; Histórico",dash_sub:"Painel consolidado · posições abertas e fechadas",
     btn_see_alerts:"Ver alertas",btn_open_pos:"Abertas",btn_closed_pos:"Fechadas",btn_full_panel:"Painel completo",
     ai_page_title:"Análise de Ação com IA",ai_page_sub:"Dados fundamentais + técnicos + consenso · análise avançada com IA",
-    chart_title:"Gráfico (TradingView)",btn_load:"Carregar",
+    chart_title:"Gráfico",chart_sym_label:"Símbolo:",btn_load:"Carregar",
     summary_title:"Resumo do Portfólio",summary_sub:"Visão rápida do P/L com base nas posições cadastradas",
     last_read:"Última leitura:",lbl_portfolio:"Portfolio",lbl_portfolio_sub:"Valor atual (aprox.)",
     lbl_pl:"P/L Médio",lbl_pl_sub:"Média das posições",lbl_positions:"Posições",lbl_positions_sub:"Públicas + locais",
@@ -632,7 +628,7 @@ const I18N = {
     ai_input_placeholder:"Ex: VALE3, PETR4, AAPL, NVDA...",
     ai_status_init:"Insira um ticker e clique em Analisar.",
     ai_s1_init:"Buscando dados fundamentais...",ai_s2_init:"Calculando indicadores...",
-    ai_s3_init:"Processando...",ai_s4_init:"Gerando recomendação...",
+    ai_s3_init:"Enviando para NVIDIA Nemotron...",ai_s4_init:"Gerando recomendação...",
     ai_starting:"Iniciando...",ai_fetching:"Buscando dados...",
     ai_data_br_ok:"Dados BR ✔",ai_data_us_ok:"Dados US ✔",
     ai_score_label:"Score técnico:",ai_error:"Erro:",
@@ -668,7 +664,7 @@ const I18N = {
     dash_title:"Recommendations &amp; History",dash_sub:"Consolidated panel · open and closed positions",
     btn_see_alerts:"See alerts",btn_open_pos:"Open",btn_closed_pos:"Closed",btn_full_panel:"Full panel",
     ai_page_title:"AI Stock Analysis",ai_page_sub:"Fundamentals + technicals + analyst consensus",
-    chart_title:"Chart (TradingView)",btn_load:"Load",
+    chart_title:"Chart",btn_load:"Load",
     summary_title:"Portfolio Summary",summary_sub:"Quick P/L view based on registered positions",
     last_read:"Last read:",lbl_portfolio:"Portfolio",lbl_portfolio_sub:"Current value (approx.)",
     lbl_pl:"Avg P/L",lbl_pl_sub:"Average of positions",lbl_positions:"Positions",lbl_positions_sub:"Public + local",
@@ -694,7 +690,7 @@ const I18N = {
     ai_input_placeholder:"Ex: AAPL, NVDA, VALE3, PETR4...",
     ai_status_init:"Enter a ticker and click Analyze.",
     ai_s1_init:"Fetching fundamental data...",ai_s2_init:"Computing indicators...",
-    ai_s3_init:"Processing...",ai_s4_init:"Generating recommendation...",
+    ai_s3_init:"Sending to NVIDIA Nemotron...",ai_s4_init:"Generating recommendation...",
     ai_starting:"Starting...",ai_fetching:"Fetching data...",
     ai_data_br_ok:"BR data ✔",ai_data_us_ok:"US data ✔",
     ai_score_label:"Technical score:",ai_error:"Error:",
@@ -788,6 +784,17 @@ ABSOLUTE RULES:
 
 document.addEventListener('DOMContentLoaded', ()=>{
 
+  // ── Umami event tracking helper ───────────────────────────────────
+  // Wraps window.umami.track() with a fail-safe — never throws if Umami is blocked
+  function track(eventName, eventData){
+    try{
+      if(typeof window.umami !== 'undefined' && typeof window.umami.track === 'function'){
+        if(eventData) window.umami.track(eventName, eventData);
+        else window.umami.track(eventName);
+      }
+    }catch(e){ /* silently fail — never break UX over analytics */ }
+  }
+
   // ── Tabs ──────────────────────────────────────────────────────────
   (function(){
     const btns=[...document.querySelectorAll('.tab-btn')];
@@ -795,6 +802,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
     function activate(id){
       btns.forEach(b=>{const on=b.getAttribute('data-tab')===id;b.classList.toggle('active',on);});
       panels.forEach(p=>p.classList.toggle('active',p.id===id));
+      track('tab_view', { tab: id }); // Track which tab is being viewed
     }
     btns.forEach(b=>b.addEventListener('click',()=>activate(b.getAttribute('data-tab'))));
     window._activateTab=activate;
@@ -804,7 +812,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
   const backdrop=document.getElementById('alertModalBackdrop');
   const alertFrame=document.getElementById('alertsModalFrame');
   let alertLoaded=false;
-  function openAlerts(){if(!alertLoaded){alertFrame.src='https://stockgaide.rafaelnm.workers.dev/';alertLoaded=true;}backdrop.classList.add('open');document.body.style.overflow='hidden';}
+  function openAlerts(){if(!alertLoaded){alertFrame.src='https://stockgaide.rafaelnm.workers.dev/';alertLoaded=true;}backdrop.classList.add('open');document.body.style.overflow='hidden';track('alerts_modal_opened');}
   function closeAlerts(){backdrop.classList.remove('open');document.body.style.overflow='';}
   document.getElementById('openAlertBtn').addEventListener('click',openAlerts);
   document.getElementById('openAlertBtn2').addEventListener('click',openAlerts);
@@ -837,7 +845,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
     loadChart(getCurrentSymbol(),currentLang==='en'?'en':'br');
   }
   document.getElementById('langToggle').addEventListener('click',()=>{
-    currentLang=currentLang==='en'?'pt':'en';localStorage.setItem('lang',currentLang);applyI18n();toast('success','Lang',d().toast_lang);
+    currentLang=currentLang==='en'?'pt':'en';localStorage.setItem('lang',currentLang);applyI18n();toast('success','Lang',d().toast_lang);track('language_changed',{lang:currentLang});
   });
 
   // ── TradingView ───────────────────────────────────────────────────
@@ -1018,9 +1026,23 @@ document.addEventListener('DOMContentLoaded', ()=>{
     return r.json();
   }
   async function fetchQuote(ticker){
-    const r=await fetch(`${WORKER}/quotes?symbols=${encodeURIComponent(ticker)}`);
-    if(!r.ok)throw new Error(`Erro HTTP ${r.status}`);
-    const j=await r.json();return j?.prices?.[ticker]??null;
+    // Try once, then retry once after 500ms if null — handles transient API failures
+    for(let attempt=0; attempt<2; attempt++){
+      try{
+        const r=await fetch(`${WORKER}/quotes?symbols=${encodeURIComponent(ticker)}`,{cache:'no-store'});
+        if(!r.ok)throw new Error(`HTTP ${r.status}`);
+        const j=await r.json();
+        const prices=j?.prices||{};
+        // Try the exact ticker, then any case variant, then any non-null value in the bag
+        const price = prices[ticker]
+                   ?? prices[ticker.toUpperCase()]
+                   ?? prices[ticker.toLowerCase()]
+                   ?? Object.values(prices).find(v=>typeof v==='number');
+        if(typeof price==='number') return price;
+      }catch(e){ if(attempt===1) throw e; }
+      if(attempt===0) await new Promise(r=>setTimeout(r,500));
+    }
+    return null;
   }
   async function fetchFundamentalsUS(ticker){
     try{
@@ -1143,6 +1165,8 @@ document.addEventListener('DOMContentLoaded', ()=>{
     const dict=d();
     const ticker=document.getElementById('ticker').value.trim().toUpperCase();
     if(!ticker){setAiStatus(dict.ai_no_ticker,'err');return;}
+    track('analyze_started', { ticker, market, lang: currentLang }); // Track every analysis attempt
+    const startTime=Date.now();
     const btn=document.getElementById('analyzeBtn');
     const spin=document.getElementById('spin');
     const btnTxt=document.getElementById('btnTxt');
@@ -1155,19 +1179,16 @@ document.addEventListener('DOMContentLoaded', ()=>{
     setAiStatus(dict.ai_starting,'load');
 
     let brData=null,anaData=null,price=null,usFund=null;
-    const sources=[];
 
     // Step 1: fundamentals
-    stepDo('s1','active',market==='BR'?`brapi.dev → ${ticker}...`:`Worker /quotes → ${ticker}...`);
+    stepDo('s1','active',`${currentLang==='en'?'Fetching fundamentals':'Buscando fundamentais'} → ${ticker}...`);
     try{
       if(market==='BR'){
         brData = await fetchBR(ticker);
         price  = brData.regularMarketPrice;
-        sources.push(brData.__fromWorker?'Worker /brapi':'brapi.dev');
         stepDo('s1','done',`${dict.ai_data_br_ok} R$ ${price}`);
       }else{
         price = await fetchQuote(ticker);
-        sources.push('Worker /quotes');
         stepDo('s1','done',`${dict.ai_price}: $${price??'N/A'}`);
       }
     }catch(e){
@@ -1177,15 +1198,13 @@ document.addEventListener('DOMContentLoaded', ()=>{
     }
 
     // Step 2: technicals
-    stepDo('s2','active',`Worker /analyze → ${ticker}...`);
+    stepDo('s2','active',`${currentLang==='en'?'Computing technicals':'Calculando técnicos'} → ${ticker}...`);
     try{
       anaData=await fetchAnalyze(ticker);
-      const src=anaData?.analysts?.source||(currentLang==='en'?'no consensus':'sem consenso');
       const techLabel=currentLang==='en'?'Technicals':'Técnicos';
-      stepDo('s2','done',`${techLabel} ✔ · ${anaData?.decision}(${anaData?.score}) · ${src}`);
-      sources.push(`Worker /analyze (${src})`);
+      stepDo('s2','done',`${techLabel} ✔ · ${anaData?.decision}(${anaData?.score})`);
     }catch(e){
-      stepDo('s2','fail',`Worker /analyze: ${e.message} (${dict.ai_continuing})`);
+      stepDo('s2','fail',`${currentLang==='en'?'Technicals':'Técnicos'}: ${e.message} (${dict.ai_continuing})`);
       anaData=null;
     }
 
@@ -1195,8 +1214,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
         usFund=await fetchFundamentalsUS(ticker);
         if(usFund){
           const techLabel=currentLang==='en'?'Technicals':'Técnicos';
-          stepDo('s2','done',`${techLabel} ✔ · ${dict.ai_pe}: ${usFund.trailingPE?.toFixed(1)??'N/A'} · ${anaData?.analysts?.source||'n/a'}`);
-          sources.push('Worker /fundamentals (Finnhub)');
+          stepDo('s2','done',`${techLabel} ✔ · ${dict.ai_pe}: ${usFund.trailingPE?.toFixed(1)??'N/A'}`);
         }
       }catch(e){}
     }
@@ -1245,7 +1263,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
     loadChart(ticker,currentLang==='en'?'en':'br');
 
     // Step 3: LLM — pick SYSTEM prompt based on current language
-    stepDo('s3','active',`${currentLang==='en'?'Sending to':'Enviando para'} ${MODEL}...`);
+    stepDo('s3','active',`${currentLang==='en'?'Sending to':'Enviando para'} NVIDIA Nemotron...`);
     setAiStatus(`${currentLang==='en'?'AI processing':'IA processando'} ${ticker}...`,'load');
 
     // Start progress bar — keeps user engaged during the 15-25s LLM wait
@@ -1290,17 +1308,23 @@ document.addEventListener('DOMContentLoaded', ()=>{
       badge.className='reco-badge '+reco;
       badge.textContent=reco==='buy'?dict.ai_reco_buy:reco==='sell'?dict.ai_reco_sell:dict.ai_reco_hold;
       stepDo('s4','done',`${badge.textContent}`);
-      const aiLabel=currentLang==='en'?'AI':'IA';
-      document.getElementById('srcTags').innerHTML=[...sources,`${aiLabel}: ${MODEL}`].map(s=>`<span class="src-tag">${s}</span>`).join('');
       setAiStatus(`${dict.ai_complete} ${ticker}`,'ok');
       // Progress: fill to 100% and fade out
       completeProgress();
+      // Track successful analysis with duration and recommendation
+      track('analyze_completed', {
+        ticker, market, recommendation: reco,
+        duration_sec: Math.round((Date.now()-startTime)/1000),
+        score: anaData?.score ?? null
+      });
     }catch(e){
       cursor.remove();stepDo('s3','fail',`${dict.ai_ai_error} ${e.message}`);
       setAiStatus(`${dict.ai_ai_error} ${e.message}`,'err');
       bodyEl.textContent=`${dict.ai_error} ${e.message}`;
       // Progress: hide immediately on error
       stopProgress();
+      // Track failures separately to spot patterns
+      track('analyze_failed', { ticker, market, error: String(e.message).slice(0,100) });
     }
     btn.disabled=false;spin.classList.remove('on');btnTxt.textContent=dict.ai_btn_analyze;
   }
@@ -1371,6 +1395,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
     const data=readLocal();data.push({symbol,avg,note});writeLocal(data);
     document.getElementById('posSymbol').value='';document.getElementById('posAvg').value='';document.getElementById('posNote').value='';
     toast('success','Portfolio',d().toast_pos_added);refreshPrices();
+    track('portfolio_position_added',{symbol});
   }
 
   async function publishLocalPositions(){
