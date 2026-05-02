@@ -276,6 +276,77 @@
 
     @keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 
+    /* ── About Section ── */
+    .about-hero{position:relative;padding:32px 28px;border-radius:20px;background:linear-gradient(135deg,rgba(8,14,26,0.95),rgba(12,21,37,0.95));border:1px solid rgba(0,200,255,0.2);overflow:hidden;margin-bottom:18px}
+    .about-hero::before{content:'';position:absolute;top:-50%;right:-10%;width:60%;height:200%;background:radial-gradient(circle,rgba(0,200,255,0.08) 0%,transparent 60%);pointer-events:none;animation:aboutGlow 8s ease-in-out infinite}
+    @keyframes aboutGlow{0%,100%{opacity:.5}50%{opacity:1}}
+    .about-hero-content{position:relative;z-index:1;display:flex;gap:24px;align-items:center;flex-wrap:wrap}
+    .about-avatar{width:96px;height:96px;border-radius:50%;background:linear-gradient(135deg,#00e5ff 0%,#00b4ff 50%,#7b2fff 100%);padding:3px;flex-shrink:0;box-shadow:0 0 32px rgba(0,200,255,0.3)}
+    .about-avatar-inner{width:100%;height:100%;border-radius:50%;background:#0a1628;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-weight:900;font-size:36px;color:#00e5ff}
+    .about-hero-text{flex:1;min-width:240px}
+    .about-hero-text h1{font-family:'Playfair Display',serif;font-size:clamp(26px,3.5vw,36px);font-weight:900;margin-bottom:6px;color:#fff;letter-spacing:-0.01em}
+    .about-hero-text h1 .ai{background:linear-gradient(135deg,#00e5ff 0%,#00b4ff 50%,#7b2fff 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+    .about-hero-text .about-tagline{color:#b8c6de;font-size:15px;line-height:1.55;margin-top:8px}
+    .about-hero-text .about-tagline strong{color:var(--accent);font-weight:600}
+
+    .about-section{padding:24px 26px;border-radius:16px;background:linear-gradient(180deg,rgba(12,21,37,0.7),rgba(8,14,26,0.85));border:1px solid var(--card-border);margin-bottom:14px}
+    .about-section h2{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:#fff;margin-bottom:6px;letter-spacing:-0.005em}
+    .about-section h2 .icon{color:var(--accent);margin-right:8px;font-size:.85em;display:inline-block;vertical-align:middle}
+    .about-section .about-eyebrow{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+    .about-section .about-eyebrow::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,rgba(0,200,255,0.3),transparent)}
+    .about-section p{color:#b8c6de;line-height:1.7;font-size:14.5px;margin:10px 0}
+    .about-section p strong{color:var(--ink);font-weight:600}
+    .about-section ul.about-list{list-style:none;padding:0;margin:14px 0;display:flex;flex-direction:column;gap:10px}
+    .about-section ul.about-list li{display:flex;gap:12px;align-items:flex-start;padding:11px 14px;background:rgba(0,200,255,0.04);border:1px solid rgba(0,200,255,0.1);border-radius:11px;font-size:14px;line-height:1.55;color:#c5d3e8;transition:all .2s}
+    .about-section ul.about-list li:hover{border-color:rgba(0,200,255,0.25);background:rgba(0,200,255,0.07);transform:translateX(2px)}
+    .about-section ul.about-list li::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--accent);flex-shrink:0;margin-top:8px;box-shadow:0 0 10px rgba(0,200,255,0.5)}
+    .about-section ul.about-list li strong{color:#fff;font-weight:600}
+
+    .about-process{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin:16px 0 4px}
+    .about-process-step{position:relative;padding:14px 12px;background:linear-gradient(135deg,rgba(0,200,255,0.05),rgba(92,90,240,0.04));border:1px solid rgba(0,200,255,0.18);border-radius:14px;transition:all .25s;display:flex;flex-direction:column}
+    .about-process-step:hover{border-color:rgba(0,200,255,0.4);transform:translateY(-2px);box-shadow:0 12px 28px rgba(0,200,255,0.1)}
+    .about-process-step .step-num{font-family:'Playfair Display',serif;font-size:34px;font-weight:900;line-height:1;background:linear-gradient(135deg,#00e5ff,#7b2fff);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:6px;display:block;opacity:.85}
+    .about-process-step h4{font-size:13px;font-weight:700;color:#fff;margin-bottom:5px;line-height:1.25;letter-spacing:-0.005em}
+    .about-process-step p{font-size:12px;color:#a5b4cc;line-height:1.45;margin:0}
+
+    /* Responsive breakpoints for the 5-step row */
+    @media(max-width:1080px){
+      .about-process{grid-template-columns:repeat(3,1fr)}
+      .about-process-step:nth-child(4),
+      .about-process-step:nth-child(5){grid-column:span 1}
+      /* Center the last 2 cards when going from 5→3 cols */
+    }
+    @media(max-width:720px){
+      .about-process{grid-template-columns:repeat(2,1fr);gap:8px}
+      .about-process-step{padding:12px 10px}
+      .about-process-step .step-num{font-size:30px}
+    }
+    @media(max-width:420px){
+      .about-process{grid-template-columns:1fr}
+    }
+
+    .about-transparency{padding:20px 22px;background:linear-gradient(135deg,rgba(0,209,122,0.08),rgba(0,200,255,0.04));border:1px solid rgba(0,209,122,0.25);border-radius:14px;margin:14px 0;display:flex;gap:14px;align-items:flex-start}
+    .about-transparency .tx-icon{font-size:32px;flex-shrink:0;line-height:1}
+    .about-transparency h3{font-family:'Playfair Display',serif;font-size:18px;color:#fff;margin-bottom:6px;font-weight:700}
+    .about-transparency p{color:#b8c6de;line-height:1.6;font-size:14px;margin:4px 0}
+
+    .about-cta{padding:24px 26px;background:linear-gradient(135deg,rgba(0,200,255,0.08),rgba(92,90,240,0.06));border:1px solid rgba(0,200,255,0.25);border-radius:16px;text-align:center;margin-top:14px}
+    .about-cta h3{font-family:'Playfair Display',serif;font-size:22px;color:#fff;margin-bottom:8px;font-weight:700}
+    .about-cta p{color:#b8c6de;font-size:14.5px;line-height:1.6;margin:6px 0 14px;max-width:600px;margin-left:auto;margin-right:auto}
+    .about-cta .linkedin-btn{display:inline-flex;align-items:center;gap:10px;padding:12px 24px;background:linear-gradient(135deg,#0a66c2,#0077b5);border:none;border-radius:12px;color:#fff;font-weight:700;font-size:15px;text-decoration:none;transition:all .2s;box-shadow:0 8px 20px rgba(10,102,194,0.25)}
+    .about-cta .linkedin-btn:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(10,102,194,0.4);filter:brightness(1.08)}
+    .about-cta .linkedin-btn svg{width:20px;height:20px;flex-shrink:0}
+
+    @media(max-width:560px){
+      .about-hero{padding:24px 20px}
+      .about-hero-content{flex-direction:column;text-align:center}
+      .about-avatar{width:80px;height:80px}
+      .about-avatar-inner{font-size:30px}
+      .about-section{padding:20px 18px}
+      .about-section h2{font-size:19px}
+      .about-transparency{flex-direction:column;text-align:center;align-items:center}
+    }
+
     @media(max-width:960px){
       .site-header{grid-template-columns:1fr;gap:12px;position:relative;top:0}
       .quick-tips-inline{max-width:100%}
@@ -390,6 +461,7 @@
     <button class="tab-btn active" data-tab="tab-analise">📈 <span data-i18n="tab_analise">Análise AI</span></button>
     <button class="tab-btn" data-tab="tab-portfolio">💼 <span data-i18n="tab_portfolio">Portfólio</span></button>
     <button class="tab-btn" data-tab="tab-mercados">🌍 <span data-i18n="tab_mercados">Mercados</span></button>
+    <button class="tab-btn" data-tab="tab-about">👤 <span data-i18n="tab_about">Sobre</span></button>
   </nav>
 
   <!-- DASHBOARD TAB -->
@@ -563,6 +635,106 @@
     </section>
   </section>
 
+  <!-- ABOUT TAB -->
+  <section id="tab-about" class="tab-panel">
+    <!-- Hero -->
+    <div class="about-hero" style="margin-top:16px">
+      <div class="about-hero-content">
+        <div class="about-avatar">
+          <div class="about-avatar-inner">RM</div>
+        </div>
+        <div class="about-hero-text">
+          <div class="about-eyebrow" style="margin-bottom:8px"><span data-i18n="about_eyebrow">Sobre</span></div>
+          <h1 data-i18n="about_hero_title">Sobre mim &amp; como a AI escolhe as ações</h1>
+          <p class="about-tagline" data-i18n="about_hero_tagline">Olá, sou <strong>Rafa Martins</strong>. Atuo em tecnologia há mais de 25 anos e estudo o mercado de ações há mais de 20, com forte foco em análise técnica. Com o tempo, ficou claro: nenhum método sozinho é suficiente. Indicadores técnicos mostram timing, fundamentos dão contexto e convicção — as melhores decisões vêm da combinação dos dois. <strong>Foi por isso que construí esta plataforma: a AI une o mundo técnico e o fundamentalista numa única análise, gerando recomendações mais precisas do que cada abordagem isolada conseguiria entregar.</strong></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Investment Philosophy -->
+    <div class="about-section">
+      <div class="about-eyebrow"><span data-i18n="about_phil_eyebrow">Filosofia de investimento</span></div>
+      <h2><span class="icon">📊</span><span data-i18n="about_phil_title">Validação em múltiplas camadas</span></h2>
+      <p data-i18n="about_phil_intro">Meu processo de seleção é construído em torno de um modelo de validação multi-camadas — não um único sinal ou indicador. Acredito em:</p>
+      <ul class="about-list">
+        <li><span data-i18n="about_phil_1">Usar <strong>análise técnica</strong> para identificar tendências, momentum, suporte/resistência e timing de entrada</span></li>
+        <li><span data-i18n="about_phil_2">Incorporar <strong>dados fundamentalistas</strong> para entender qualidade do negócio, expectativa de crescimento e sentimento dos analistas</span></li>
+        <li><span data-i18n="about_phil_3">Aplicar <strong>IA e automação</strong> para processar grandes volumes de dados de forma consistente e sem emoção</span></li>
+        <li><span data-i18n="about_phil_4"><strong>Sempre validar duas vezes</strong> os sinais antes de comprometer capital</span></li>
+      </ul>
+      <p data-i18n="about_phil_outro">Desde 2024, estudo ativamente como a inteligência artificial — especialmente IA generativa — pode conectar essas peças e reduzir o viés humano. O objetivo não é "prever" o mercado, mas <strong>aumentar a probabilidade de boas decisões</strong>.</p>
+    </div>
+
+    <!-- How StockGaide was created -->
+    <div class="about-section">
+      <div class="about-eyebrow"><span data-i18n="about_how_eyebrow">Como nasceu</span></div>
+      <h2><span class="icon">⚡</span><span data-i18n="about_how_title">Como o StockGaide foi criado</span></h2>
+      <p data-i18n="about_how_intro">Esse trabalho me levou à criação do <strong>stockgaide.com</strong>. A plataforma acompanha cerca de <strong>800 ações selecionadas</strong>, curadas a partir de fontes especializadas. Essas ações são monitoradas continuamente usando TradingView combinado com algoritmos proprietários que desenvolvi ao longo do tempo.</p>
+
+      <div class="about-process">
+        <div class="about-process-step">
+          <span class="step-num">1</span>
+          <h4 data-i18n="about_step1_title">Monitoramento diário</h4>
+          <p data-i18n="about_step1_desc">Todo dia, após o fechamento do mercado, a plataforma roda scans algorítmicos sobre todo o universo de ações.</p>
+        </div>
+        <div class="about-process-step">
+          <span class="step-num">2</span>
+          <h4 data-i18n="about_step2_title">Geração de sinais técnicos</h4>
+          <p data-i18n="about_step2_desc">Meus modelos avaliam força de tendência, momentum, volatilidade e condições técnicas-chave para gerar sinais de compra ou observação.</p>
+        </div>
+        <div class="about-process-step">
+          <span class="step-num">3</span>
+          <h4 data-i18n="about_step3_title">Dados fundamentais &amp; analistas</h4>
+          <p data-i18n="about_step3_desc">Para validação mais profunda, dados adicionais são coletados de múltiplas fontes — opiniões de analistas e sentimento de mercado — combinados com o contexto técnico.</p>
+        </div>
+        <div class="about-process-step">
+          <span class="step-num">4</span>
+          <h4 data-i18n="about_step4_title">Análise com IA</h4>
+          <p data-i18n="about_step4_desc">O dataset combinado é processado por modelos de IA (incluindo LLMs) para gerar análise estruturada e responder: <em>É o momento certo para comprar?</em></p>
+        </div>
+        <div class="about-process-step">
+          <span class="step-num">5</span>
+          <h4 data-i18n="about_step5_title">Validação humana + IA</h4>
+          <p data-i18n="about_step5_desc">Não sigo sinais cegamente. Antes de agir, eu re-valido pessoalmente cada recomendação no painel de IA, revisando estrutura técnica, contexto e risco.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Transparency -->
+    <div class="about-transparency">
+      <div class="tx-icon">🔍</div>
+      <div>
+        <h3 data-i18n="about_tx_title">Transparência total: eu uso esses sinais</h3>
+        <p data-i18n="about_tx_p1">Um ponto importante: eu <strong>invisto ativamente</strong> com base nessas mesmas recomendações.</p>
+        <p data-i18n="about_tx_p2">A plataforma inclui uma aba de <strong>Portfólio</strong>, onde você vê quais ações tenho em carteira agora, e um <strong>Dashboard</strong> com o histórico completo de trades gerados pelo sistema. Transparência importa — isso não é teoria nem material de marketing com backtests; é parte do meu processo de decisão real.</p>
+      </div>
+    </div>
+
+    <!-- Continuous Improvement -->
+    <div class="about-section">
+      <div class="about-eyebrow"><span data-i18n="about_imp_eyebrow">Em evolução</span></div>
+      <h2><span class="icon">🔄</span><span data-i18n="about_imp_title">Melhoria contínua</span></h2>
+      <p data-i18n="about_imp_intro">Este é um sistema em constante evolução. Continuamente:</p>
+      <ul class="about-list">
+        <li><span data-i18n="about_imp_1">Refinando algoritmos</span></li>
+        <li><span data-i18n="about_imp_2">Testando novos modelos de IA</span></li>
+        <li><span data-i18n="about_imp_3">Melhorando a qualidade dos sinais</span></li>
+        <li><span data-i18n="about_imp_4">Reduzindo ruído e falsos positivos</span></li>
+      </ul>
+      <p data-i18n="about_imp_outro"><strong>Feedback é parte crítica desse processo, e é sempre bem-vindo.</strong></p>
+    </div>
+
+    <!-- CTA LinkedIn -->
+    <div class="about-cta">
+      <h3 data-i18n="about_cta_title">Vamos nos conectar</h3>
+      <p data-i18n="about_cta_p">Se quiser conhecer melhor minha trajetória profissional, me encontre no LinkedIn. O StockGaide é algo que estou construindo e compartilhando com amigos e assinantes que querem uma abordagem disciplinada, transparente e com IA — sem hype, atalhos ou promessas de caixa-preta.</p>
+      <a href="https://www.linkedin.com/in/rafaelnmartins/" target="_blank" rel="noopener" class="linkedin-btn">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+        <span data-i18n="about_cta_btn">Conectar no LinkedIn</span>
+      </a>
+    </div>
+  </section>
+
   <footer>© <span id="y"></span> &nbsp;·&nbsp; <span data-i18n="disclaimer">Site educacional, não é recomendação de investimento.</span></footer>
 </div>
 
@@ -598,7 +770,46 @@ const I18N = {
     tip2b:"Objetivo atingido? Posição segue para Histórico",
     tip3:'Veja ações compradas do Rafael disponíveis em <span class="hl">Portfólio</span>',
     btn_alerts_live:"Alertas live",
-    tab_dashboard:"Dashboard",tab_analise:"Análise AI",tab_portfolio:"Portfólio",tab_mercados:"Mercados",
+    tab_dashboard:"Dashboard",tab_analise:"Análise AI",tab_portfolio:"Portfólio",tab_mercados:"Mercados",tab_about:"Sobre",
+    // About section
+    about_eyebrow:"Sobre",
+    about_hero_title:"Sobre mim &amp; como a AI escolhe as ações",
+    about_hero_tagline:"Olá, sou <strong>Rafa Martins</strong>. Atuo em tecnologia há mais de 25 anos e estudo o mercado de ações há mais de 20, com forte foco em análise técnica. Com o tempo, ficou claro: nenhum método sozinho é suficiente. Indicadores técnicos mostram timing, fundamentos dão contexto e convicção — as melhores decisões vêm da combinação dos dois. <strong>Foi por isso que construí esta plataforma: a AI une o mundo técnico e o fundamentalista numa única análise, gerando recomendações mais precisas do que cada abordagem isolada conseguiria entregar.</strong>",
+    about_phil_eyebrow:"Filosofia de investimento",
+    about_phil_title:"Validação em múltiplas camadas",
+    about_phil_intro:"Meu processo de seleção é construído em torno de um modelo de validação multi-camadas — não um único sinal ou indicador. Acredito em:",
+    about_phil_1:'Usar <strong>análise técnica</strong> para identificar tendências, momentum, suporte/resistência e timing de entrada',
+    about_phil_2:'Incorporar <strong>dados fundamentalistas</strong> para entender qualidade do negócio, expectativa de crescimento e sentimento dos analistas',
+    about_phil_3:'Aplicar <strong>IA e automação</strong> para processar grandes volumes de dados de forma consistente e sem emoção',
+    about_phil_4:'<strong>Sempre validar duas vezes</strong> os sinais antes de comprometer capital',
+    about_phil_outro:'Desde 2024, estudo ativamente como a inteligência artificial — especialmente IA generativa — pode conectar essas peças e reduzir o viés humano. O objetivo não é "prever" o mercado, mas <strong>aumentar a probabilidade de boas decisões</strong>.',
+    about_how_eyebrow:"Como nasceu",
+    about_how_title:"Como o StockGaide foi criado",
+    about_how_intro:"Esse trabalho me levou à criação do <strong>stockgaide.com</strong>. A plataforma acompanha cerca de <strong>800 ações selecionadas</strong>, curadas a partir de fontes especializadas. Essas ações são monitoradas continuamente usando TradingView combinado com algoritmos proprietários que desenvolvi ao longo do tempo.",
+    about_step1_title:"Monitoramento diário",
+    about_step1_desc:"Todo dia, após o fechamento do mercado, a plataforma roda scans algorítmicos sobre todo o universo de ações.",
+    about_step2_title:"Geração de sinais técnicos",
+    about_step2_desc:"Meus modelos avaliam força de tendência, momentum, volatilidade e condições técnicas-chave para gerar sinais de compra ou observação.",
+    about_step3_title:"Dados fundamentais &amp; analistas",
+    about_step3_desc:"Para validação mais profunda, dados adicionais são coletados de múltiplas fontes — opiniões de analistas e sentimento de mercado — combinados com o contexto técnico.",
+    about_step4_title:"Análise com IA",
+    about_step4_desc:"O dataset combinado é processado por modelos de IA (incluindo LLMs) para gerar análise estruturada e responder: <em>É o momento certo para comprar?</em>",
+    about_step5_title:"Validação humana + IA",
+    about_step5_desc:"Não sigo sinais cegamente. Antes de agir, eu re-valido pessoalmente cada recomendação no painel de IA, revisando estrutura técnica, contexto e risco.",
+    about_tx_title:"Transparência total: eu uso esses sinais",
+    about_tx_p1:"Um ponto importante: eu <strong>invisto ativamente</strong> com base nessas mesmas recomendações.",
+    about_tx_p2:"A plataforma inclui uma aba de <strong>Portfólio</strong>, onde você vê quais ações tenho em carteira agora, e um <strong>Dashboard</strong> com o histórico completo de trades gerados pelo sistema. Transparência importa — isso não é teoria nem material de marketing com backtests; é parte do meu processo de decisão real.",
+    about_imp_eyebrow:"Em evolução",
+    about_imp_title:"Melhoria contínua",
+    about_imp_intro:"Este é um sistema em constante evolução. Continuamente:",
+    about_imp_1:"Refinando algoritmos",
+    about_imp_2:"Testando novos modelos de IA",
+    about_imp_3:"Melhorando a qualidade dos sinais",
+    about_imp_4:"Reduzindo ruído e falsos positivos",
+    about_imp_outro:"<strong>Feedback é parte crítica desse processo, e é sempre bem-vindo.</strong>",
+    about_cta_title:"Vamos nos conectar",
+    about_cta_p:"Se quiser conhecer melhor minha trajetória profissional, me encontre no LinkedIn. O StockGaide é algo que estou construindo e compartilhando com amigos e assinantes que querem uma abordagem disciplinada, transparente e com IA — sem hype, atalhos ou promessas de caixa-preta.",
+    about_cta_btn:"Conectar no LinkedIn",
     dash_title:"Recomendações &amp; Histórico",dash_sub:"Painel consolidado · posições abertas e fechadas",
     btn_see_alerts:"Ver alertas",btn_open_pos:"Abertas",btn_closed_pos:"Fechadas",btn_full_panel:"Painel completo",
     ai_page_title:"Análise de Ação com IA",ai_page_sub:"Dados fundamentais + técnicos + consenso · análise avançada com IA",
@@ -660,7 +871,46 @@ const I18N = {
     tip2b:"Target reached? Position moves to History",
     tip3:'See Rafael\'s purchased stocks available in <span class="hl">Portfolio</span>',
     btn_alerts_live:"Live Alerts",
-    tab_dashboard:"Dashboard",tab_analise:"AI Analysis",tab_portfolio:"Portfolio",tab_mercados:"Markets",
+    tab_dashboard:"Dashboard",tab_analise:"AI Analysis",tab_portfolio:"Portfolio",tab_mercados:"Markets",tab_about:"About",
+    // About section
+    about_eyebrow:"About",
+    about_hero_title:"About me &amp; how AI picks the stocks",
+    about_hero_tagline:"Hi, I'm <strong>Rafa Martins</strong>. I've been working in technology for more than 25 years, and for over 20 years I've been deeply involved in studying the stock market, with strong focus on technical analysis. Over time, one thing became clear: no single method is enough on its own. Technical indicators show timing and momentum; fundamentals provide context, conviction, and risk awareness. The best decisions come from combining both. <strong>That's why I built this platform: AI brings the technical and fundamental worlds together into a single analysis, generating recommendations more accurate than either approach could deliver alone.</strong>",
+    about_phil_eyebrow:"Investment philosophy",
+    about_phil_title:"Multi-layer validation",
+    about_phil_intro:"My stock selection process is built around a multi-layer validation model — not a single signal or indicator. I believe in:",
+    about_phil_1:'Using <strong>technical analysis</strong> to identify trends, momentum, support/resistance, and entry timing',
+    about_phil_2:'Incorporating <strong>fundamental data</strong> to understand business quality, growth expectations, and analyst sentiment',
+    about_phil_3:'Applying <strong>AI and automation</strong> to process large amounts of data consistently and without emotion',
+    about_phil_4:'<strong>Always double-checking</strong> signals before committing capital',
+    about_phil_outro:'Since 2024, I\'ve been actively studying how artificial intelligence — especially generative AI — can help connect these pieces and reduce human bias. The goal is not to "predict" the market, but to <strong>improve the probability of good decisions</strong>.',
+    about_how_eyebrow:"How it started",
+    about_how_title:"How StockGaide was created",
+    about_how_intro:"This work led to the creation of <strong>stockgaide.com</strong>. The platform tracks around <strong>800 selected stocks</strong>, curated from specialized sources. These stocks are continuously monitored using TradingView combined with proprietary algorithms I developed over time.",
+    about_step1_title:"Daily monitoring",
+    about_step1_desc:"Every day, after market close, the platform runs algorithmic scans across the full stock universe.",
+    about_step2_title:"Technical signal generation",
+    about_step2_desc:"My models evaluate trend strength, momentum, volatility, and key technical conditions to produce buy or watch signals.",
+    about_step3_title:"Fundamental &amp; analyst data",
+    about_step3_desc:"For deeper validation, additional data is collected from multiple sources — analyst opinions and market sentiment — combined with technical context.",
+    about_step4_title:"AI-driven analysis",
+    about_step4_desc:"The combined dataset is processed through AI models (including LLMs) to generate structured analysis answering: <em>Is this the right time to buy?</em>",
+    about_step5_title:"Human + AI validation",
+    about_step5_desc:"I don't blindly follow signals. Before acting, I personally re-validate each recommendation using the AI dashboard, reviewing technical structure, context, and risk.",
+    about_tx_title:"Full transparency: I use these signals myself",
+    about_tx_p1:"One important point: I <strong>actively invest</strong> based on these same recommendations.",
+    about_tx_p2:"The platform includes a <strong>Portfolio</strong> view where you can see which stocks I currently hold, and a <strong>Dashboard</strong> with the full history of trades generated by the system. Transparency matters — this is not theoretical or back-tested marketing material; it's part of my real decision process.",
+    about_imp_eyebrow:"Continuously evolving",
+    about_imp_title:"Continuous improvement",
+    about_imp_intro:"This is an evolving system. I'm continuously:",
+    about_imp_1:"Refining algorithms",
+    about_imp_2:"Testing new AI models",
+    about_imp_3:"Improving signal quality",
+    about_imp_4:"Reducing noise and false positives",
+    about_imp_outro:"<strong>Feedback is a critical part of that process, and it's always welcome.</strong>",
+    about_cta_title:"Let's connect",
+    about_cta_p:"If you'd like to learn more about my professional background, find me on LinkedIn. StockGaide is something I'm building and sharing with friends and subscribers who want a disciplined, transparent, AI-enhanced approach to investing — without hype, shortcuts, or black-box promises.",
+    about_cta_btn:"Connect on LinkedIn",
     dash_title:"Recommendations &amp; History",dash_sub:"Consolidated panel · open and closed positions",
     btn_see_alerts:"See alerts",btn_open_pos:"Open",btn_closed_pos:"Closed",btn_full_panel:"Full panel",
     ai_page_title:"AI Stock Analysis",ai_page_sub:"Fundamentals + technicals + analyst consensus",
