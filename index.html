@@ -29,7 +29,7 @@
 
     .disclaimer-bar{position:fixed;top:0;left:0;right:0;z-index:60;display:flex;align-items:center;justify-content:center;gap:10px;padding:9px 16px;background:rgba(4,8,15,0.92);border-bottom:1px solid rgba(255,255,255,0.08);backdrop-filter:blur(14px);color:#b0bdd4;font-size:12.5px}
     .disclaimer-bar strong{color:#fff}
-    .disclaimer-bar .pill{display:inline-flex;align-items:center;gap:5px;padding:2px 9px;border-radius:999px;border:1px solid rgba(255,180,71,0.4);background:rgba(255,180,71,0.10);color:#ffe5a8;font-weight:700;font-size:11px;letter-spacing:0.04em}
+    .disclaimer-bar .pill{display:inline-flex;align-items:center;gap:5px;padding:2px 9px;border-radius:999px;border:1px solid rgba(0,200,255,0.35);background:rgba(0,200,255,0.10);color:#9de8ff;font-weight:700;font-size:11px;letter-spacing:0.04em}
 
     .site-header{display:grid;grid-template-columns:auto 1fr auto;gap:18px;align-items:start;padding:18px 20px;background:rgba(8,14,26,0.85);border:1px solid var(--card-border);border-radius:20px;backdrop-filter:blur(16px);box-shadow:var(--shadow-1);margin-bottom:6px;position:sticky;top:58px;z-index:40}
 
@@ -128,7 +128,15 @@
 
     .dash-topbar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;padding:14px 18px;background:linear-gradient(180deg,rgba(12,21,37,0.95),rgba(8,14,26,0.90));border:1px solid var(--card-border);border-radius:16px;margin-bottom:14px}
     .dash-topbar-left{display:flex;align-items:center;gap:12px}
-    .dash-topbar-right{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+    .dash-topbar-right{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+    /* ── Dashboard filter pills: subtly grouped, secondary to the primary 'Ver alertas' CTA ── */
+    .dash-filter-group{display:inline-flex;align-items:center;background:rgba(8,14,26,0.6);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:3px;gap:2px}
+    .dash-filter-btn{padding:7px 13px;border-radius:8px;font-size:12.5px;font-weight:600;color:var(--muted);text-decoration:none;transition:all .15s ease;display:inline-flex;align-items:center;gap:5px;font-family:inherit;white-space:nowrap}
+    .dash-filter-btn:hover{background:rgba(0,200,255,0.08);color:#dde6f5}
+    .dash-filter-btn:active{transform:translateY(1px)}
+    @media(max-width:480px){
+      .dash-filter-btn{padding:8px 11px;font-size:12px}
+    }
     .status-dot{width:8px;height:8px;border-radius:50%;background:var(--success);box-shadow:0 0 8px rgba(0,209,122,0.6);flex-shrink:0}
 
     .summary-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:12px}
@@ -251,10 +259,19 @@
     .ai-result-header{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:14px;flex-wrap:wrap}
     .ai-sym-ticker{font-size:26px;font-weight:700;color:var(--accent);line-height:1;font-family:'Space Mono',monospace}
     .ai-sym-name{font-size:12px;color:var(--muted);margin-top:3px}
-    .reco-badge{font-family:'Space Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:7px 16px;border-radius:999px;border:1px solid;white-space:nowrap;align-self:flex-start}
-    .reco-badge.buy{color:var(--success);border-color:var(--success);background:rgba(0,209,122,0.1)}
-    .reco-badge.hold{color:var(--neutral);border-color:var(--neutral);background:rgba(255,181,71,0.1)}
-    .reco-badge.sell{color:var(--danger);border-color:var(--danger);background:rgba(255,77,109,0.1)}
+    /* ── Final AI Recommendation block: visually elevated to avoid confusion with the technical Score ── */
+    .ai-reco-block{display:flex;flex-direction:column;align-items:flex-end;gap:6px;align-self:flex-start;max-width:100%}
+    .ai-reco-eyebrow{font-family:'Space Mono',monospace;font-size:9.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);display:flex;align-items:center;gap:6px;line-height:1;white-space:nowrap}
+    .ai-reco-eyebrow::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--accent);box-shadow:0 0 8px rgba(0,200,255,0.7);animation:aiRecoEbPulse 1.6s ease-in-out infinite;flex-shrink:0}
+    @keyframes aiRecoEbPulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.45;transform:scale(1.25)}}
+    .reco-badge{font-family:'Space Mono',monospace;font-size:14px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;padding:11px 22px;border-radius:999px;border:2px solid;white-space:nowrap;transition:all .25s ease;position:relative}
+    .reco-badge.buy{color:var(--success);border-color:var(--success);background:rgba(0,209,122,0.13);box-shadow:0 8px 24px rgba(0,209,122,0.20),inset 0 0 0 1px rgba(0,209,122,0.15)}
+    .reco-badge.hold{color:var(--neutral);border-color:var(--neutral);background:rgba(255,181,71,0.13);box-shadow:0 8px 24px rgba(255,181,71,0.18),inset 0 0 0 1px rgba(255,181,71,0.15)}
+    .reco-badge.sell{color:var(--danger);border-color:var(--danger);background:rgba(255,77,109,0.13);box-shadow:0 8px 24px rgba(255,77,109,0.20),inset 0 0 0 1px rgba(255,77,109,0.15)}
+    @media(max-width:480px){
+      .reco-badge{font-size:13px;padding:9px 18px}
+      .ai-reco-eyebrow{font-size:9px;letter-spacing:.13em}
+    }
 
     .ai-divider{height:1px;background:rgba(255,255,255,0.07);margin:14px 0}
 
@@ -367,16 +384,171 @@
       .ai-sym-ticker{font-size:20px}
       .brand-sub{font-size:10px;letter-spacing:0.04em}
     }
+
+    /* ════════════════════════════════════════════════════════
+       TOUR INTERATIVO — primeira visita
+       ════════════════════════════════════════════════════════ */
+    .tour-backdrop{display:none;position:fixed;inset:0;z-index:200;background:rgba(4,8,15,0.92);backdrop-filter:blur(10px);align-items:center;justify-content:center;padding:20px;animation:tourFadeIn .35s ease}
+    .tour-backdrop.open{display:flex}
+    @keyframes tourFadeIn{from{opacity:0}to{opacity:1}}
+    .tour-card{width:min(560px,100%);background:linear-gradient(180deg,rgba(12,21,37,0.98),rgba(8,14,26,0.99));border:1px solid rgba(0,200,255,0.3);border-radius:22px;box-shadow:0 32px 80px rgba(0,0,0,0.7),0 0 60px rgba(0,200,255,0.12);padding:32px 30px;position:relative;overflow:hidden;animation:tourSlideUp .4s cubic-bezier(0.34,1.56,0.64,1)}
+    @keyframes tourSlideUp{from{opacity:0;transform:translateY(20px) scale(0.96)}to{opacity:1;transform:none}}
+    .tour-card::before{content:'';position:absolute;top:0;left:-50%;right:-50%;height:2px;background:linear-gradient(90deg,transparent,var(--accent),transparent);animation:tourGlow 3s ease-in-out infinite}
+    @keyframes tourGlow{0%,100%{transform:translateX(-30%);opacity:.5}50%{transform:translateX(30%);opacity:1}}
+    .tour-step-num{font-family:'Space Mono',monospace;font-size:11px;color:var(--accent);letter-spacing:.18em;text-transform:uppercase;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+    .tour-step-num::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,rgba(0,200,255,0.3),transparent)}
+    .tour-icon{font-size:48px;line-height:1;margin-bottom:12px;display:inline-block;animation:tourIconBounce 2s ease-in-out infinite}
+    @keyframes tourIconBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+    .tour-title{font-family:'Playfair Display',serif;font-size:26px;font-weight:900;color:#fff;line-height:1.2;letter-spacing:-0.01em;margin-bottom:10px}
+    .tour-title .ai{background:linear-gradient(135deg,#00e5ff 0%,#7b2fff 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+    .tour-desc{color:#b8c6de;font-size:15px;line-height:1.6;margin-bottom:8px}
+    .tour-desc strong{color:var(--ink);font-weight:600}
+    .tour-desc .hl{color:var(--accent);font-weight:600}
+    .tour-progress{display:flex;gap:6px;margin:22px 0 18px}
+    .tour-dot{flex:1;height:4px;border-radius:999px;background:rgba(255,255,255,0.08);transition:background .4s,transform .3s}
+    .tour-dot.active{background:linear-gradient(90deg,var(--accent),var(--accent-2));transform:scaleY(1.3)}
+    .tour-dot.done{background:rgba(0,200,255,0.4)}
+    .tour-actions{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:6px;flex-wrap:wrap}
+    .tour-skip{background:transparent;border:none;color:var(--muted);font-family:inherit;font-size:13px;cursor:pointer;padding:8px 4px;text-decoration:underline;text-decoration-color:rgba(143,165,204,0.3);text-underline-offset:3px}
+    .tour-skip:hover{color:#dde6f5;text-decoration-color:rgba(255,255,255,0.5)}
+    .tour-nav{display:flex;gap:8px}
+    .tour-btn{cursor:pointer;font-family:inherit;font-size:14px;font-weight:700;border-radius:11px;padding:11px 22px;border:1px solid rgba(255,255,255,0.10);background:rgba(8,14,26,0.7);color:var(--ink);transition:all .2s ease;display:inline-flex;align-items:center;gap:6px}
+    .tour-btn:hover{border-color:rgba(0,200,255,0.4)}
+    .tour-btn.primary{background:linear-gradient(135deg,rgba(0,200,255,0.3),rgba(45,126,247,0.25));border-color:rgba(0,200,255,0.5);color:#e8f9ff;box-shadow:0 8px 24px rgba(0,200,255,0.18)}
+    .tour-btn.primary:hover{filter:brightness(1.12);box-shadow:0 12px 30px rgba(0,200,255,0.28)}
+    .tour-btn:disabled{opacity:.4;cursor:not-allowed}
+    .tour-feature{margin-top:8px;padding:14px 16px;background:rgba(0,200,255,0.06);border:1px solid rgba(0,200,255,0.2);border-radius:12px;display:flex;align-items:flex-start;gap:10px}
+    .tour-feature-icon{font-size:20px;flex-shrink:0;line-height:1.2}
+    .tour-feature-text{font-size:13.5px;color:#c5d3e8;line-height:1.5}
+    .tour-feature-text strong{color:var(--accent)}
+
+    /* Help / restart tour button (small) */
+    .help-fab{position:fixed;right:18px;bottom:18px;z-index:55;display:flex;flex-direction:column;gap:8px;align-items:flex-end}
+    .help-btn{width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,rgba(0,200,255,0.25),rgba(92,90,240,0.2));border:1px solid rgba(0,200,255,0.4);color:#e8f9ff;font-size:20px;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 24px rgba(0,200,255,0.2);transition:all .2s ease;font-weight:700}
+    .help-btn:hover{transform:scale(1.08);box-shadow:0 12px 30px rgba(0,200,255,0.35)}
+    .help-btn.glossary{background:linear-gradient(135deg,rgba(92,90,240,0.25),rgba(45,126,247,0.2));border-color:rgba(92,90,240,0.4)}
+    .help-btn-tip{background:rgba(8,14,26,0.95);border:1px solid rgba(0,200,255,0.3);color:#dde6f5;font-size:12px;padding:6px 11px;border-radius:8px;white-space:nowrap;opacity:0;transform:translateX(8px);transition:all .2s ease;pointer-events:none;font-weight:600}
+    .help-fab:hover .help-btn-tip{opacity:1;transform:translateX(0)}
+
+    /* ════════════════════════════════════════════════════════
+       GLOSSÁRIO — modal com explicações dos termos
+       ════════════════════════════════════════════════════════ */
+    .gloss-backdrop{display:none;position:fixed;inset:0;z-index:150;background:rgba(4,8,15,0.86);backdrop-filter:blur(10px);align-items:center;justify-content:center;padding:20px;animation:tourFadeIn .25s}
+    .gloss-backdrop.open{display:flex}
+    .gloss-modal{width:min(720px,100%);max-height:85vh;background:rgba(8,14,26,0.98);border:1px solid rgba(92,90,240,0.3);border-radius:20px;box-shadow:0 32px 80px rgba(0,0,0,0.7),0 0 60px rgba(92,90,240,0.1);display:flex;flex-direction:column;overflow:hidden;animation:tourSlideUp .35s cubic-bezier(0.34,1.56,0.64,1)}
+    .gloss-header{padding:18px 22px;border-bottom:1px solid rgba(255,255,255,0.08);background:linear-gradient(180deg,rgba(12,21,37,0.95),rgba(8,14,26,0.85));display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+    .gloss-header-left{display:flex;align-items:center;gap:10px}
+    .gloss-header h2{font-family:'Playfair Display',serif;font-size:22px;font-weight:800;color:#fff;letter-spacing:-0.005em}
+    .gloss-header .icon{font-size:24px}
+    .gloss-search{flex:1;min-width:180px;max-width:280px;padding:9px 14px;background:rgba(4,8,15,0.7);border:1px solid rgba(92,90,240,0.25);border-radius:10px;color:var(--ink);font-family:inherit;font-size:13px}
+    .gloss-search:focus{border-color:rgba(92,90,240,0.5);box-shadow:0 0 0 3px rgba(92,90,240,0.1);outline:none}
+    .gloss-body{flex:1;overflow-y:auto;padding:18px 22px;scrollbar-width:thin;scrollbar-color:rgba(92,90,240,0.4) transparent}
+    .gloss-body::-webkit-scrollbar{width:8px}
+    .gloss-body::-webkit-scrollbar-thumb{background:rgba(92,90,240,0.3);border-radius:4px}
+    .gloss-cat{font-family:'Space Mono',monospace;font-size:10.5px;color:rgba(92,90,240,0.85);letter-spacing:.16em;text-transform:uppercase;font-weight:700;margin:14px 0 8px;display:flex;align-items:center;gap:8px}
+    .gloss-cat:first-child{margin-top:0}
+    .gloss-cat::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,rgba(92,90,240,0.25),transparent)}
+    .gloss-item{padding:11px 14px;background:rgba(0,200,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:10px;margin-bottom:8px;transition:all .18s}
+    .gloss-item:hover{border-color:rgba(0,200,255,0.25);background:rgba(0,200,255,0.06);transform:translateX(2px)}
+    .gloss-item-head{display:flex;align-items:center;gap:10px;margin-bottom:5px;flex-wrap:wrap}
+    .gloss-term{font-family:'Space Mono',monospace;font-size:14px;font-weight:700;color:var(--accent);letter-spacing:.02em}
+    .gloss-full{font-size:12.5px;color:#a5b4cc;font-style:italic}
+    .gloss-desc{color:#c5d3e8;font-size:13.5px;line-height:1.55;margin:0}
+    .gloss-desc strong{color:var(--ink)}
+    .gloss-empty{text-align:center;padding:40px 20px;color:var(--muted);font-size:14px}
+
+    /* Custom tooltip on metric labels (subtle, non-intrusive) */
+    .ai-metric-l[data-tip]{cursor:help;border-bottom:1px dotted rgba(143,165,204,0.4);position:relative;display:inline-block}
+    .ai-metric-l[data-tip]:hover{color:var(--accent);border-bottom-color:rgba(0,200,255,0.6)}
+    /* Tooltip itself uses the native title attr — no custom JS needed for desktop */
+
+    /* Mobile-friendly tap-to-show tooltip */
+    @media(max-width:768px){
+      .ai-metric-l[data-tip]::after{content:'?';display:inline-block;width:13px;height:13px;line-height:13px;text-align:center;border-radius:50%;background:rgba(0,200,255,0.18);color:var(--accent);font-size:9px;font-weight:700;margin-left:4px;vertical-align:middle;font-family:inherit}
+    }
+
+    @media(max-width:560px){
+      .tour-card{padding:24px 22px}
+      .tour-title{font-size:22px}
+      .tour-icon{font-size:40px}
+      .tour-actions{flex-direction:column-reverse;align-items:stretch}
+      .tour-nav{width:100%;justify-content:space-between}
+      .tour-skip{align-self:center}
+      .gloss-header{padding:14px 16px;flex-direction:column;align-items:stretch}
+      .gloss-search{max-width:100%}
+      .help-fab{right:14px;bottom:14px}
+      .help-btn{width:44px;height:44px;font-size:18px}
+    }
   </style>
 </head>
 <body>
 
 <div class="disclaimer-bar" role="status">
-  <span class="pill" data-i18n="disc_pill">⚠️ Educacional</span>
-  <span><strong data-i18n="disc_bold">Conteúdo educacional.</strong> <span data-i18n="disc_text">Não é recomendação de investimento.</span></span>
+  <span class="pill" data-i18n="disc_pill">💡 Educacional</span>
+  <span><strong data-i18n="disc_bold">Plataforma educacional.</strong> <span data-i18n="disc_text">Análises usadas pelo criador nas próprias decisões. Não é recomendação de investimento.</span></span>
 </div>
 
 <div class="toasts" id="toasts" aria-live="polite"></div>
+
+<!-- ════════════════════════════════════════════════════════
+     TOUR INTERATIVO — modal de boas-vindas (5 passos)
+     Aparece automaticamente na primeira visita
+     ════════════════════════════════════════════════════════ -->
+<div class="tour-backdrop" id="tourBackdrop" role="dialog" aria-modal="true" aria-labelledby="tourTitle">
+  <div class="tour-card">
+    <div class="tour-step-num"><span id="tourStepNum">Passo 1 de 5</span></div>
+    <div class="tour-icon" id="tourIcon">👋</div>
+    <h2 class="tour-title" id="tourTitle">Bem-vindo!</h2>
+    <p class="tour-desc" id="tourDesc">—</p>
+    <div class="tour-feature" id="tourFeatureBox">
+      <div class="tour-feature-icon" id="tourFeatureIcon">💡</div>
+      <div class="tour-feature-text" id="tourFeatureText">—</div>
+    </div>
+    <div class="tour-progress">
+      <div class="tour-dot active" data-step="0"></div>
+      <div class="tour-dot" data-step="1"></div>
+      <div class="tour-dot" data-step="2"></div>
+      <div class="tour-dot" data-step="3"></div>
+      <div class="tour-dot" data-step="4"></div>
+    </div>
+    <div class="tour-actions">
+      <button class="tour-skip" id="tourSkip">Pular tour</button>
+      <div class="tour-nav">
+        <button class="tour-btn" id="tourPrev" disabled>← Voltar</button>
+        <button class="tour-btn primary" id="tourNext">Próximo →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════
+     GLOSSÁRIO — modal com explicações dos termos financeiros
+     ════════════════════════════════════════════════════════ -->
+<div class="gloss-backdrop" id="glossBackdrop" role="dialog" aria-modal="true" aria-labelledby="glossTitle">
+  <div class="gloss-modal">
+    <div class="gloss-header">
+      <div class="gloss-header-left">
+        <span class="icon">📖</span>
+        <h2 id="glossTitle">Glossário</h2>
+      </div>
+      <input type="text" class="gloss-search" id="glossSearch" placeholder="Buscar termo..." aria-label="Buscar termo no glossário"/>
+      <button class="btn small ghost" id="glossClose" aria-label="Fechar glossário">✕</button>
+    </div>
+    <div class="gloss-body" id="glossBody"><!-- preenchido pelo JS --></div>
+  </div>
+</div>
+
+<!-- Floating help buttons (replay tour + open glossary) -->
+<div class="help-fab" id="helpFab">
+  <div style="display:flex;gap:8px;align-items:center">
+    <span class="help-btn-tip" id="glossTip">📖 Glossário</span>
+    <button class="help-btn glossary" id="glossOpenBtn" aria-label="Abrir glossário de termos">📖</button>
+  </div>
+  <div style="display:flex;gap:8px;align-items:center">
+    <span class="help-btn-tip" id="tourTip">🎯 Refazer tour</span>
+    <button class="help-btn" id="tourOpenBtn" aria-label="Refazer tour de boas-vindas">?</button>
+  </div>
+</div>
 
 <div class="alert-modal-backdrop" id="alertModalBackdrop">
   <div class="alert-modal">
@@ -475,10 +647,11 @@
         </div>
       </div>
       <div class="dash-topbar-right">
-        <button id="openAlertBtn2" class="btn small accent">⚡ <span data-i18n="btn_see_alerts">Ver alertas</span></button>
-        <a class="btn small" href="https://stockgaide.rafaelnm.workers.dev/dashboard?view=open" target="_blank" rel="noopener">🔓 <span data-i18n="btn_open_pos">Abertas</span></a>
-        <a class="btn small ghost" href="https://stockgaide.rafaelnm.workers.dev/dashboard?view=closed" target="_blank" rel="noopener">✅ <span data-i18n="btn_closed_pos">Fechadas</span></a>
-        <a class="btn small" href="https://stockgaide.rafaelnm.workers.dev/dashboard" target="_blank" rel="noopener">↗ <span data-i18n="btn_full_panel">Painel completo</span></a>
+        <button id="openAlertBtn2" class="btn accent" style="padding:10px 18px;font-size:14px">⚡ <span data-i18n="btn_see_alerts">Ver alertas</span></button>
+        <div class="dash-filter-group" role="group" aria-label="Filtros de posições">
+          <a class="dash-filter-btn" href="https://stockgaide.rafaelnm.workers.dev/dashboard?view=open" target="_blank" rel="noopener">🔓 <span data-i18n="btn_open_pos">Abertas</span></a>
+          <a class="dash-filter-btn" href="https://stockgaide.rafaelnm.workers.dev/dashboard?view=closed" target="_blank" rel="noopener">✅ <span data-i18n="btn_closed_pos">Fechadas</span></a>
+        </div>
       </div>
     </div>
     <div class="cf-dashboard-wrap">
@@ -539,7 +712,10 @@
               <div class="ai-sym-ticker" id="outTicker">—</div>
               <div class="ai-sym-name" id="outName">—</div>
             </div>
-            <div class="reco-badge hold" id="recoBadge" data-i18n="ai_reco_wait">Aguardando</div>
+            <div class="ai-reco-block">
+              <div class="ai-reco-eyebrow" data-i18n="ai_reco_eyebrow">Recomendação Final IA</div>
+              <div class="reco-badge hold" id="recoBadge" data-i18n="ai_reco_wait">Aguardando</div>
+            </div>
           </div>
           <div class="ai-divider"></div>
           <div class="ai-body" id="analysisBody"></div>
@@ -760,7 +936,7 @@ const MODEL     = 'nvidia/nemotron-3-nano-30b-a3b:free';
 // ── i18n ──────────────────────────────────────────────────────────
 const I18N = {
   pt:{
-    disc_pill:"⚠️ Educacional",disc_bold:"Conteúdo educacional.",disc_text:"Não é recomendação de investimento.",
+    disc_pill:"💡 Educacional",disc_bold:"Plataforma educacional.",disc_text:"Análises usadas pelo criador nas próprias decisões. Não é recomendação de investimento.",
     modal_alerts_title:"Trading Alerts",modal_open_sep:"↗ Abrir separado",
     brand_sub:"Análise inteligente de ações",
     tips_title:"Quick Tips",
@@ -858,10 +1034,63 @@ const I18N = {
     ai_prog_msg_done:"Resposta chegando — renderizando...",
     ai_price:"Preço",ai_change:"Variação",ai_high52:"Máx 52S",ai_low52:"Mín 52S",
     ai_pe:"P/L",ai_pe_ttm:"P/L TTM",ai_pe_fwd:"P/L Fwd",
-    ai_eps:"EPS",ai_eps_ttm:"EPS TTM",ai_pbv:"P/VPA",ai_mkt_cap:"Mkt Cap",ai_sig_tec:"Sinal Téc.",
+    ai_eps:"EPS",ai_eps_ttm:"EPS TTM",ai_pbv:"P/VPA",ai_mkt_cap:"Mkt Cap",ai_sig_tec:"Score Técnico",
+    ai_reco_eyebrow:"⚡ Recomendação Final IA",
+    // ── Tooltips contextuais nas métricas ──
+    tip_price:"Preço atual da ação na bolsa.",
+    tip_change:"Variação percentual de hoje em relação ao fechamento de ontem.",
+    tip_high52:"Maior preço atingido nas últimas 52 semanas (1 ano). Útil para saber se a ação está perto da máxima histórica recente.",
+    tip_low52:"Menor preço nas últimas 52 semanas. Pode indicar oportunidade ou tendência de queda.",
+    tip_pe:"P/L (Preço/Lucro). Mostra quantos anos de lucro atual seriam necessários para 'pagar' o preço da ação. Valores mais baixos podem indicar ação mais barata em relação ao lucro.",
+    tip_pe_ttm:"P/L TTM (últimos 12 meses). Compara o preço atual com o lucro real dos últimos 12 meses. Mais confiável que estimativas futuras.",
+    tip_pe_fwd:"P/L Forward (projetado). Usa estimativas de lucro futuro dos analistas. Indica quanto a ação está cara em relação ao lucro esperado.",
+    tip_eps:"EPS (Earnings Per Share) — Lucro por Ação. Quanto a empresa lucra para cada ação emitida. Quanto maior, melhor.",
+    tip_pbv:"P/VPA (Preço/Valor Patrimonial). Compara o preço da ação com o valor contábil da empresa. Abaixo de 1 pode indicar ação descontada (mas analise antes do contexto).",
+    tip_mkt_cap:"Market Cap — Valor de mercado. Quanto a empresa vale considerando todas as suas ações. Empresas maiores tendem a ser mais estáveis, menores podem crescer mais rápido.",
+    tip_rsi:"RSI (Relative Strength Index). Vai de 0 a 100. Acima de 70 = ação possivelmente sobrecomprada (cara). Abaixo de 30 = sobrevendida (barata). Entre 40 e 60 é zona neutra.",
+    tip_sma50:"SMA50 — Média móvel de 50 dias. Indica a tendência de médio prazo. Preço acima da SMA50 sugere alta, abaixo sugere baixa.",
+    tip_sig_tec:"Score calculado APENAS com indicadores técnicos (RSI, MACD, médias móveis). NÃO considera fundamentos nem opinião de analistas. Para a recomendação completa da IA — que combina técnico + fundamentos + analistas — veja o badge colorido no topo desta análise.",
+    // ── Tour de boas-vindas ──
+    tour_skip:"Pular tour",
+    tour_prev:"← Voltar",
+    tour_next:"Próximo →",
+    tour_finish:"Começar 🚀",
+    tour_step:"Passo {n} de {total}",
+    tour_s1_icon:"👋",
+    tour_s1_title:"Bem-vindo ao <span class='ai'>StockGaide</span>",
+    tour_s1_desc:"Olá! Sou <strong>Rafa Martins</strong>. Há mais de 25 anos em tecnologia e estudando o mercado de ações. Construí esta plataforma para combinar <strong>análise técnica + fundamentos + IA</strong> em um só lugar.",
+    tour_s1_feat:"<strong>Transparência total:</strong> eu uso essas mesmas recomendações nas minhas decisões de investimento.",
+    tour_s2_icon:"📊",
+    tour_s2_title:"Veja o <span class='ai'>Dashboard</span>",
+    tour_s2_desc:"Aqui você vê as <strong>recomendações geradas pela plataforma</strong> — ações que cruzaram critérios técnicos rigorosos com base em ~800 ativos monitorados diariamente após o fechamento de Wall Street.",
+    tour_s2_feat:"Cada alerta busca <strong>5% de ganho em até 20 dias</strong>. Quando o objetivo é atingido, a posição vai para o histórico.",
+    tour_s3_icon:"🤖",
+    tour_s3_title:"Use a <span class='ai'>Análise AI</span>",
+    tour_s3_desc:"Digite qualquer ticker (AAPL, NVDA, VALE3, PETR4...) e receba uma análise <strong>gerada por IA em tempo real</strong>, completa e em segundos: preço, fundamentos, indicadores técnicos, consenso de analistas e <strong>recomendação clara</strong>: comprar, manter ou vender.",
+    tour_s3_feat:"Termos como <strong>P/L, RSI, EPS</strong>? Passe o mouse em qualquer label para ver explicação simples.",
+    tour_s4_icon:"💼",
+    tour_s4_title:"Acompanhe o <span class='ai'>Portfólio</span>",
+    tour_s4_desc:"Veja em tempo real as ações que <strong>eu pessoalmente comprei</strong> e o P/L atual delas. Você também pode adicionar suas próprias posições para acompanhar localmente.",
+    tour_s4_feat:"<strong>Não é teoria nem backtest:</strong> são posições reais, com preço médio real.",
+    tour_s5_icon:"📖",
+    tour_s5_title:"Sempre que tiver dúvida...",
+    tour_s5_desc:"Use o botão <strong>📖</strong> no canto inferior direito para abrir o <strong>glossário completo</strong> com todos os termos financeiros explicados em português simples.",
+    tour_s5_feat:"O botão <strong>?</strong> ao lado abre este tour novamente quando quiser.",
+    // ── Glossário ──
+    gloss_title:"Glossário de Termos",
+    gloss_search_placeholder:"Buscar termo...",
+    gloss_empty:"Nenhum termo encontrado para essa busca.",
+    gloss_cat_price:"Preço & Variação",
+    gloss_cat_value:"Valuation (Valor Justo)",
+    gloss_cat_tech:"Análise Técnica",
+    gloss_cat_size:"Tamanho da Empresa",
+    gloss_cat_signal:"Sinais & Recomendações",
+    // help fab tips
+    help_tip_glossary:"📖 Glossário",
+    help_tip_tour:"🎯 Refazer tour",
   },
   en:{
-    disc_pill:"⚠️ Educational",disc_bold:"Educational content.",disc_text:"Not investment advice.",
+    disc_pill:"💡 Educational",disc_bold:"Educational platform.",disc_text:"Analyses used by the creator in their own decisions. Not investment advice.",
     modal_alerts_title:"Trading Alerts",modal_open_sep:"↗ Open separately",
     brand_sub:"Intelligent stock analysis",
     tips_title:"Quick Tips",
@@ -959,7 +1188,60 @@ const I18N = {
     ai_prog_msg_done:"Response arriving — rendering...",
     ai_price:"Price",ai_change:"Change",ai_high52:"52W High",ai_low52:"52W Low",
     ai_pe:"P/E",ai_pe_ttm:"P/E TTM",ai_pe_fwd:"P/E Fwd",
-    ai_eps:"EPS",ai_eps_ttm:"EPS TTM",ai_pbv:"P/B",ai_mkt_cap:"Mkt Cap",ai_sig_tec:"Tech Signal",
+    ai_eps:"EPS",ai_eps_ttm:"EPS TTM",ai_pbv:"P/B",ai_mkt_cap:"Mkt Cap",ai_sig_tec:"Tech Score",
+    ai_reco_eyebrow:"⚡ AI Final Recommendation",
+    // ── Educational tooltips on metrics ──
+    tip_price:"Current stock price on the exchange.",
+    tip_change:"Today's percentage change relative to yesterday's close.",
+    tip_high52:"Highest price reached in the last 52 weeks (1 year). Useful to know if the stock is near its recent all-time high.",
+    tip_low52:"Lowest price in the last 52 weeks. May indicate opportunity or downward trend.",
+    tip_pe:"P/E (Price-to-Earnings). Shows how many years of current earnings would be needed to 'pay back' the stock price. Lower values may indicate cheaper stock relative to profit.",
+    tip_pe_ttm:"P/E TTM (Trailing Twelve Months). Compares current price to actual profit over the last 12 months. More reliable than future estimates.",
+    tip_pe_fwd:"P/E Forward (projected). Uses analyst future earnings estimates. Indicates how expensive the stock is relative to expected profit.",
+    tip_eps:"EPS (Earnings Per Share). How much the company earns per outstanding share. Higher is better.",
+    tip_pbv:"P/B (Price-to-Book). Compares stock price to the company's book value. Below 1 may indicate discounted stock (but analyze context first).",
+    tip_mkt_cap:"Market Cap. The company's total market value across all shares. Larger companies tend to be more stable; smaller ones may grow faster.",
+    tip_rsi:"RSI (Relative Strength Index). Ranges 0-100. Above 70 = possibly overbought (expensive). Below 30 = oversold (cheap). 40-60 is neutral zone.",
+    tip_sma50:"SMA50 — 50-day moving average. Indicates medium-term trend. Price above SMA50 suggests uptrend, below suggests downtrend.",
+    tip_sig_tec:"Score calculated ONLY from technical indicators (RSI, MACD, moving averages). Does NOT consider fundamentals or analyst opinions. For the full AI recommendation — combining technicals + fundamentals + analysts — see the colored badge at the top of this analysis.",
+    // ── Welcome tour ──
+    tour_skip:"Skip tour",
+    tour_prev:"← Back",
+    tour_next:"Next →",
+    tour_finish:"Get started 🚀",
+    tour_step:"Step {n} of {total}",
+    tour_s1_icon:"👋",
+    tour_s1_title:"Welcome to <span class='ai'>StockGaide</span>",
+    tour_s1_desc:"Hi! I'm <strong>Rafa Martins</strong>. Over 25 years in technology and studying the stock market. I built this platform to combine <strong>technical analysis + fundamentals + AI</strong> in one place.",
+    tour_s1_feat:"<strong>Full transparency:</strong> I use these same recommendations in my own investment decisions.",
+    tour_s2_icon:"📊",
+    tour_s2_title:"See the <span class='ai'>Dashboard</span>",
+    tour_s2_desc:"Here you see <strong>recommendations generated by the platform</strong> — stocks that crossed strict technical criteria across ~800 monitored assets daily after Wall Street close.",
+    tour_s2_feat:"Each alert targets <strong>5% gain within 20 days</strong>. When the target is hit, the position moves to history.",
+    tour_s3_icon:"🤖",
+    tour_s3_title:"Use <span class='ai'>AI Analysis</span>",
+    tour_s3_desc:"Type any ticker (AAPL, NVDA, VALE3, PETR4...) and get a <strong>real-time AI-generated</strong> analysis, complete and in seconds: price, fundamentals, technical indicators, analyst consensus, and a <strong>clear recommendation</strong>: buy, hold, or sell.",
+    tour_s3_feat:"Confused by terms like <strong>P/E, RSI, EPS</strong>? Hover any label to see a plain-English explanation.",
+    tour_s4_icon:"💼",
+    tour_s4_title:"Track the <span class='ai'>Portfolio</span>",
+    tour_s4_desc:"See in real time the stocks <strong>I personally bought</strong> and their current P/L. You can also add your own positions to track locally.",
+    tour_s4_feat:"<strong>Not theory or backtests:</strong> these are real positions with real average prices.",
+    tour_s5_icon:"📖",
+    tour_s5_title:"Whenever you're in doubt...",
+    tour_s5_desc:"Use the <strong>📖</strong> button at the bottom right to open the <strong>full glossary</strong> with all financial terms explained in plain English.",
+    tour_s5_feat:"The <strong>?</strong> button next to it reopens this tour anytime you want.",
+    // ── Glossary ──
+    gloss_title:"Glossary of Terms",
+    gloss_search_placeholder:"Search term...",
+    gloss_empty:"No terms found for that search.",
+    gloss_cat_price:"Price & Movement",
+    gloss_cat_value:"Valuation (Fair Value)",
+    gloss_cat_tech:"Technical Analysis",
+    gloss_cat_size:"Company Size",
+    gloss_cat_signal:"Signals & Recommendations",
+    // help fab tips
+    help_tip_glossary:"📖 Glossary",
+    help_tip_tour:"🎯 Replay tour",
   }
 };
 
@@ -1372,9 +1654,12 @@ document.addEventListener('DOMContentLoaded', ()=>{
 
   function renderMetrics(items){
     const g=document.getElementById('metrics');g.innerHTML='';
-    items.filter(x=>x.v!=null&&x.v!=='N/A'&&x.v!=='undefined'&&x.v!=='null').forEach(({l,v,cls})=>{
+    items.filter(x=>x.v!=null&&x.v!=='N/A'&&x.v!=='undefined'&&x.v!=='null').forEach(({l,v,cls,tip})=>{
       const d=document.createElement('div');d.className='ai-metric';
-      d.innerHTML=`<div class="ai-metric-l">${l}</div><div class="ai-metric-v ${cls||''}">${v}</div>`;
+      const labelHTML = tip
+        ? `<div class="ai-metric-l" data-tip="${esc(tip)}" title="${esc(tip)}">${l}</div>`
+        : `<div class="ai-metric-l">${l}</div>`;
+      d.innerHTML=`${labelHTML}<div class="ai-metric-v ${cls||''}">${v}</div>`;
       g.appendChild(d);
     });
     g.classList.add('visible');
@@ -1471,34 +1756,34 @@ document.addEventListener('DOMContentLoaded', ()=>{
 
     const rawData=buildData(ticker,price,brData,anaData,usFund);
 
-    // Render metrics with translated labels
+    // Render metrics with translated labels + educational tooltips
     if(market==='BR'&&brData){
       const d2=brData;const chg=d2.regularMarketChangePercent??0;
       renderMetrics([
-        {l:dict.ai_price,v:`R$ ${d2.regularMarketPrice}`,cls:''},
-        {l:dict.ai_change,v:d2.regularMarketChangePercent!=null?`${chg>=0?'+':''}${chg?.toFixed(2)}%`:null,cls:chg>=0?'pos':'neg'},
-        {l:dict.ai_high52,v:d2.fiftyTwoWeekHigh?`R$ ${d2.fiftyTwoWeekHigh}`:null,cls:''},
-        {l:dict.ai_low52,v:d2.fiftyTwoWeekLow?`R$ ${d2.fiftyTwoWeekLow}`:null,cls:''},
-        {l:dict.ai_pe,v:d2.priceEarnings,cls:''},
-        {l:dict.ai_eps,v:d2.earningsPerShare?`R$ ${d2.earningsPerShare}`:null,cls:''},
-        {l:'RSI(14)',v:anaData?.technicals?.rsi,cls:''},
-        {l:'SMA50',v:anaData?.technicals?.sma50,cls:''},
-        {l:dict.ai_sig_tec,v:anaData?`${anaData.decision}(${anaData.score})`:null,cls:anaData?.decision==='BUY'?'pos':anaData?.decision==='SELL'?'neg':'blue'},
+        {l:dict.ai_price,v:`R$ ${d2.regularMarketPrice}`,cls:'',tip:dict.tip_price},
+        {l:dict.ai_change,v:d2.regularMarketChangePercent!=null?`${chg>=0?'+':''}${chg?.toFixed(2)}%`:null,cls:chg>=0?'pos':'neg',tip:dict.tip_change},
+        {l:dict.ai_high52,v:d2.fiftyTwoWeekHigh?`R$ ${d2.fiftyTwoWeekHigh}`:null,cls:'',tip:dict.tip_high52},
+        {l:dict.ai_low52,v:d2.fiftyTwoWeekLow?`R$ ${d2.fiftyTwoWeekLow}`:null,cls:'',tip:dict.tip_low52},
+        {l:dict.ai_pe,v:d2.priceEarnings,cls:'',tip:dict.tip_pe},
+        {l:dict.ai_eps,v:d2.earningsPerShare?`R$ ${d2.earningsPerShare}`:null,cls:'',tip:dict.tip_eps},
+        {l:'RSI(14)',v:anaData?.technicals?.rsi,cls:'',tip:dict.tip_rsi},
+        {l:'SMA50',v:anaData?.technicals?.sma50,cls:'',tip:dict.tip_sma50},
+        {l:dict.ai_sig_tec,v:anaData?`${anaData.decision}(${anaData.score})`:null,cls:'blue',tip:dict.tip_sig_tec},
       ]);
     }else{
       const t=anaData?.technicals||{};const f=usFund||{};
       const fmtB=v=>v?`$${(v/1e9).toFixed(1)}B`:null;
       renderMetrics([
-        {l:dict.ai_price,v:price!=null?`$${price}`:null,cls:''},
-        {l:dict.ai_pe_ttm,v:f.trailingPE!=null?f.trailingPE.toFixed(1):null,cls:''},
-        {l:dict.ai_pe_fwd,v:f.forwardPE!=null?f.forwardPE.toFixed(1):null,cls:''},
-        {l:dict.ai_eps_ttm,v:f.eps!=null?`$${f.eps.toFixed(2)}`:null,cls:''},
-        {l:dict.ai_pbv,v:f.priceToBook!=null?f.priceToBook.toFixed(2):null,cls:''},
-        {l:dict.ai_mkt_cap,v:fmtB(f.marketCap),cls:''},
-        {l:dict.ai_high52,v:f.fiftyTwoHigh!=null?`$${f.fiftyTwoHigh}`:null,cls:''},
-        {l:dict.ai_low52,v:f.fiftyTwoLow!=null?`$${f.fiftyTwoLow}`:null,cls:''},
-        {l:'RSI(14)',v:t.rsi,cls:''},
-        {l:dict.ai_sig_tec,v:anaData?`${anaData.decision}(${anaData.score})`:null,cls:anaData?.decision==='BUY'?'pos':anaData?.decision==='SELL'?'neg':'blue'},
+        {l:dict.ai_price,v:price!=null?`$${price}`:null,cls:'',tip:dict.tip_price},
+        {l:dict.ai_pe_ttm,v:f.trailingPE!=null?f.trailingPE.toFixed(1):null,cls:'',tip:dict.tip_pe_ttm},
+        {l:dict.ai_pe_fwd,v:f.forwardPE!=null?f.forwardPE.toFixed(1):null,cls:'',tip:dict.tip_pe_fwd},
+        {l:dict.ai_eps_ttm,v:f.eps!=null?`$${f.eps.toFixed(2)}`:null,cls:'',tip:dict.tip_eps},
+        {l:dict.ai_pbv,v:f.priceToBook!=null?f.priceToBook.toFixed(2):null,cls:'',tip:dict.tip_pbv},
+        {l:dict.ai_mkt_cap,v:fmtB(f.marketCap),cls:'',tip:dict.tip_mkt_cap},
+        {l:dict.ai_high52,v:f.fiftyTwoHigh!=null?`$${f.fiftyTwoHigh}`:null,cls:'',tip:dict.tip_high52},
+        {l:dict.ai_low52,v:f.fiftyTwoLow!=null?`$${f.fiftyTwoLow}`:null,cls:'',tip:dict.tip_low52},
+        {l:'RSI(14)',v:t.rsi,cls:'',tip:dict.tip_rsi},
+        {l:dict.ai_sig_tec,v:anaData?`${anaData.decision}(${anaData.score})`:null,cls:'blue',tip:dict.tip_sig_tec},
       ]);
     }
 
@@ -1743,9 +2028,264 @@ document.addEventListener('DOMContentLoaded', ()=>{
     if(!isInput&&key==='a'){e.preventDefault();window._activateTab('tab-portfolio');document.getElementById('posSymbol')?.focus();return;}
   },{passive:false});
 
+  // ═══════════════════════════════════════════════════════
+  // ── INTERACTIVE TOUR — runs on first visit ───────────
+  // ═══════════════════════════════════════════════════════
+  const TOUR_KEY='stockgaide_tour_completed_v2';
+  const TOUR_TOTAL=5;
+  let tourCurrentStep=0;
+
+  function tourStepData(idx){
+    const dict=d();
+    const steps=[
+      // Step 1: Welcome
+      {icon:dict.tour_s1_icon,title:dict.tour_s1_title,desc:dict.tour_s1_desc,feat:dict.tour_s1_feat,tab:null},
+      // Step 2: AI Analysis FIRST — most distinctive feature, hook the user with value
+      {icon:dict.tour_s3_icon,title:dict.tour_s3_title,desc:dict.tour_s3_desc,feat:dict.tour_s3_feat,tab:'tab-analise'},
+      // Step 3: Dashboard SECOND — recommendations history, contextual after they get the AI value prop
+      {icon:dict.tour_s2_icon,title:dict.tour_s2_title,desc:dict.tour_s2_desc,feat:dict.tour_s2_feat,tab:'tab-dashboard'},
+      // Step 4: Portfolio
+      {icon:dict.tour_s4_icon,title:dict.tour_s4_title,desc:dict.tour_s4_desc,feat:dict.tour_s4_feat,tab:'tab-portfolio'},
+      // Step 5: Help / glossary
+      {icon:dict.tour_s5_icon,title:dict.tour_s5_title,desc:dict.tour_s5_desc,feat:dict.tour_s5_feat,tab:null},
+    ];
+    return steps[idx];
+  }
+
+  function tourRender(){
+    const dict=d();
+    const data=tourStepData(tourCurrentStep);
+    document.getElementById('tourIcon').textContent=data.icon;
+    document.getElementById('tourTitle').innerHTML=data.title;
+    document.getElementById('tourDesc').innerHTML=data.desc;
+    document.getElementById('tourFeatureText').innerHTML=data.feat;
+    document.getElementById('tourStepNum').textContent=(dict.tour_step||'Step {n} of {total}').replace('{n}',tourCurrentStep+1).replace('{total}',TOUR_TOTAL);
+    // progress dots
+    document.querySelectorAll('.tour-dot').forEach((dot,i)=>{
+      dot.classList.toggle('active',i===tourCurrentStep);
+      dot.classList.toggle('done',i<tourCurrentStep);
+    });
+    // navigation buttons
+    const prev=document.getElementById('tourPrev'),next=document.getElementById('tourNext');
+    prev.disabled=tourCurrentStep===0;
+    prev.textContent=dict.tour_prev||'← Back';
+    next.textContent=tourCurrentStep===TOUR_TOTAL-1?(dict.tour_finish||'Get started 🚀'):(dict.tour_next||'Next →');
+    document.getElementById('tourSkip').textContent=dict.tour_skip||'Skip tour';
+    // Activate the corresponding tab as a visual preview (so user sees the area)
+    if(data.tab && window._activateTab){window._activateTab(data.tab);}
+  }
+
+  function openTour(forced){
+    tourCurrentStep=0;
+    tourRender();
+    document.getElementById('tourBackdrop').classList.add('open');
+    document.body.style.overflow='hidden';
+    track('tour_started',{forced:!!forced});
+  }
+
+  function closeTour(completed){
+    document.getElementById('tourBackdrop').classList.remove('open');
+    document.body.style.overflow='';
+    if(completed){
+      try{localStorage.setItem(TOUR_KEY,'1');}catch(e){}
+      track('tour_completed',{step:tourCurrentStep+1});
+    } else {
+      track('tour_skipped',{step:tourCurrentStep+1});
+    }
+  }
+
+  function tourGoNext(){
+    if(tourCurrentStep<TOUR_TOTAL-1){
+      tourCurrentStep++;tourRender();
+    } else {
+      closeTour(true);
+      // Always end on Dashboard so user sees value first
+      if(window._activateTab) window._activateTab('tab-dashboard');
+    }
+  }
+  function tourGoPrev(){
+    if(tourCurrentStep>0){tourCurrentStep--;tourRender();}
+  }
+
+  document.getElementById('tourNext').addEventListener('click',tourGoNext);
+  document.getElementById('tourPrev').addEventListener('click',tourGoPrev);
+  document.getElementById('tourSkip').addEventListener('click',()=>closeTour(false));
+  document.getElementById('tourBackdrop').addEventListener('click',e=>{
+    if(e.target.id==='tourBackdrop')closeTour(false);
+  });
+  // Replay button
+  document.getElementById('tourOpenBtn').addEventListener('click',()=>openTour(true));
+  // Keyboard: arrow keys + Esc inside tour
+  document.addEventListener('keydown',e=>{
+    if(!document.getElementById('tourBackdrop').classList.contains('open'))return;
+    if(e.key==='ArrowRight'||e.key==='Enter'){e.preventDefault();tourGoNext();}
+    else if(e.key==='ArrowLeft'){e.preventDefault();tourGoPrev();}
+    else if(e.key==='Escape'){e.preventDefault();closeTour(false);}
+  });
+
+  // ═══════════════════════════════════════════════════════
+  // ── GLOSSARY — financial terms in plain language ─────
+  // ═══════════════════════════════════════════════════════
+  const GLOSS_DATA={
+    pt:{
+      [`gloss_cat_price`]:[
+        {term:'Preço',full:'Preço atual',desc:'O valor pelo qual a ação está sendo negociada agora na bolsa.'},
+        {term:'Variação',full:'Variação do dia',desc:'Diferença percentual entre o preço atual e o fechamento do dia anterior. Positivo = subiu, negativo = caiu.'},
+        {term:'Máx 52S',full:'Máxima das 52 semanas',desc:'Maior preço atingido pela ação nos últimos 12 meses. Útil para saber se a ação está perto do topo recente.'},
+        {term:'Mín 52S',full:'Mínima das 52 semanas',desc:'Menor preço atingido pela ação nos últimos 12 meses. Pode indicar oportunidade de compra ou tendência negativa.'},
+      ],
+      [`gloss_cat_value`]:[
+        {term:'P/L',full:'Preço sobre Lucro',desc:'Quantos anos de lucro atual seriam necessários para "pagar" o preço da ação. Ex: P/L de 15 significa 15 anos. <strong>P/L baixo</strong> sugere ação descontada; <strong>P/L alto</strong> sugere expectativa de crescimento ou ação cara.'},
+        {term:'P/L TTM',full:'P/L Trailing Twelve Months',desc:'P/L calculado com o lucro real dos últimos 12 meses. Mais confiável que projeções, porque usa dados já realizados.'},
+        {term:'P/L Forward',full:'P/L Projetado',desc:'P/L calculado com a estimativa de lucro futuro feita por analistas. Mostra se a ação está cara em relação ao que se espera ganhar.'},
+        {term:'EPS',full:'Earnings Per Share — Lucro por Ação',desc:'Quanto a empresa lucra para cada ação que ela emitiu. Cálculo: lucro líquido ÷ número de ações. <strong>Quanto maior, melhor</strong>.'},
+        {term:'EPS TTM',full:'EPS dos últimos 12 meses',desc:'Lucro por ação somando os 4 últimos trimestres reportados. Mostra a capacidade real de gerar lucro recentemente.'},
+        {term:'P/VPA',full:'Preço sobre Valor Patrimonial',desc:'Compara o preço da ação com o valor contábil da empresa (patrimônio ÷ número de ações). <strong>Abaixo de 1</strong> = ação negociada abaixo do valor contábil (potencial desconto). <strong>Acima de 3</strong> = mercado precificando muito acima do patrimônio.'},
+      ],
+      [`gloss_cat_tech`]:[
+        {term:'RSI',full:'Relative Strength Index — Índice de Força Relativa',desc:'Indicador de 0 a 100 que mede se uma ação está sobrecomprada ou sobrevendida. <strong>Acima de 70</strong> = sobrecomprada (pode cair). <strong>Abaixo de 30</strong> = sobrevendida (pode subir). <strong>Entre 40 e 60</strong> = zona neutra.'},
+        {term:'SMA',full:'Simple Moving Average — Média Móvel Simples',desc:'A média do preço fechado dos últimos N dias. SMA50 = média dos últimos 50 dias, SMA200 = últimos 200 dias. Quando o preço cruza para cima da SMA, é sinal de força; cruza para baixo, sinal de fraqueza.'},
+        {term:'MACD',full:'Moving Average Convergence Divergence',desc:'Indicador que mostra se a tendência de curto prazo está mais forte ou mais fraca que a de médio prazo. Quando MACD cruza acima de seu sinal, é sinal de compra; abaixo, sinal de venda.'},
+        {term:'Histograma MACD',full:'Hist do MACD',desc:'Mostra a diferença entre o MACD e sua linha de sinal. Histograma crescendo = momentum aumentando.'},
+      ],
+      [`gloss_cat_size`]:[
+        {term:'Mkt Cap',full:'Market Capitalization — Capitalização de Mercado',desc:'Valor total da empresa na bolsa: preço da ação × número total de ações. <strong>Large Cap</strong> (>$10B): empresas grandes e estáveis. <strong>Mid Cap</strong> ($2B–$10B): porte médio. <strong>Small Cap</strong> (<$2B): menores e mais voláteis, mas com potencial de crescimento maior.'},
+        {term:'Volume',full:'Volume negociado',desc:'Quantidade de ações compradas e vendidas no período. Alto volume com alta de preço confirma força do movimento.'},
+      ],
+      [`gloss_cat_signal`]:[
+        {term:'⚡ Recomendação Final IA',full:'Decisão completa gerada pela IA',desc:'A recomendação <strong>principal</strong>, exibida no badge colorido grande no topo da análise (🟢 Comprar · 🟡 Manter · 🔴 Vender). É a decisão completa, gerada pela IA combinando <strong>análise técnica</strong> (RSI, MACD, médias) + <strong>fundamentos</strong> (P/L, EPS, crescimento, margem) + <strong>consenso de analistas de mercado</strong> + <strong>contexto macro</strong>. <strong>É essa que você deve usar como referência de decisão</strong>.'},
+        {term:'Score Técnico',full:'BUY/HOLD/SELL com força (0-100)',desc:'Aparece como <code>BUY(70)</code>, <code>HOLD(50)</code> ou <code>SELL(80)</code> num dos cards de métricas. <strong>Atenção:</strong> este score é calculado <strong>APENAS com indicadores técnicos</strong> (RSI, MACD, médias móveis) — <strong>não inclui</strong> fundamentos nem opinião de analistas. <strong>Não confunda com a Recomendação Final IA acima</strong> — pode até divergir dela. O número entre parênteses é a força (BUY 70+ = forte, 50-69 = moderado).'},
+        {term:'CP v11',full:'Estratégia de Curto Prazo (versão 11)',desc:'Algoritmo proprietário focado em ganhos rápidos. Alvo: <strong>+5% em até 20 dias</strong>. Stop em -3,5%.'},
+        {term:'MACDLE',full:'Estratégia de Longo Prazo',desc:'Algoritmo focado em movimentos maiores ao longo de semanas/meses. Combina MACD, PSO e SMI.'},
+        {term:'P/L %',full:'Profit/Loss — Lucro/Prejuízo',desc:'Quanto você ganhou ou perdeu em uma posição, em percentual. Calculado: (preço atual − preço médio) ÷ preço médio × 100.'},
+        {term:'Profit Factor',full:'Fator de Lucro',desc:'Razão entre soma dos ganhos e soma das perdas no histórico. <strong>Acima de 1.40</strong> = estratégia ganha mais do que perde. <strong>Abaixo de 1.0</strong> = estratégia perde dinheiro.'},
+        {term:'Probabilidade',full:'Prob. histórica',desc:'Em N sinais anteriores semelhantes, em quantos % deles a ação efetivamente atingiu o alvo de 5% em 15 dias. Sweet spot: 60-65%.'},
+      ],
+    },
+    en:{
+      [`gloss_cat_price`]:[
+        {term:'Price',full:'Current price',desc:'The price at which the stock is currently trading on the exchange.'},
+        {term:'Change',full:'Daily change',desc:'Percentage difference between current price and yesterday\'s close. Positive = up, negative = down.'},
+        {term:'52W High',full:'52-week high',desc:'Highest price in the last 12 months. Useful to know if the stock is near its recent top.'},
+        {term:'52W Low',full:'52-week low',desc:'Lowest price in the last 12 months. May indicate buying opportunity or downward trend.'},
+      ],
+      [`gloss_cat_value`]:[
+        {term:'P/E',full:'Price-to-Earnings Ratio',desc:'How many years of current earnings would be needed to "pay back" the stock price. Ex: P/E of 15 = 15 years. <strong>Low P/E</strong> may mean discounted stock; <strong>high P/E</strong> often signals growth expectations or expensive stock.'},
+        {term:'P/E TTM',full:'Trailing Twelve Months P/E',desc:'P/E calculated using actual earnings from the last 12 months. More reliable than projections.'},
+        {term:'P/E Forward',full:'Forward P/E',desc:'P/E calculated with analyst future earnings estimates. Shows whether the stock is expensive vs. expected profits.'},
+        {term:'EPS',full:'Earnings Per Share',desc:'How much the company earns per outstanding share. Calculation: net income ÷ number of shares. <strong>Higher is better</strong>.'},
+        {term:'EPS TTM',full:'EPS Trailing Twelve Months',desc:'Earnings per share over the last 4 reported quarters. Shows real recent earning power.'},
+        {term:'P/B',full:'Price-to-Book Ratio',desc:'Compares stock price to company\'s book value (equity ÷ shares). <strong>Below 1</strong> = stock trading below book value (potential discount). <strong>Above 3</strong> = market pricing well above book value.'},
+      ],
+      [`gloss_cat_tech`]:[
+        {term:'RSI',full:'Relative Strength Index',desc:'0-100 indicator measuring overbought/oversold conditions. <strong>Above 70</strong> = overbought (may fall). <strong>Below 30</strong> = oversold (may rise). <strong>40-60</strong> = neutral zone.'},
+        {term:'SMA',full:'Simple Moving Average',desc:'Average of closing prices over N days. SMA50 = 50-day average, SMA200 = 200-day average. Price crossing above SMA = strength signal; below = weakness.'},
+        {term:'MACD',full:'Moving Average Convergence Divergence',desc:'Indicator showing if short-term trend is stronger or weaker than mid-term. MACD crossing above signal line = buy signal; below = sell signal.'},
+        {term:'MACD Histogram',full:'MACD Hist',desc:'Difference between MACD and its signal line. Growing histogram = increasing momentum.'},
+      ],
+      [`gloss_cat_size`]:[
+        {term:'Mkt Cap',full:'Market Capitalization',desc:'Company\'s total market value: share price × total shares. <strong>Large Cap</strong> (>$10B): big, stable. <strong>Mid Cap</strong> ($2B–$10B): mid-size. <strong>Small Cap</strong> (<$2B): smaller, more volatile, higher growth potential.'},
+        {term:'Volume',full:'Trading volume',desc:'Number of shares bought and sold over the period. High volume with price up confirms move strength.'},
+      ],
+      [`gloss_cat_signal`]:[
+        {term:'⚡ AI Final Recommendation',full:'Complete decision generated by AI',desc:'The <strong>main</strong> recommendation, shown in the large colored badge at the top of the analysis (🟢 Buy · 🟡 Hold · 🔴 Sell). It is the complete decision, generated by AI combining <strong>technical analysis</strong> (RSI, MACD, moving averages) + <strong>fundamentals</strong> (P/E, EPS, growth, margins) + <strong>analyst consensus</strong> + <strong>macro context</strong>. <strong>This is the one you should use as your decision reference</strong>.'},
+        {term:'Tech Score',full:'BUY/HOLD/SELL with strength (0-100)',desc:'Appears as <code>BUY(70)</code>, <code>HOLD(50)</code> or <code>SELL(80)</code> in one of the metric cards. <strong>Important:</strong> this score is calculated <strong>ONLY from technical indicators</strong> (RSI, MACD, moving averages) — it does <strong>not include</strong> fundamentals or analyst opinions. <strong>Do not confuse it with the AI Final Recommendation above</strong> — they may even diverge. The number in parentheses is the strength (BUY 70+ = strong, 50-69 = moderate).'},
+        {term:'CP v11',full:'Short-Term Strategy (v11)',desc:'Proprietary algorithm focused on quick gains. Target: <strong>+5% within 20 days</strong>. Stop at -3.5%.'},
+        {term:'MACDLE',full:'Long-Term Strategy',desc:'Algorithm focused on larger movements over weeks/months. Combines MACD, PSO, and SMI.'},
+        {term:'P/L %',full:'Profit/Loss percentage',desc:'How much you\'ve gained or lost on a position, as a percentage. Calculated: (current price − average price) ÷ average price × 100.'},
+        {term:'Profit Factor',full:'Profit Factor',desc:'Ratio of total gains to total losses in trade history. <strong>Above 1.40</strong> = strategy wins more than loses. <strong>Below 1.0</strong> = strategy loses money.'},
+        {term:'Probability',full:'Historical probability',desc:'Out of N previous similar signals, what % actually hit the 5% target within 15 days. Sweet spot: 60-65%.'},
+      ],
+    },
+  };
+
+  function renderGlossary(filter){
+    const dict=d();
+    const lang=currentLang==='en'?'en':'pt';
+    const data=GLOSS_DATA[lang];
+    const body=document.getElementById('glossBody');
+    const q=String(filter||'').trim().toLowerCase();
+    let html='';
+    let totalShown=0;
+    Object.keys(data).forEach(catKey=>{
+      const items=data[catKey];
+      const filtered=q
+        ? items.filter(it=>(it.term+' '+it.full+' '+it.desc).toLowerCase().includes(q))
+        : items;
+      if(!filtered.length)return;
+      html+=`<div class="gloss-cat">${esc(dict[catKey]||catKey)}</div>`;
+      filtered.forEach(it=>{
+        totalShown++;
+        html+=`<div class="gloss-item">
+          <div class="gloss-item-head">
+            <span class="gloss-term">${esc(it.term)}</span>
+            <span class="gloss-full">${esc(it.full)}</span>
+          </div>
+          <p class="gloss-desc">${it.desc}</p>
+        </div>`;
+      });
+    });
+    if(!totalShown){
+      html=`<div class="gloss-empty">${esc(dict.gloss_empty||'No terms found.')}</div>`;
+    }
+    body.innerHTML=html;
+  }
+
+  function openGlossary(){
+    document.getElementById('glossSearch').value='';
+    renderGlossary('');
+    document.getElementById('glossBackdrop').classList.add('open');
+    document.body.style.overflow='hidden';
+    track('glossary_opened');
+  }
+  function closeGlossary(){
+    document.getElementById('glossBackdrop').classList.remove('open');
+    document.body.style.overflow='';
+  }
+  document.getElementById('glossOpenBtn').addEventListener('click',openGlossary);
+  document.getElementById('glossClose').addEventListener('click',closeGlossary);
+  document.getElementById('glossBackdrop').addEventListener('click',e=>{
+    if(e.target.id==='glossBackdrop')closeGlossary();
+  });
+  document.getElementById('glossSearch').addEventListener('input',e=>{
+    renderGlossary(e.target.value);
+  });
+  document.addEventListener('keydown',e=>{
+    if(e.key==='Escape'&&document.getElementById('glossBackdrop').classList.contains('open')){
+      closeGlossary();
+    }
+  });
+
+  // Update FAB tooltips on language change
+  function updateHelpFabTips(){
+    const dict=d();
+    document.getElementById('glossTip').textContent=dict.help_tip_glossary||'📖 Glossary';
+    document.getElementById('tourTip').textContent=dict.help_tip_tour||'🎯 Replay tour';
+    document.getElementById('glossSearch').placeholder=dict.gloss_search_placeholder||'Search...';
+    document.getElementById('glossTitle').textContent=dict.gloss_title||'Glossary';
+  }
+  // Re-render glossary when language changes (hook into existing langToggle handler)
+  const _origLangToggle=document.getElementById('langToggle');
+  if(_origLangToggle){
+    _origLangToggle.addEventListener('click',()=>{
+      // The original handler already runs applyI18n() — we just refresh helper UI
+      setTimeout(()=>{
+        updateHelpFabTips();
+        if(document.getElementById('glossBackdrop').classList.contains('open')){
+          renderGlossary(document.getElementById('glossSearch').value);
+        }
+        // If tour is open, re-render its current step in new language
+        if(document.getElementById('tourBackdrop').classList.contains('open')){
+          tourRender();
+        }
+      },50);
+    });
+  }
+
   // ── Init ──────────────────────────────────────────────────────────
   document.getElementById('y').textContent=new Date().getFullYear();
   applyI18n();
+  updateHelpFabTips(); // Set FAB tooltips in current language
   loadChart('NASDAQ:AAPL');
   const conn=navigator.connection||{},slow=conn.saveData||/2g|slow-2g/.test(conn.effectiveType||'');
   if(!slow)loadPublicPositions();else renderPositions(readCache());
@@ -1753,6 +2293,15 @@ document.addEventListener('DOMContentLoaded', ()=>{
   document.getElementById('refreshBtn').addEventListener('click',refreshPrices);
   renderPositions(readCache());
   updateSummaryMetrics(readCache());
+
+  // ── Auto-open tour on first visit ────────────────────────────────
+  // localStorage flag prevents repeat auto-open. User can replay via "?" FAB.
+  // Small delay so initial UI settles first.
+  try{
+    if(!localStorage.getItem(TOUR_KEY)){
+      setTimeout(()=>openTour(false),900);
+    }
+  }catch(e){ /* localStorage blocked — silently skip auto-tour */ }
 });
 </script>
 </body>
