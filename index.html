@@ -484,7 +484,6 @@
 <body>
 
 <div class="disclaimer-bar" role="status">
-  <span class="pill" data-i18n="disc_pill">💡 Educacional</span>
   <span><strong data-i18n="disc_bold">Plataforma educacional.</strong> <span data-i18n="disc_text">Análises usadas pelo criador nas próprias decisões. Não é recomendação de investimento.</span></span>
 </div>
 
@@ -2099,8 +2098,8 @@ document.addEventListener('DOMContentLoaded', ()=>{
       tourCurrentStep++;tourRender();
     } else {
       closeTour(true);
-      // Always end on Dashboard so user sees value first
-      if(window._activateTab) window._activateTab('tab-dashboard');
+      // End on AI Analysis tab — most distinctive feature; user can immediately try a ticker
+      if(window._activateTab) window._activateTab('tab-analise');
     }
   }
   function tourGoPrev(){
