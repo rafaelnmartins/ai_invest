@@ -172,6 +172,7 @@
     .toast .dot{width:8px;height:8px;border-radius:50%;margin-top:4px;flex-shrink:0;background:var(--neutral)}
     .toast.success .dot{background:var(--success);box-shadow:0 0 6px rgba(0,209,122,0.5)}
     .toast.error .dot{background:var(--danger)}
+    .toast.warn .dot{background:var(--neutral);box-shadow:0 0 6px rgba(255,181,71,0.5)}
     .toast .ttitle{font-weight:700;font-size:13px}
     .toast .tmsg{color:var(--muted);margin-top:2px;font-size:12px}
     .toast button{margin-left:auto;border:none;background:transparent;color:rgba(255,255,255,0.5);cursor:pointer;font-size:16px;padding:0 2px}
@@ -1583,6 +1584,22 @@ document.addEventListener('DOMContentLoaded', ()=>{
     }catch(e){console.warn('fetchFundamentalsUS:',e.message);return null;}
   }
 
+  // ── Defensive sanitizer for fundamentals ─────────────────────────
+  // Detects unit mismatches common in ADRs (e.g. RIO ADR in USD but Yahoo returns
+  // 52W high/low from the London listing in GBp pence — ~100x larger numbers).
+  // Heuristic: if a 52W value is >5x the current price or <0.2x of it, the unit
+  // is almost certainly wrong (real 52W range rarely deviates >5x in 12 months).
+  // We null those fields so they're not displayed and not sent to the LLM.
+  function sanitizeFundamentals(usF, price){
+    if(!usF || price==null || price<=0) return {usF, warnings:[]};
+    const out = {...usF};
+    const warnings = [];
+    const ratioBad = (v)=> v!=null && (v > price*5 || v < price*0.2);
+    if(ratioBad(out.fiftyTwoHigh)){ out.fiftyTwoHigh = null; warnings.push('fiftyTwoHigh'); }
+    if(ratioBad(out.fiftyTwoLow)){  out.fiftyTwoLow  = null; warnings.push('fiftyTwoLow');  }
+    return {usF:out, warnings};
+  }
+
   function buildData(ticker,price,brData,ana,usF){
     const t=ana?.technicals||{};const a=ana?.analysts||{};
     const EN=currentLang==='en';
@@ -1751,6 +1768,32 @@ document.addEventListener('DOMContentLoaded', ()=>{
           stepDo('s2','done',`${techLabel} ✔ · ${dict.ai_pe}: ${usFund.trailingPE?.toFixed(1)??'N/A'}`);
         }
       }catch(e){}
+    }
+
+    // Sanitize US fundamentals — defense-in-depth for cases where:
+    //   (a) the worker already sanitized (it sends _warnings + null fields)
+    //   (b) an old cached worker response sneaks through with bad data
+    //   (c) a future data source change introduces new mismatches
+    // We unify both paths into a single user-facing toast + tracking event.
+    if(market==='US' && usFund && price){
+      // Path A: worker already detected the issue and sent _warnings
+      const workerWarnings = Array.isArray(usFund._warnings) ? usFund._warnings : [];
+      // Path B: frontend secondary scan (covers stale cache or future cases)
+      const {usF:cleaned, warnings:frontendWarnings} = sanitizeFundamentals(usFund, price);
+      usFund = cleaned;
+      const allWarnings = [...workerWarnings, ...frontendWarnings];
+      if(allWarnings.length){
+        console.warn(`[sanitize] Inconsistent 52W data for ${ticker}:`, allWarnings);
+        toast('warn','Aviso', currentLang==='en'
+          ? `52W data hidden for ${ticker} (data source inconsistency — common in cross-listed ADRs).`
+          : `52 semanas ocultadas para ${ticker} (inconsistência na fonte de dados — comum em ADRs com dupla listagem).`,
+          5000);
+        track('fundamentals_sanitized',{
+          ticker,
+          source: workerWarnings.length ? 'worker' : 'frontend',
+          fields: frontendWarnings.join(',') || 'worker_prefiltered'
+        });
+      }
     }
 
     const rawData=buildData(ticker,price,brData,anaData,usFund);
