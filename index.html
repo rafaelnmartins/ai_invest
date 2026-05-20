@@ -189,6 +189,13 @@
 
     .summary-pill{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:999px;border:1px solid rgba(255,255,255,0.09);background:rgba(8,14,26,0.6);font-size:12px;font-weight:600;margin-top:10px;color:#c5d3e8}
     footer{margin:32px 0 10px;text-align:center;color:var(--muted);font-size:12.5px}
+    .site-social{display:flex;justify-content:center;gap:14px;margin-bottom:14px}
+    .site-social .social-link{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;background:rgba(15,23,42,.6);color:var(--muted);border:1px solid var(--card-border);transition:all .2s ease;text-decoration:none}
+    .site-social .social-link:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,.2)}
+    .site-social .social-x:hover{background:#000;color:#fff;border-color:#fff}
+    .site-social .social-instagram:hover{background:linear-gradient(45deg,#f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%);color:#fff;border-color:#dc2743}
+    .site-social .social-tiktok:hover{background:#000;color:#25f4ee;border-color:#fe2c55}
+    .site-footer-text{color:var(--muted)}
     .controls{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
     .text-green{color:var(--success);font-weight:700}
     .text-red{color:var(--danger);font-weight:700}
@@ -259,7 +266,24 @@
     .ai-result-wrap.visible{display:block;animation:fadeUp .4s}
     .ai-result-header{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:14px;flex-wrap:wrap}
     .ai-sym-ticker{font-size:26px;font-weight:700;color:var(--accent);line-height:1;font-family:'Space Mono',monospace}
-    .ai-sym-name{font-size:12px;color:var(--muted);margin-top:3px}
+    .ai-sym-name{font-size:15px;color:var(--ink);margin-top:6px;font-weight:500;letter-spacing:.01em;line-height:1.3;max-width:340px}
+    .ai-sym-name.placeholder{color:var(--muted);font-weight:400;font-style:italic;font-size:12px}
+    .ai-sym-meta{display:flex;gap:6px;margin-top:6px;align-items:center;flex-wrap:wrap}
+    .ai-sym-chip{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:999px;background:rgba(0,200,255,.1);color:var(--accent);font-size:10.5px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;border:1px solid rgba(0,200,255,.22);font-family:'Space Mono',monospace}
+    /* Share bar — appears after successful analysis */
+    .ai-share-bar{display:none;margin-top:16px;padding-top:14px;border-top:1px dashed rgba(255,255,255,.09);animation:fadeUp .35s ease}
+    .ai-share-bar.visible{display:block}
+    .ai-share-label{font-family:'Space Mono',monospace;font-size:10.5px;color:var(--muted);letter-spacing:.14em;text-transform:uppercase;margin-bottom:8px;font-weight:600}
+    .ai-share-actions{display:flex;gap:8px;flex-wrap:wrap}
+    .ai-share-btn{display:inline-flex;align-items:center;gap:6px;padding:7px 13px;border-radius:999px;border:1px solid rgba(255,255,255,.10);background:rgba(15,23,42,.55);color:var(--ink);font-size:12.5px;font-weight:600;cursor:pointer;transition:all .15s;font-family:inherit}
+    .ai-share-btn:hover{transform:translateY(-1px);border-color:var(--accent)}
+    .ai-share-btn:disabled{opacity:.6;cursor:wait}
+    .ai-share-whatsapp:hover{background:#25D366;color:#fff;border-color:#25D366}
+    .ai-share-x:hover{background:#000;color:#fff;border-color:#fff}
+    .ai-share-copy:hover{background:var(--accent);color:#04080f;border-color:var(--accent)}
+    .ai-share-status{margin-top:8px;font-size:11.5px;color:var(--muted);min-height:14px}
+    .ai-share-status.ok{color:var(--success)}
+    .ai-share-status.err{color:var(--danger)}
     /* ── Final AI Recommendation block: visually elevated to avoid confusion with the technical Score ── */
     .ai-reco-block{display:flex;flex-direction:column;align-items:flex-end;gap:6px;align-self:flex-start;max-width:100%}
     .ai-reco-eyebrow{font-family:'Space Mono',monospace;font-size:9.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);display:flex;align-items:center;gap:6px;line-height:1;white-space:nowrap}
@@ -710,7 +734,8 @@
           <div class="ai-result-header">
             <div>
               <div class="ai-sym-ticker" id="outTicker">—</div>
-              <div class="ai-sym-name" id="outName">—</div>
+              <div class="ai-sym-name placeholder" id="outName">—</div>
+              <div class="ai-sym-meta" id="outMeta"></div>
             </div>
             <div class="ai-reco-block">
               <div class="ai-reco-eyebrow" data-i18n="ai_reco_eyebrow">Recomendação Final IA</div>
@@ -719,6 +744,26 @@
           </div>
           <div class="ai-divider"></div>
           <div class="ai-body" id="analysisBody"></div>
+
+          <!-- Share bar (hidden until analysis completes successfully) -->
+          <div class="ai-share-bar" id="shareBar">
+            <div class="ai-share-label" data-i18n="ai_share_label">Compartilhe esta análise</div>
+            <div class="ai-share-actions">
+              <button class="ai-share-btn ai-share-whatsapp" id="shareWhats" aria-label="Compartilhar no WhatsApp" title="WhatsApp">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                <span>WhatsApp</span>
+              </button>
+              <button class="ai-share-btn ai-share-x" id="shareX" aria-label="Compartilhar no X" title="X">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                <span>X</span>
+              </button>
+              <button class="ai-share-btn ai-share-copy" id="shareCopy" aria-label="Copiar link" title="Copiar link">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                <span id="shareCopyTxt" data-i18n="ai_share_copy">Copiar link</span>
+              </button>
+            </div>
+            <div class="ai-share-status" id="shareStatus"></div>
+          </div>
         </div>
       </section>
 
@@ -911,7 +956,20 @@
     </div>
   </section>
 
-  <footer>© <span id="y"></span> &nbsp;·&nbsp; <span data-i18n="disclaimer">Site educacional, não é recomendação de investimento.</span></footer>
+  <footer>
+    <div class="site-social" aria-label="Stockgaide nas redes sociais">
+      <a href="https://x.com/stockgaide?s=11" target="_blank" rel="noopener noreferrer" aria-label="Stockgaide no X (antigo Twitter)" class="social-link social-x" title="X / Twitter">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+      </a>
+      <a href="https://www.instagram.com/stockgaide?igsh=MWJmZnNveWI2ZDVncw%3D%3D&utm_source=qr" target="_blank" rel="noopener noreferrer" aria-label="Stockgaide no Instagram" class="social-link social-instagram" title="Instagram">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+      </a>
+      <a href="https://www.tiktok.com/@stockgaide?_r=1&_t=ZS-96VAxiwzkcn" target="_blank" rel="noopener noreferrer" aria-label="Stockgaide no TikTok" class="social-link social-tiktok" title="TikTok">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-5.2 1.74 2.89 2.89 0 012.31-4.64 2.93 2.93 0 01.88.13V9.4a6.84 6.84 0 00-1-.05A6.33 6.33 0 005.8 20.1a6.34 6.34 0 0010.86-4.43v-7a8.16 8.16 0 004.77 1.52v-3.4a4.85 4.85 0 01-1.84-.1z"/></svg>
+      </a>
+    </div>
+    <div class="site-footer-text">© <span id="y"></span> &nbsp;·&nbsp; <span data-i18n="disclaimer">Site educacional, não é recomendação de investimento.</span></div>
+  </footer>
 </div>
 
 <datalist id="symbolList">
@@ -1724,6 +1782,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
     btn.disabled=true;spin.classList.add('on');btnTxt.textContent=dict.ai_btn_analyzing;
     document.getElementById('metrics').classList.remove('visible');
     document.getElementById('analysisWrap').classList.remove('visible');
+    document.getElementById('shareBar').classList.remove('visible');  // reset share UI on new analysis
     document.getElementById('steps').classList.add('visible');
     ['s1','s2','s3','s4'].forEach(id=>{const el=document.getElementById(id);if(el){el.className='ai-step';el.querySelector('.ai-step-icon').textContent='○';}});
     stopProgress(); // reset any previous progress bar
@@ -1831,7 +1890,18 @@ document.addEventListener('DOMContentLoaded', ()=>{
 
     const name=(market==='BR'?(brData?.longName||brData?.shortName):(usFund?.name||anaData?.symbol||ticker))||ticker;
     document.getElementById('outTicker').textContent=ticker;
-    document.getElementById('outName').textContent=name;
+    const nameEl=document.getElementById('outName');
+    nameEl.textContent=name;
+    // Remove placeholder styling once we have the actual company name
+    // (not just the ticker reused as fallback)
+    if(name && name !== ticker) nameEl.classList.remove('placeholder');
+    else nameEl.classList.add('placeholder');
+    // Market chip — small visual indicator beside the company name
+    const metaEl=document.getElementById('outMeta');
+    if(metaEl){
+      const marketLabel = market==='BR' ? '🇧🇷 B3' : '🇺🇸 NYSE/NASDAQ';
+      metaEl.innerHTML = '<span class="ai-sym-chip">'+marketLabel+'</span>';
+    }
     const bodyEl=document.getElementById('analysisBody');
     bodyEl.innerHTML='';
     const cursor=document.createElement('span');cursor.className='ai-cursor';
@@ -1894,6 +1964,23 @@ document.addEventListener('DOMContentLoaded', ()=>{
         duration_sec: Math.round((Date.now()-startTime)/1000),
         score: anaData?.score ?? null
       });
+
+      // ── Share — expose the analysis payload for the share buttons ──
+      // We snapshot all the data the share-page needs so the buttons can
+      // POST it to /share/save when clicked (lazy: only persists if user clicks).
+      window._lastAnalysis = {
+        ticker, name,
+        reco,
+        market,
+        analysis: fullText,
+        score: anaData?.score ?? null,
+        decision: anaData?.decision ?? null,
+        lang: currentLang,
+      };
+      window._lastShareUrl = null;  // will be filled on first click
+      document.getElementById('shareBar').classList.add('visible');
+      document.getElementById('shareStatus').textContent = '';
+      document.getElementById('shareStatus').className = 'ai-share-status';
     }catch(e){
       cursor.remove();stepDo('s3','fail',`${dict.ai_ai_error} ${e.message}`);
       setAiStatus(`${dict.ai_ai_error} ${e.message}`,'err');
@@ -1908,6 +1995,86 @@ document.addEventListener('DOMContentLoaded', ()=>{
 
   document.getElementById('analyzeBtn').addEventListener('click',analyze);
   document.getElementById('ticker').addEventListener('keydown',e=>{if(e.key==='Enter')analyze();});
+
+  // ═══════════════════════════════════════════════════════
+  // ── SHARE ─────────────────────────────────────────────
+  // ═══════════════════════════════════════════════════════
+  // Lazy save: only POST /share/save when the user actually clicks a share
+  // button. The resulting URL is cached on window._lastShareUrl so subsequent
+  // clicks reuse the same link (don't create multiple shares for the same analysis).
+  async function ensureShareUrl(){
+    if(window._lastShareUrl)return window._lastShareUrl;
+    if(!window._lastAnalysis)throw new Error('No analysis to share');
+    const setStatus=(msg,cls='')=>{const s=document.getElementById('shareStatus');s.textContent=msg;s.className='ai-share-status '+cls;};
+    setStatus(currentLang==='en'?'Generating share link...':'Gerando link de compartilhamento...','');
+    const resp=await fetch(`${API_BASE}/share/save`,{
+      method:'POST',
+      headers:{'content-type':'application/json'},
+      body:JSON.stringify(window._lastAnalysis),
+      mode:'cors',
+    });
+    if(!resp.ok){
+      const t=await resp.text().catch(()=>'');
+      throw new Error('HTTP '+resp.status+': '+t.slice(0,80));
+    }
+    const j=await resp.json();
+    if(!j.url)throw new Error('Resposta inválida');
+    window._lastShareUrl=j.url;
+    setStatus('','');
+    return j.url;
+  }
+
+  function shareTextFor(reco,ticker,name){
+    const recoLabelPt={buy:'COMPRA',sell:'VENDA',hold:'AGUARDAR'}[reco]||'AGUARDAR';
+    const recoLabelEn={buy:'BUY',sell:'SELL',hold:'HOLD'}[reco]||'HOLD';
+    const label=currentLang==='en'?recoLabelEn:recoLabelPt;
+    if(currentLang==='en'){
+      return `📊 ${ticker} (${name}) — AI recommendation: ${label}\n\nFull analysis on Stockgaide:`;
+    }
+    return `📊 ${ticker} (${name}) — Recomendação IA: ${label}\n\nVeja a análise completa no Stockgaide:`;
+  }
+
+  async function handleShare(channel){
+    const a=window._lastAnalysis;
+    if(!a){return;}
+    const btnsAll=document.querySelectorAll('#shareWhats, #shareX, #shareCopy');
+    btnsAll.forEach(b=>b.disabled=true);
+    try{
+      const url=await ensureShareUrl();
+      const text=shareTextFor(a.reco,a.ticker,a.name);
+      const fullMsg=text+' '+url;
+      if(channel==='whatsapp'){
+        window.open('https://wa.me/?text='+encodeURIComponent(fullMsg),'_blank','noopener,noreferrer');
+      }else if(channel==='x'){
+        // X intent: text + separate url param works better for previews
+        window.open('https://twitter.com/intent/tweet?text='+encodeURIComponent(text)+'&url='+encodeURIComponent(url),'_blank','noopener,noreferrer');
+      }else if(channel==='copy'){
+        // Try clipboard API, fall back to textarea trick if blocked
+        try{
+          await navigator.clipboard.writeText(url);
+          const s=document.getElementById('shareStatus');
+          s.textContent=currentLang==='en'?'✓ Link copied!':'✓ Link copiado!';
+          s.className='ai-share-status ok';
+          setTimeout(()=>{s.textContent='';s.className='ai-share-status';},2500);
+        }catch{
+          const ta=document.createElement('textarea');ta.value=url;document.body.appendChild(ta);ta.select();
+          try{document.execCommand('copy');const s=document.getElementById('shareStatus');s.textContent=currentLang==='en'?'✓ Link copied!':'✓ Link copiado!';s.className='ai-share-status ok';}catch{const s=document.getElementById('shareStatus');s.textContent=url;s.className='ai-share-status';}
+          document.body.removeChild(ta);
+        }
+      }
+      track('share_clicked',{channel,ticker:a.ticker,reco:a.reco});
+    }catch(e){
+      const s=document.getElementById('shareStatus');
+      s.textContent=(currentLang==='en'?'Failed to share: ':'Erro ao compartilhar: ')+(e.message||'erro');
+      s.className='ai-share-status err';
+    }finally{
+      btnsAll.forEach(b=>b.disabled=false);
+    }
+  }
+
+  document.getElementById('shareWhats').addEventListener('click',()=>handleShare('whatsapp'));
+  document.getElementById('shareX').addEventListener('click',()=>handleShare('x'));
+  document.getElementById('shareCopy').addEventListener('click',()=>handleShare('copy'));
 
   // ═══════════════════════════════════════════════════════
   // ── PORTFOLIO ─────────────────────────────────────────
