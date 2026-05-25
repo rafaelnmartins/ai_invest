@@ -270,8 +270,25 @@
     .ai-sym-name.placeholder{color:var(--muted);font-weight:400;font-style:italic;font-size:12px}
     .ai-sym-meta{display:flex;gap:6px;margin-top:6px;align-items:center;flex-wrap:wrap}
     .ai-sym-chip{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:999px;background:rgba(0,200,255,.1);color:var(--accent);font-size:10.5px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;border:1px solid rgba(0,200,255,.22);font-family:'Space Mono',monospace}
-    /* Share bar — appears after successful analysis */
-    .ai-share-bar{display:none;margin-top:16px;padding-top:14px;border-top:1px dashed rgba(255,255,255,.09);animation:fadeUp .35s ease}
+    /* Follow modal — appears once after the user's 2nd analysis */
+    .follow-backdrop{display:none;position:fixed;inset:0;z-index:160;background:rgba(4,8,15,.92);backdrop-filter:blur(10px);align-items:center;justify-content:center;padding:20px;animation:tourFadeIn .35s ease}
+    .follow-backdrop.open{display:flex}
+    .follow-card{width:min(440px,100%);background:linear-gradient(180deg,rgba(12,21,37,.98),rgba(8,14,26,.99));border:1px solid rgba(0,200,255,.3);border-radius:20px;box-shadow:0 32px 80px rgba(0,0,0,.7),0 0 60px rgba(0,200,255,.12);padding:28px 26px;position:relative;overflow:hidden;text-align:center;animation:tourSlideUp .4s cubic-bezier(0.34,1.56,0.64,1)}
+    .follow-card::before{content:'';position:absolute;top:0;left:-50%;right:-50%;height:2px;background:linear-gradient(90deg,transparent,var(--accent),transparent);animation:tourGlow 3s ease-in-out infinite}
+    .follow-card-emoji{font-size:48px;line-height:1;margin-bottom:12px;display:inline-block;animation:tourIconBounce 2s ease-in-out infinite}
+    .follow-card-title{font-family:'Playfair Display',serif;font-size:24px;font-weight:900;color:#fff;line-height:1.2;letter-spacing:-0.01em;margin-bottom:10px}
+    .follow-card-title .hl{background:linear-gradient(135deg,#00e5ff 0%,#7b2fff 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+    .follow-card-desc{color:#b8c6de;font-size:14px;line-height:1.55;margin-bottom:18px}
+    .follow-card-desc strong{color:var(--ink)}
+    .follow-card-btns{display:flex;flex-direction:column;gap:8px;margin-bottom:14px}
+    .follow-card-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 20px;border-radius:12px;border:1px solid rgba(255,255,255,.10);background:rgba(8,14,26,.7);color:var(--ink);font-size:14px;font-weight:700;text-decoration:none;cursor:pointer;transition:all .2s;font-family:inherit}
+    .follow-card-btn:hover{transform:translateY(-1px)}
+    .follow-card-btn.instagram{background:linear-gradient(45deg,#f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%);color:#fff;border-color:#dc2743}
+    .follow-card-btn.instagram:hover{filter:brightness(1.1);box-shadow:0 8px 24px rgba(220,39,67,.3)}
+    .follow-card-btn.x{background:#000;color:#fff;border-color:#fff}
+    .follow-card-btn.x:hover{filter:brightness(1.15);box-shadow:0 8px 24px rgba(0,0,0,.4)}
+    .follow-card-dismiss{background:transparent;border:none;color:var(--muted);font-family:inherit;font-size:13px;cursor:pointer;padding:6px;text-decoration:underline;text-decoration-color:rgba(143,165,204,.3);text-underline-offset:3px;width:100%}
+    .follow-card-dismiss:hover{color:#dde6f5}
     .ai-share-bar.visible{display:block}
     .ai-share-label{font-family:'Space Mono',monospace;font-size:10.5px;color:var(--muted);letter-spacing:.14em;text-transform:uppercase;margin-bottom:8px;font-weight:600}
     .ai-share-actions{display:flex;gap:8px;flex-wrap:wrap}
@@ -284,6 +301,20 @@
     .ai-share-status{margin-top:8px;font-size:11.5px;color:var(--muted);min-height:14px}
     .ai-share-status.ok{color:var(--success)}
     .ai-share-status.err{color:var(--danger)}
+    /* Follow CTA — appears below share bar after successful analysis */
+    .ai-follow-cta{display:none;margin-top:14px;padding:16px 18px;border-radius:14px;background:linear-gradient(135deg,rgba(0,200,255,.07),rgba(92,90,240,.05));border:1px solid rgba(0,200,255,.22);position:relative;overflow:hidden;animation:fadeUp .4s ease .15s both}
+    .ai-follow-cta.visible{display:block}
+    .ai-follow-cta::before{content:'';position:absolute;top:0;left:-50%;right:-50%;height:1px;background:linear-gradient(90deg,transparent,var(--accent),transparent);animation:aiBorderGlow 4s ease-in-out infinite}
+    .ai-follow-cta-title{font-family:'DM Sans',sans-serif;font-size:14.5px;font-weight:700;color:var(--ink);margin-bottom:5px;display:flex;align-items:center;gap:7px}
+    .ai-follow-cta-title .emoji{font-size:18px}
+    .ai-follow-cta-desc{font-size:12.5px;color:#b8c6de;line-height:1.5;margin-bottom:12px}
+    .ai-follow-cta-desc strong{color:var(--accent);font-weight:600}
+    .ai-follow-cta-btns{display:flex;gap:8px;flex-wrap:wrap}
+    .ai-follow-btn{display:inline-flex;align-items:center;gap:7px;padding:9px 16px;border-radius:11px;border:1px solid rgba(255,255,255,.10);background:rgba(8,14,26,.7);color:var(--ink);font-size:13px;font-weight:600;text-decoration:none;cursor:pointer;transition:all .2s;font-family:inherit}
+    .ai-follow-btn:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(0,0,0,.25)}
+    .ai-follow-btn.instagram:hover{background:linear-gradient(45deg,#f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%);color:#fff;border-color:#dc2743}
+    .ai-follow-btn.x:hover{background:#000;color:#fff;border-color:#fff}
+    .ai-follow-btn svg{flex-shrink:0}
     /* ── Final AI Recommendation block: visually elevated to avoid confusion with the technical Score ── */
     .ai-reco-block{display:flex;flex-direction:column;align-items:flex-end;gap:6px;align-self:flex-start;max-width:100%}
     .ai-reco-eyebrow{font-family:'Space Mono',monospace;font-size:9.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);display:flex;align-items:center;gap:6px;line-height:1;white-space:nowrap}
@@ -310,6 +341,9 @@
 
     .ai-cursor{display:inline-block;width:7px;height:12px;background:var(--accent);margin-left:2px;animation:aiCur .7s steps(1) infinite;vertical-align:text-bottom}
     @keyframes aiCur{0%,100%{opacity:1}50%{opacity:0}}
+    /* @stockgaide brand chip — appears inline next to the market chip (B3 / NYSE)
+       so it never collides with the recommendation badge or other floating UI */
+    .ai-sym-chip.brand-chip{background:rgba(123,47,255,.10);color:#b794ff;border-color:rgba(123,47,255,.28)}
 
     .src-tags{display:none}
 
@@ -546,6 +580,29 @@
 </div>
 
 <!-- ════════════════════════════════════════════════════════
+     FOLLOW MODAL — shown once after the user's 2nd successful analysis
+     Driven by localStorage counters: stockgaide_analysis_count + stockgaide_follow_modal_shown
+     ════════════════════════════════════════════════════════ -->
+<div class="follow-backdrop" id="followBackdrop" role="dialog" aria-modal="true" aria-labelledby="followCardTitle">
+  <div class="follow-card">
+    <div class="follow-card-emoji">👋</div>
+    <h2 class="follow-card-title" id="followCardTitle"><span data-i18n="follow_modal_title">Curtiu o <span class="hl">stockgAIde</span>?</span></h2>
+    <p class="follow-card-desc" data-i18n="follow_modal_desc">Você já fez algumas análises. Se quiser receber as <strong>recomendações da semana</strong>, segue lá:</p>
+    <div class="follow-card-btns">
+      <a href="https://www.instagram.com/stockgaide?igsh=MWJmZnNveWI2ZDVncw%3D%3D&utm_source=qr" target="_blank" rel="noopener noreferrer" class="follow-card-btn instagram" id="modalFollowIg">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+        <span data-i18n="follow_modal_btn_ig">Seguir no Instagram</span>
+      </a>
+      <a href="https://x.com/stockgaide?s=11" target="_blank" rel="noopener noreferrer" class="follow-card-btn x" id="modalFollowX">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+        <span data-i18n="follow_modal_btn_x">Seguir no X</span>
+      </a>
+    </div>
+    <button class="follow-card-dismiss" id="followDismiss" data-i18n="follow_modal_dismiss">Agora não</button>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════
      GLOSSÁRIO — modal com explicações dos termos financeiros
      ════════════════════════════════════════════════════════ -->
 <div class="gloss-backdrop" id="glossBackdrop" role="dialog" aria-modal="true" aria-labelledby="glossTitle">
@@ -763,6 +820,22 @@
               </button>
             </div>
             <div class="ai-share-status" id="shareStatus"></div>
+          </div>
+
+          <!-- Follow CTA — appears alongside the share bar after successful analysis -->
+          <div class="ai-follow-cta" id="followCta">
+            <div class="ai-follow-cta-title"><span class="emoji">📈</span><span data-i18n="follow_cta_title">Quer a próxima análise?</span></div>
+            <div class="ai-follow-cta-desc" data-i18n="follow_cta_desc">Toda semana posto as ações que o algoritmo destacou. <strong>Sem spam, sem curso pago.</strong></div>
+            <div class="ai-follow-cta-btns">
+              <a href="https://www.instagram.com/stockgaide?igsh=MWJmZnNveWI2ZDVncw%3D%3D&utm_source=qr" target="_blank" rel="noopener noreferrer" class="ai-follow-btn instagram" id="ctaFollowIg" aria-label="Seguir Stockgaide no Instagram">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+                <span data-i18n="follow_cta_btn_ig">Seguir no Instagram</span>
+              </a>
+              <a href="https://x.com/stockgaide?s=11" target="_blank" rel="noopener noreferrer" class="ai-follow-btn x" id="ctaFollowX" aria-label="Seguir Stockgaide no X">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                <span data-i18n="follow_cta_btn_x">Seguir no X</span>
+              </a>
+            </div>
           </div>
         </div>
       </section>
@@ -1146,6 +1219,18 @@ const I18N = {
     // help fab tips
     help_tip_glossary:"📖 Glossário",
     help_tip_tour:"🎯 Refazer tour",
+    // Share + Follow CTAs
+    ai_share_label:"Compartilhe esta análise",
+    ai_share_copy:"Copiar link",
+    follow_cta_title:"Quer a próxima análise?",
+    follow_cta_desc:'Toda semana posto as ações que o algoritmo destacou. <strong>Sem spam, sem curso pago.</strong>',
+    follow_cta_btn_ig:"Seguir no Instagram",
+    follow_cta_btn_x:"Seguir no X",
+    follow_modal_title:'Curtiu o <span class="hl">stockgAIde</span>?',
+    follow_modal_desc:"Você já fez algumas análises. Se quiser receber as <strong>recomendações da semana</strong>, segue lá:",
+    follow_modal_btn_ig:"Seguir no Instagram",
+    follow_modal_btn_x:"Seguir no X",
+    follow_modal_dismiss:"Agora não",
   },
   en:{
     disc_pill:"💡 Educational",disc_bold:"Educational platform.",disc_text:"Analyses used by the creator in their own decisions. Not investment advice.",
@@ -1300,6 +1385,18 @@ const I18N = {
     // help fab tips
     help_tip_glossary:"📖 Glossary",
     help_tip_tour:"🎯 Replay tour",
+    // Share + Follow CTAs
+    ai_share_label:"Share this analysis",
+    ai_share_copy:"Copy link",
+    follow_cta_title:"Want the next analysis?",
+    follow_cta_desc:'Every week I post the stocks the algorithm highlighted. <strong>No spam, no paid course.</strong>',
+    follow_cta_btn_ig:"Follow on Instagram",
+    follow_cta_btn_x:"Follow on X",
+    follow_modal_title:'Liked <span class="hl">stockgAIde</span>?',
+    follow_modal_desc:"You've already run a few analyses. To get the <strong>weekly picks</strong>, follow along:",
+    follow_modal_btn_ig:"Follow on Instagram",
+    follow_modal_btn_x:"Follow on X",
+    follow_modal_dismiss:"Not now",
   }
 };
 
@@ -1783,6 +1880,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
     document.getElementById('metrics').classList.remove('visible');
     document.getElementById('analysisWrap').classList.remove('visible');
     document.getElementById('shareBar').classList.remove('visible');  // reset share UI on new analysis
+    document.getElementById('followCta').classList.remove('visible'); // reset follow CTA too
     document.getElementById('steps').classList.add('visible');
     ['s1','s2','s3','s4'].forEach(id=>{const el=document.getElementById(id);if(el){el.className='ai-step';el.querySelector('.ai-step-icon').textContent='○';}});
     stopProgress(); // reset any previous progress bar
@@ -1900,7 +1998,10 @@ document.addEventListener('DOMContentLoaded', ()=>{
     const metaEl=document.getElementById('outMeta');
     if(metaEl){
       const marketLabel = market==='BR' ? '🇧🇷 B3' : '🇺🇸 NYSE/NASDAQ';
-      metaEl.innerHTML = '<span class="ai-sym-chip">'+marketLabel+'</span>';
+      // The brand chip sits next to the market chip so it never collides with
+      // the recommendation badge (top-right) or other floating UI.
+      metaEl.innerHTML = '<span class="ai-sym-chip">'+marketLabel+'</span>'
+                       + '<span class="ai-sym-chip brand-chip">⚡ @stockgaide</span>';
     }
     const bodyEl=document.getElementById('analysisBody');
     bodyEl.innerHTML='';
@@ -1981,6 +2082,30 @@ document.addEventListener('DOMContentLoaded', ()=>{
       document.getElementById('shareBar').classList.add('visible');
       document.getElementById('shareStatus').textContent = '';
       document.getElementById('shareStatus').className = 'ai-share-status';
+
+      // ── Growth: show follow CTA below share bar ──
+      document.getElementById('followCta').classList.add('visible');
+
+      // ── Growth: increment analysis counter; trigger follow modal on the 2nd
+      // successful analysis (once per browser, ever — respects user dismissal). ──
+      try {
+        const ANA_COUNT_KEY = 'stockgaide_analysis_count_v1';
+        const MODAL_SHOWN_KEY = 'stockgaide_follow_modal_shown_v1';
+        const prevCount = parseInt(localStorage.getItem(ANA_COUNT_KEY) || '0', 10) || 0;
+        const newCount = prevCount + 1;
+        localStorage.setItem(ANA_COUNT_KEY, String(newCount));
+        const alreadyShown = localStorage.getItem(MODAL_SHOWN_KEY) === '1';
+        // Trigger on 2nd analysis to avoid pestering brand-new visitors.
+        // Delay slightly so the analysis finishes rendering first.
+        if (newCount >= 2 && !alreadyShown) {
+          setTimeout(() => {
+            document.getElementById('followBackdrop').classList.add('open');
+            document.body.style.overflow = 'hidden';
+            localStorage.setItem(MODAL_SHOWN_KEY, '1');
+            track('follow_modal_shown', { analysis_count: newCount });
+          }, 1800);
+        }
+      } catch (e) { /* localStorage blocked — skip silently */ }
     }catch(e){
       cursor.remove();stepDo('s3','fail',`${dict.ai_ai_error} ${e.message}`);
       setAiStatus(`${dict.ai_ai_error} ${e.message}`,'err');
@@ -2075,6 +2200,58 @@ document.addEventListener('DOMContentLoaded', ()=>{
   document.getElementById('shareWhats').addEventListener('click',()=>handleShare('whatsapp'));
   document.getElementById('shareX').addEventListener('click',()=>handleShare('x'));
   document.getElementById('shareCopy').addEventListener('click',()=>handleShare('copy'));
+
+  // ═══════════════════════════════════════════════════════
+  // ── FOLLOW (growth) ───────────────────────────────────
+  // ═══════════════════════════════════════════════════════
+  // The follow modal opens automatically on the user's 2nd analysis (logic
+  // sits inside analyze() flow). Here we wire up dismissal + click tracking
+  // so we can measure conversion in Umami.
+
+  function closeFollowModal(reason){
+    const bd = document.getElementById('followBackdrop');
+    if (!bd.classList.contains('open')) return;
+    bd.classList.remove('open');
+    document.body.style.overflow = '';
+    if (reason === 'dismiss') track('follow_modal_dismissed');
+  }
+
+  document.getElementById('followDismiss').addEventListener('click', ()=>closeFollowModal('dismiss'));
+  document.getElementById('followBackdrop').addEventListener('click', e=>{
+    // Click on backdrop (outside the card) also closes
+    if (e.target.id === 'followBackdrop') closeFollowModal('dismiss');
+  });
+  document.addEventListener('keydown', e=>{
+    if (e.key === 'Escape' && document.getElementById('followBackdrop').classList.contains('open')){
+      closeFollowModal('dismiss');
+    }
+  });
+
+  // Track clicks on each follow button so we can measure conversion per surface.
+  // (source: cta = inline card under share bar; modal = popup)
+  document.getElementById('ctaFollowIg').addEventListener('click', ()=>{
+    track('follow_clicked', { channel: 'instagram', source: 'cta' });
+  });
+  document.getElementById('ctaFollowX').addEventListener('click', ()=>{
+    track('follow_clicked', { channel: 'x', source: 'cta' });
+  });
+  document.getElementById('modalFollowIg').addEventListener('click', ()=>{
+    track('follow_clicked', { channel: 'instagram', source: 'modal' });
+    closeFollowModal('converted');  // close after click so user can come back
+  });
+  document.getElementById('modalFollowX').addEventListener('click', ()=>{
+    track('follow_clicked', { channel: 'x', source: 'modal' });
+    closeFollowModal('converted');
+  });
+  // Also track clicks on the footer social icons (low-intent but useful baseline)
+  document.querySelectorAll('.site-social .social-link').forEach(link=>{
+    link.addEventListener('click', ()=>{
+      const channel = link.classList.contains('social-x') ? 'x'
+                    : link.classList.contains('social-instagram') ? 'instagram'
+                    : link.classList.contains('social-tiktok') ? 'tiktok' : 'unknown';
+      track('follow_clicked', { channel, source: 'footer' });
+    });
+  });
 
   // ═══════════════════════════════════════════════════════
   // ── PORTFOLIO ─────────────────────────────────────────
