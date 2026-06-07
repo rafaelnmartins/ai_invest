@@ -1,10 +1,25 @@
 <!doctype html>
-<html lang="pt-br">
+<html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Stockgaide - Dicas para familia e amigos</title>
-  <meta name="description" content="Site Stockgaide com dicas, gráfico TradingView, alertas embutidos e minhas posições com P/L %." />
+  <title>Stockgaide - Free AI Stock Analysis &amp; Screener</title>
+  <meta name="description" content="Free AI-powered stock analysis. Get instant BUY/HOLD/SELL recommendations with fundamentals, technical indicators, and analyst consensus for US and Brazilian stocks." />
+  <meta name="keywords" content="AI stock analysis, stock screener, free stock analysis, algorithmic trading, stock recommendations, technical analysis AI" />
+  <link rel="canonical" href="https://stockgaide.com" />
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Stockgaide - Free AI Stock Analysis" />
+  <meta property="og:description" content="Free AI-powered stock screener with real-time BUY/HOLD/SELL recommendations. Fundamentals + technicals + analyst consensus in one analysis." />
+  <meta property="og:url" content="https://stockgaide.com" />
+  <meta property="og:image" content="https://stockgaide.com/og-image.png" />
+  <meta property="og:site_name" content="Stockgaide" />
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@stockgaide" />
+  <meta name="twitter:title" content="Stockgaide - Free AI Stock Analysis" />
+  <meta name="twitter:description" content="Free AI-powered stock screener. BUY/HOLD/SELL in seconds." />
+  <meta name="twitter:image" content="https://stockgaide.com/og-image.png" />
   <link rel="preconnect" href="https://s3.tradingview.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,500;0,9..40,700;0,9..40,900;1,9..40,300&family=Space+Mono:wght@400;700&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
   <!-- Umami Analytics — privacy-friendly, no cookies, no consent banner needed -->
@@ -636,7 +651,7 @@
     <div class="alert-modal-header">
       <div style="display:flex;align-items:center;gap:10px">
         <span class="badge">⚡ Live</span>
-        <h2 data-i18n="modal_alerts_title">Trading Alerts</h2>
+        <h2 data-i18n="modal_alerts_title">Histórico de Sinais</h2>
       </div>
       <div style="display:flex;gap:8px;align-items:center">
         <a class="btn small" href="https://stockgaide.rafaelnm.workers.dev/" target="_blank" rel="noopener" data-i18n="modal_open_sep">↗ Abrir separado</a>
@@ -704,15 +719,16 @@
       </ul>
     </div>
     <div class="header-actions">
-      <button id="openAlertBtn" class="btn accent">⚡ <span data-i18n="btn_alerts_live">Alertas live</span></button>
+      <button id="openAlertBtn" class="btn accent">⚡ <span data-i18n="btn_alerts_live">Feed de Sinais</span></button>
       <button id="langToggle" class="btn small" title="Switch language">🇧🇷/🇺🇸 <span id="langLabel">PT</span></button>
     </div>
   </header>
 
   <nav class="tabs" aria-label="Navegação principal">
-    <button class="tab-btn" data-tab="tab-dashboard">📊 <span data-i18n="tab_dashboard">Dashboard</span></button>
+    <button class="tab-btn" data-tab="tab-dashboard">📊 <span data-i18n="tab_dashboard">Sinais & Histórico</span></button>
     <button class="tab-btn active" data-tab="tab-analise">📈 <span data-i18n="tab_analise">Análise AI</span></button>
-    <button class="tab-btn" data-tab="tab-portfolio">💼 <span data-i18n="tab_portfolio">Portfólio</span></button>
+    <!-- PORTFOLIO TAB BTN — hidden while portfolio is not being updated; remove style to restore -->
+    <button class="tab-btn" data-tab="tab-portfolio" style="display:none">💼 <span data-i18n="tab_portfolio">Portfólio</span></button>
     <button class="tab-btn" data-tab="tab-mercados">🌍 <span data-i18n="tab_mercados">Mercados</span></button>
     <button class="tab-btn" data-tab="tab-about">👤 <span data-i18n="tab_about">Sobre</span></button>
   </nav>
@@ -723,12 +739,12 @@
       <div class="dash-topbar-left">
         <div class="status-dot"></div>
         <div>
-          <div style="font-weight:700;font-size:15px;" data-i18n="dash_title">Recomendações &amp; Histórico</div>
-          <div class="muted-small" style="margin-top:2px" data-i18n="dash_sub">Painel consolidado · posições abertas e fechadas</div>
+          <div style="font-weight:700;font-size:15px;" data-i18n="dash_title">Sinais &amp; Histórico</div>
+          <div class="muted-small" style="margin-top:2px" data-i18n="dash_sub">Posições abertas pelo algoritmo e histórico de trades fechados</div>
         </div>
       </div>
       <div class="dash-topbar-right">
-        <button id="openAlertBtn2" class="btn accent" style="padding:10px 18px;font-size:14px">⚡ <span data-i18n="btn_see_alerts">Ver alertas</span></button>
+        <button id="openAlertBtn2" class="btn accent" style="padding:10px 18px;font-size:14px">⚡ <span data-i18n="btn_see_alerts">Ver feed de sinais</span></button>
         <div class="dash-filter-group" role="group" aria-label="Filtros de posições">
           <a class="dash-filter-btn" href="https://stockgaide.rafaelnm.workers.dev/dashboard?view=open" target="_blank" rel="noopener">🔓 <span data-i18n="btn_open_pos">Abertas</span></a>
           <a class="dash-filter-btn" href="https://stockgaide.rafaelnm.workers.dev/dashboard?view=closed" target="_blank" rel="noopener">✅ <span data-i18n="btn_closed_pos">Fechadas</span></a>
@@ -854,8 +870,8 @@
     </div>
   </section>
 
-  <!-- PORTFÓLIO TAB -->
-  <section id="tab-portfolio" class="tab-panel">
+  <!-- PORTFÓLIO TAB — hidden while portfolio is not being updated; remove style="display:none" to restore -->
+  <section id="tab-portfolio" class="tab-panel" style="display:none">
     <div class="card" style="margin-top:16px">
       <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
         <div>
@@ -1000,7 +1016,7 @@
       <div>
         <h3 data-i18n="about_tx_title">Transparência total: eu uso esses sinais</h3>
         <p data-i18n="about_tx_p1">Um ponto importante: eu <strong>invisto ativamente</strong> com base nessas mesmas recomendações.</p>
-        <p data-i18n="about_tx_p2">A plataforma inclui uma aba de <strong>Portfólio</strong>, onde você vê quais ações tenho em carteira agora, e um <strong>Dashboard</strong> com o histórico completo de trades gerados pelo sistema. Transparência importa — isso não é teoria nem material de marketing com backtests; é parte do meu processo de decisão real.</p>
+        <p data-i18n="about_tx_p2">A plataforma inclui uma aba de <strong>Portfólio</strong>, onde você vê quais ações tenho em carteira agora, e a aba de <strong>Sinais & Histórico</strong> com o histórico completo de trades gerados pelo sistema. Transparência importa — isso não é teoria nem material de marketing com backtests; é parte do meu processo de decisão real.</p>
       </div>
     </div>
 
@@ -1068,16 +1084,16 @@ const MODEL     = 'nvidia/nemotron-3-nano-30b-a3b:free';
 const I18N = {
   pt:{
     disc_pill:"💡 Educacional",disc_bold:"Plataforma educacional.",disc_text:"Análises usadas pelo criador nas próprias decisões. Não é recomendação de investimento.",
-    modal_alerts_title:"Trading Alerts",modal_open_sep:"↗ Abrir separado",
+    modal_alerts_title:"Histórico de Sinais",modal_open_sep:"↗ Abrir separado",
     brand_sub:"Análise inteligente de ações",
     tips_title:"Quick Tips",
     tip1:'Use <span class="hl">Análise AI</span> para opinião sobre qualquer ação',
-    tip2:'Veja os <span class="hl">Alertas</span> enviados após fechamento de Wall Street em <span class="hl">Dashboard</span>',
+    tip2:'Veja os <span class="hl">Sinais</span> gerados após o fechamento de Wall Street em <span class="hl">Sinais & Histórico</span>',
     tip2a:'Ganho esperado de <span class="hl">5%</span> em até <span class="hl">20 dias</span>',
     tip2b:"Objetivo atingido? Posição segue para Histórico",
     tip3:'Veja ações compradas do Rafael disponíveis em <span class="hl">Portfólio</span>',
-    btn_alerts_live:"Alertas live",
-    tab_dashboard:"Dashboard",tab_analise:"Análise AI",tab_portfolio:"Portfólio",tab_mercados:"Mercados",tab_about:"Sobre",
+    btn_alerts_live:"Feed de Sinais",
+    tab_dashboard:"Sinais & Histórico",tab_analise:"Análise AI",tab_portfolio:"Portfólio",tab_mercados:"Mercados",tab_about:"Sobre",
     // About section
     about_eyebrow:"Sobre",
     about_hero_title:"Sobre mim &amp; como a AI escolhe as ações",
@@ -1105,7 +1121,7 @@ const I18N = {
     about_step5_desc:"Não sigo sinais cegamente. Antes de agir, eu re-valido pessoalmente cada recomendação no painel de IA, revisando estrutura técnica, contexto e risco.",
     about_tx_title:"Transparência total: eu uso esses sinais",
     about_tx_p1:"Um ponto importante: eu <strong>invisto ativamente</strong> com base nessas mesmas recomendações.",
-    about_tx_p2:"A plataforma inclui uma aba de <strong>Portfólio</strong>, onde você vê quais ações tenho em carteira agora, e um <strong>Dashboard</strong> com o histórico completo de trades gerados pelo sistema. Transparência importa — isso não é teoria nem material de marketing com backtests; é parte do meu processo de decisão real.",
+    about_tx_p2:"A plataforma inclui uma aba de <strong>Portfólio</strong>, onde você vê quais ações tenho em carteira agora, e a aba de <strong>Sinais & Histórico</strong> com o histórico completo de trades gerados pelo sistema. Transparência importa — isso não é teoria nem material de marketing com backtests; é parte do meu processo de decisão real.",
     about_imp_eyebrow:"Em evolução",
     about_imp_title:"Melhoria contínua",
     about_imp_intro:"Este é um sistema em constante evolução. Continuamente:",
@@ -1117,8 +1133,8 @@ const I18N = {
     about_cta_title:"Vamos nos conectar",
     about_cta_p:"Se quiser conhecer melhor minha trajetória profissional, me encontre no LinkedIn. O StockGaide é algo que estou construindo e compartilhando com amigos e assinantes que querem uma abordagem disciplinada, transparente e com IA — sem hype, atalhos ou promessas de caixa-preta.",
     about_cta_btn:"Conectar no LinkedIn",
-    dash_title:"Recomendações &amp; Histórico",dash_sub:"Painel consolidado · posições abertas e fechadas",
-    btn_see_alerts:"Ver alertas",btn_open_pos:"Abertas",btn_closed_pos:"Fechadas",btn_full_panel:"Painel completo",
+    dash_title:"Sinais & Histórico",dash_sub:"Posições abertas pelo algoritmo e histórico de trades fechados",
+    btn_see_alerts:"Ver feed de sinais",btn_open_pos:"Abertas",btn_closed_pos:"Fechadas",btn_full_panel:"Painel completo",
     ai_page_title:"Análise de Ação com IA",ai_page_sub:"Dados fundamentais + técnicos + consenso · análise avançada com IA",
     chart_title:"Gráfico",chart_sym_label:"Símbolo:",btn_load:"Carregar",
     summary_title:"Resumo do Portfólio",summary_sub:"Visão rápida do P/L com base nas posições cadastradas",
@@ -1192,9 +1208,9 @@ const I18N = {
     tour_s1_desc:"Olá! Sou <strong>Rafa Martins</strong>. Há mais de 25 anos em tecnologia e estudando o mercado de ações. Construí esta plataforma para combinar <strong>análise técnica + fundamentos + IA</strong> em um só lugar.",
     tour_s1_feat:"<strong>Transparência total:</strong> eu uso essas mesmas recomendações nas minhas decisões de investimento.",
     tour_s2_icon:"📊",
-    tour_s2_title:"Veja o <span class='ai'>Dashboard</span>",
-    tour_s2_desc:"Aqui você vê as <strong>recomendações geradas pela plataforma</strong> — ações que cruzaram critérios técnicos rigorosos com base em ~800 ativos monitorados diariamente após o fechamento de Wall Street.",
-    tour_s2_feat:"Cada alerta busca <strong>5% de ganho em até 20 dias</strong>. Quando o objetivo é atingido, a posição vai para o histórico.",
+    tour_s2_title:"Veja <span class='ai'>Sinais & Histórico</span>",
+    tour_s2_desc:"Aqui você vê os <strong>sinais gerados pela plataforma</strong> — ações que cruzaram critérios técnicos rigorosos com base em ~800 ativos monitorados diariamente após o fechamento de Wall Street.",
+    tour_s2_feat:"Cada sinal busca <strong>5% de ganho em até 20 dias</strong>. Quando o objetivo é atingido, a posição vai para o histórico.",
     tour_s3_icon:"🤖",
     tour_s3_title:"Use a <span class='ai'>Análise AI</span>",
     tour_s3_desc:"Digite qualquer ticker (AAPL, NVDA, VALE3, PETR4...) e receba uma análise <strong>gerada por IA em tempo real</strong>, completa e em segundos: preço, fundamentos, indicadores técnicos, consenso de analistas e <strong>recomendação clara</strong>: comprar, manter ou vender.",
@@ -1234,16 +1250,16 @@ const I18N = {
   },
   en:{
     disc_pill:"💡 Educational",disc_bold:"Educational platform.",disc_text:"Analyses used by the creator in their own decisions. Not investment advice.",
-    modal_alerts_title:"Trading Alerts",modal_open_sep:"↗ Open separately",
+    modal_alerts_title:"Signal History",modal_open_sep:"↗ Open separately",
     brand_sub:"Intelligent stock analysis",
     tips_title:"Quick Tips",
     tip1:'Use <span class="hl">AI Analysis</span> for opinion on any stock',
-    tip2:'See <span class="hl">Alerts</span> sent after Wall Street close in <span class="hl">Dashboard</span>',
+    tip2:'See <span class="hl">Signals</span> generated after Wall Street close in <span class="hl">Signals & History</span>',
     tip2a:'Expected gain of <span class="hl">5%</span> within <span class="hl">20 days</span>',
     tip2b:"Target reached? Position moves to History",
     tip3:'See Rafael\'s purchased stocks available in <span class="hl">Portfolio</span>',
-    btn_alerts_live:"Live Alerts",
-    tab_dashboard:"Dashboard",tab_analise:"AI Analysis",tab_portfolio:"Portfolio",tab_mercados:"Markets",tab_about:"About",
+    btn_alerts_live:"Signal Feed",
+    tab_dashboard:"Signals & History",tab_analise:"AI Analysis",tab_portfolio:"Portfolio",tab_mercados:"Markets",tab_about:"About",
     // About section
     about_eyebrow:"About",
     about_hero_title:"About me &amp; how AI picks the stocks",
@@ -1271,7 +1287,7 @@ const I18N = {
     about_step5_desc:"I don't blindly follow signals. Before acting, I personally re-validate each recommendation using the AI dashboard, reviewing technical structure, context, and risk.",
     about_tx_title:"Full transparency: I use these signals myself",
     about_tx_p1:"One important point: I <strong>actively invest</strong> based on these same recommendations.",
-    about_tx_p2:"The platform includes a <strong>Portfolio</strong> view where you can see which stocks I currently hold, and a <strong>Dashboard</strong> with the full history of trades generated by the system. Transparency matters — this is not theoretical or back-tested marketing material; it's part of my real decision process.",
+    about_tx_p2:"The platform includes a <strong>Portfolio</strong> view where you can see which stocks I currently hold, and a <strong>Signals & History</strong> tab with the full history of trades generated by the system. Transparency matters — this is not theoretical or back-tested marketing material; it's part of my real decision process.",
     about_imp_eyebrow:"Continuously evolving",
     about_imp_title:"Continuous improvement",
     about_imp_intro:"This is an evolving system. I'm continuously:",
@@ -1283,8 +1299,8 @@ const I18N = {
     about_cta_title:"Let's connect",
     about_cta_p:"If you'd like to learn more about my professional background, find me on LinkedIn. StockGaide is something I'm building and sharing with friends and subscribers who want a disciplined, transparent, AI-enhanced approach to investing — without hype, shortcuts, or black-box promises.",
     about_cta_btn:"Connect on LinkedIn",
-    dash_title:"Recommendations &amp; History",dash_sub:"Consolidated panel · open and closed positions",
-    btn_see_alerts:"See alerts",btn_open_pos:"Open",btn_closed_pos:"Closed",btn_full_panel:"Full panel",
+    dash_title:"Signals & History",dash_sub:"Positions opened by the algorithm and closed trade history",
+    btn_see_alerts:"View signal feed",btn_open_pos:"Open",btn_closed_pos:"Closed",btn_full_panel:"Full panel",
     ai_page_title:"AI Stock Analysis",ai_page_sub:"Fundamentals + technicals + analyst consensus",
     chart_title:"Chart",btn_load:"Load",
     summary_title:"Portfolio Summary",summary_sub:"Quick P/L view based on registered positions",
@@ -1358,9 +1374,9 @@ const I18N = {
     tour_s1_desc:"Hi! I'm <strong>Rafa Martins</strong>. Over 25 years in technology and studying the stock market. I built this platform to combine <strong>technical analysis + fundamentals + AI</strong> in one place.",
     tour_s1_feat:"<strong>Full transparency:</strong> I use these same recommendations in my own investment decisions.",
     tour_s2_icon:"📊",
-    tour_s2_title:"See the <span class='ai'>Dashboard</span>",
-    tour_s2_desc:"Here you see <strong>recommendations generated by the platform</strong> — stocks that crossed strict technical criteria across ~800 monitored assets daily after Wall Street close.",
-    tour_s2_feat:"Each alert targets <strong>5% gain within 20 days</strong>. When the target is hit, the position moves to history.",
+    tour_s2_title:"See <span class='ai'>Signals & History</span>",
+    tour_s2_desc:"Here you see <strong>signals generated by the platform</strong> — stocks that crossed strict technical criteria across ~800 monitored assets daily after Wall Street close.",
+    tour_s2_feat:"Each signal targets <strong>5% gain within 20 days</strong>. When the target is hit, the position moves to history.",
     tour_s3_icon:"🤖",
     tour_s3_title:"Use <span class='ai'>AI Analysis</span>",
     tour_s3_desc:"Type any ticker (AAPL, NVDA, VALE3, PETR4...) and get a <strong>real-time AI-generated</strong> analysis, complete and in seconds: price, fundamentals, technical indicators, analyst consensus, and a <strong>clear recommendation</strong>: buy, hold, or sell.",
@@ -1518,13 +1534,13 @@ document.addEventListener('DOMContentLoaded', ()=>{
   function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 
   // ── i18n ──────────────────────────────────────────────────────────
-  function detectLang(){return String(navigator.language||'pt-BR').toLowerCase().startsWith('en')?'en':'pt';}
+  function detectLang(){const lang=String(navigator.language||navigator.languages?.[0]||'en').toLowerCase();if(lang.startsWith('pt'))return 'pt';return 'en';}
   let currentLang=localStorage.getItem('lang')||detectLang();
   function d(){return I18N[currentLang]||I18N.pt;}
   function applyI18n(){
     const dict=d();
     document.documentElement.lang=currentLang==='en'?'en':'pt-br';
-    document.title=currentLang==='en'?'Stockgaide - Stock Tips':'Stockgaide - Dicas para familia e amigos';
+    document.title=currentLang==='en'?'Stockgaide - Free AI Stock Analysis & Screener':'Stockgaide - Análise de Ações com IA';
     document.getElementById('langLabel').textContent=currentLang.toUpperCase();
     document.querySelectorAll('[data-i18n]').forEach(el=>{const k=el.getAttribute('data-i18n');if(dict[k]!==undefined)el.innerHTML=dict[k];});
     document.querySelectorAll('[data-i18n-placeholder]').forEach(el=>{const k=el.getAttribute('data-i18n-placeholder');if(dict[k]!==undefined)el.setAttribute('placeholder',dict[k]);});
@@ -1897,7 +1913,22 @@ document.addEventListener('DOMContentLoaded', ()=>{
         stepDo('s1','done',`${dict.ai_data_br_ok} R$ ${price}`);
       }else{
         price = await fetchQuote(ticker);
-        stepDo('s1','done',`${dict.ai_price}: $${price??'N/A'}`);
+        // ── Ticker validation: if no price found, the ticker likely doesn't exist.
+        // Block before calling the LLM to avoid wasting a token on garbage input.
+        if(price === null){
+          const notFoundMsg = currentLang==='en'
+            ? `"${ticker}" not found — check the ticker symbol (e.g. AVGO, not AVG; MSFT, not MSFTT).`
+            : `"${ticker}" não encontrado — verifique o ticker (ex: AVGO e não AVG; MSFT e não MSFTT).`;
+          stepDo('s1','fail', notFoundMsg);
+          setAiStatus(notFoundMsg,'err');
+          // Flash the input field red to draw attention
+          const inp = document.getElementById('ticker');
+          if(inp){ inp.style.borderColor='var(--danger)'; setTimeout(()=>{ inp.style.borderColor=''; },3000); }
+          btn.disabled=false;spin.classList.remove('on');btnTxt.textContent=dict.ai_btn_analyze;
+          track('analyze_ticker_not_found',{ticker,market});
+          return;
+        }
+        stepDo('s1','done',`${dict.ai_price}: $${price}`);
       }
     }catch(e){
       stepDo('s1','fail',`${dict.ai_error} ${e.message}`);
@@ -2411,7 +2442,8 @@ document.addEventListener('DOMContentLoaded', ()=>{
     const key=(e.key||'').toLowerCase();
     const isInput=/input|textarea/i.test((e.target?.tagName)||'');
     if(!isInput&&key==='r'){e.preventDefault();refreshPrices();return;}
-    if(!isInput&&key==='a'){e.preventDefault();window._activateTab('tab-portfolio');document.getElementById('posSymbol')?.focus();return;}
+    // Shortcut 'A' for portfolio hidden while portfolio tab is hidden
+    // if(!isInput&&key==='a'){e.preventDefault();window._activateTab('tab-portfolio');document.getElementById('posSymbol')?.focus();return;}
   },{passive:false});
 
   // ═══════════════════════════════════════════════════════
@@ -2430,8 +2462,8 @@ document.addEventListener('DOMContentLoaded', ()=>{
       {icon:dict.tour_s3_icon,title:dict.tour_s3_title,desc:dict.tour_s3_desc,feat:dict.tour_s3_feat,tab:'tab-analise'},
       // Step 3: Dashboard SECOND — recommendations history, contextual after they get the AI value prop
       {icon:dict.tour_s2_icon,title:dict.tour_s2_title,desc:dict.tour_s2_desc,feat:dict.tour_s2_feat,tab:'tab-dashboard'},
-      // Step 4: Portfolio
-      {icon:dict.tour_s4_icon,title:dict.tour_s4_title,desc:dict.tour_s4_desc,feat:dict.tour_s4_feat,tab:'tab-portfolio'},
+      // Step 4: Portfolio — tab hidden; keep tour step but don't navigate there
+      {icon:dict.tour_s4_icon,title:dict.tour_s4_title,desc:dict.tour_s4_desc,feat:dict.tour_s4_feat,tab:null},
       // Step 5: Help / glossary
       {icon:dict.tour_s5_icon,title:dict.tour_s5_title,desc:dict.tour_s5_desc,feat:dict.tour_s5_feat,tab:null},
     ];
