@@ -7,6 +7,14 @@
   <meta name="description" content="Free AI-powered stock analysis. Get instant BUY/HOLD/SELL recommendations with fundamentals, technical indicators, and analyst consensus for US and Brazilian stocks." />
   <meta name="keywords" content="AI stock analysis, stock screener, free stock analysis, algorithmic trading, stock recommendations, technical analysis AI" />
   <link rel="canonical" href="https://stockgaide.com" />
+  <!-- PWA: installable app (Phase 1) -->
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="theme-color" content="#04080f" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Stockgaide" />
+  <link rel="apple-touch-icon" href="/icons/icon-192.png" />
   <!-- Open Graph -->
   <meta property="og:type" content="website" />
   <meta property="og:title" content="Stockgaide - Free AI Stock Analysis" />
@@ -2721,6 +2729,17 @@ document.addEventListener('DOMContentLoaded', ()=>{
     }
   }catch(e){ /* localStorage blocked — silently skip auto-tour */ }
 });
+</script>
+<!-- PWA: register service worker (install + offline; push comes in Phase 2) -->
+<script>
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", function () {
+      navigator.serviceWorker
+        .register("/service-worker.js")
+        .then(function (reg) { console.log("Stockgaide SW registered:", reg.scope); })
+        .catch(function (err) { console.warn("SW registration failed:", err); });
+    });
+  }
 </script>
 </body>
 </html>
