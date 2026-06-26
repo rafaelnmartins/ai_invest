@@ -212,6 +212,9 @@
 
     .summary-pill{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:999px;border:1px solid rgba(255,255,255,0.09);background:rgba(8,14,26,0.6);font-size:12px;font-weight:600;margin-top:10px;color:#c5d3e8}
     footer{margin:32px 0 10px;text-align:center;color:var(--muted);font-size:12.5px}
+    .footer-nav{display:flex;justify-content:center;flex-wrap:wrap;gap:18px;margin-bottom:16px}
+    .footer-nav a{color:var(--muted);text-decoration:none;font-size:13px;transition:color .15s}
+    .footer-nav a:hover{color:var(--accent,#f59e0b);text-decoration:underline}
     .site-social{display:flex;justify-content:center;gap:14px;margin-bottom:14px}
     .site-social .social-link{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;background:rgba(15,23,42,.6);color:var(--muted);border:1px solid var(--card-border);transition:all .2s ease;text-decoration:none}
     .site-social .social-link:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,.2)}
@@ -1054,6 +1057,11 @@
   </section>
 
   <footer>
+    <nav class="footer-nav" aria-label="Links do site">
+      <a href="/stocks">Todas as ações</a>
+      <a href="/blog">Blog</a>
+      <a href="https://stockgaide.com/">Início</a>
+    </nav>
     <div class="site-social" aria-label="Stockgaide nas redes sociais">
       <a href="https://x.com/stockgaide?s=11" target="_blank" rel="noopener noreferrer" aria-label="Stockgaide no X (antigo Twitter)" class="social-link social-x" title="X / Twitter">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
