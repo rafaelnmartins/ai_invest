@@ -4,7 +4,7 @@
  *
  * Bump CACHE_VERSION whenever you change cached assets so clients refresh.
  */
-const CACHE_VERSION = "stockgaide-v1";
+const CACHE_VERSION = "stockgaide-v2";
 const APP_SHELL = [
   "/",
   "/index.html",
@@ -49,7 +49,8 @@ self.addEventListener("fetch", (event) => {
     url.pathname.startsWith("/stock/") ||
     url.pathname.startsWith("/analyze") ||
     url.pathname.startsWith("/kimi") ||
-    url.pathname.startsWith("/webhook");
+    url.pathname.startsWith("/webhook") ||
+    url.pathname.startsWith("/push/");
 
   // Never cache dynamic/data endpoints — always go to network.
   if (isApiLike) {
@@ -73,32 +74,51 @@ self.addEventListener("fetch", (event) => {
 });
 
 /* ──────────────────────────────────────────────────────────────────────────
- * PHASE 2 — PUSH NOTIFICATIONS (stubbed; enable later)
- * When we build push, uncomment and wire these. They're here so the structure
- * is ready and you can see what's coming.
- *
- * self.addEventListener("push", (event) => {
- *   let data = {};
- *   try { data = event.data.json(); } catch { data = { title: "Stockgaide", body: event.data && event.data.text() }; }
- *   const title = data.title || "Stockgaide";
- *   const options = {
- *     body: data.body || "New signal",
- *     icon: "/icons/icon-192.png",
- *     badge: "/icons/icon-192.png",
- *     data: { url: data.url || "/" },
- *     tag: data.tag || "signal",
- *   };
- *   event.waitUntil(self.registration.showNotification(title, options));
- * });
- *
- * self.addEventListener("notificationclick", (event) => {
- *   event.notification.close();
- *   const target = (event.notification.data && event.notification.data.url) || "/";
- *   event.waitUntil(
- *     clients.matchAll({ type: "window", includeUncontrolled: true }).then((wins) => {
- *       for (const w of wins) { if (w.url.includes(target) && "focus" in w) return w.focus(); }
- *       return clients.openWindow(target);
- *     })
- *   );
- * });
+ * PHASE 2 — PUSH NOTIFICATIONS (live)
+ * Pushes arrive WITHOUT payload (the worker only sends a VAPID-signed wake-up).
+ * On push we fetch /push/latest from the worker (via the Cloudflare route
+ * stockgaide.com/push/*) to know what to display. If that fetch fails we show
+ * a generic notification — never a silent drop (iOS requires showNotification).
  * ────────────────────────────────────────────────────────────────────────── */
+self.addEventListener("push", (event) => {
+  event.waitUntil((async () => {
+    let title = "Stockgaide";
+    let body = "Novo sinal disponível";
+    let url = "https://stockgaide.com/dashboard?view=open";
+    try {
+      if (event.data) {
+        // Future-proof: if a payload ever arrives, use it.
+        const d = event.data.json();
+        title = d.title || title; body = d.body || body; url = d.url || url;
+      } else {
+        const r = await fetch("/push/latest", { cache: "no-store" });
+        if (r.ok) {
+          const d = await r.json();
+          title = d.title || title; body = d.body || body; url = d.url || url;
+        }
+      }
+    } catch (e) { /* keep generic notification */ }
+    await self.registration.showNotification(title, {
+      body,
+      icon: "/icons/icon-192.png",
+      badge: "/icons/icon-192.png",
+      data: { url },
+      tag: "stockgaide-signal",
+      renotify: true,
+    });
+  })());
+});
+
+self.addEventListener("notificationclick", (event) => {
+  event.notification.close();
+  const target = (event.notification.data && event.notification.data.url) || "https://stockgaide.com/";
+  event.waitUntil(
+    clients.matchAll({ type: "window", includeUncontrolled: true }).then((wins) => {
+      for (const w of wins) {
+        if (w.url.indexOf("stockgaide.com") !== -1 && "focus" in w) return w.focus();
+      }
+      return clients.openWindow(target);
+    })
+  );
+});
+
