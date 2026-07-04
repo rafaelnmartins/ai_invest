@@ -2749,5 +2749,94 @@ document.addEventListener('DOMContentLoaded', ()=>{
     });
   }
 </script>
+<!-- PWA Phase 2: push notifications — floating activation button.
+     Self-contained: creates its own UI, talks to the worker via the
+     Cloudflare route stockgaide.com/push/* (same-origin, no CORS). -->
+<script>
+(function () {
+  "use strict";
+  var supported = "serviceWorker" in navigator && "PushManager" in window && "Notification" in window;
+  var isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+  var isStandalone = (window.matchMedia && window.matchMedia("(display-mode: standalone)").matches) || window.navigator.standalone === true;
+  // iOS only supports web push when installed to the home screen — outside
+  // that, stay silent (the install hint is already part of Phase 1 docs).
+  if (!supported || (isIOS && !isStandalone)) return;
+
+  function b64uToU8(s) {
+    s = s.replace(/-/g, "+").replace(/_/g, "/");
+    while (s.length % 4) s += "=";
+    var bin = atob(s);
+    var a = new Uint8Array(bin.length);
+    for (var i = 0; i < bin.length; i++) a[i] = bin.charCodeAt(i);
+    return a;
+  }
+
+  var btn = document.createElement("button");
+  btn.id = "push-toggle-btn";
+  btn.type = "button";
+  btn.style.cssText = "position:fixed;bottom:16px;right:16px;z-index:9998;" +
+    "background:rgba(245,158,11,.14);border:1px solid rgba(245,158,11,.45);" +
+    "color:#facc15;border-radius:999px;padding:.55rem .95rem;font-size:.8rem;" +
+    "font-weight:600;cursor:pointer;backdrop-filter:blur(6px);font-family:inherit;" +
+    "box-shadow:0 6px 18px rgba(0,0,0,.35);";
+  document.body.appendChild(btn);
+
+  function setLabel(on) {
+    btn.textContent = on ? "🔔 Alertas ativados" : "🔕 Ativar alertas";
+    btn.setAttribute("data-on", on ? "1" : "0");
+  }
+  setLabel(false);
+
+  navigator.serviceWorker.ready
+    .then(function (reg) { return reg.pushManager.getSubscription(); })
+    .then(function (sub) { setLabel(!!sub); })
+    .catch(function () { setLabel(false); });
+
+  btn.addEventListener("click", function () {
+    navigator.serviceWorker.ready.then(function (reg) {
+      return reg.pushManager.getSubscription().then(function (existing) {
+        if (existing) {
+          // Toggle OFF: tell the worker, then unsubscribe locally.
+          return fetch("/push/unsubscribe", {
+            method: "POST",
+            headers: { "content-type": "application/json" },
+            body: JSON.stringify({ endpoint: existing.endpoint })
+          }).catch(function () {})
+            .then(function () { return existing.unsubscribe(); })
+            .then(function () { setLabel(false); });
+        }
+        // Toggle ON: permission → VAPID key → subscribe → register with worker.
+        return Notification.requestPermission().then(function (perm) {
+          if (perm !== "granted") {
+            alert("Permissão de notificação negada. Ative nas configurações do navegador/app.");
+            return;
+          }
+          return fetch("/push/vapid-public", { cache: "no-store" })
+            .then(function (r) { return r.json(); })
+            .then(function (kd) {
+              if (!kd || !kd.key) { alert("Push ainda não configurado no servidor."); return; }
+              return reg.pushManager.subscribe({
+                userVisibleOnly: true,
+                applicationServerKey: b64uToU8(kd.key)
+              }).then(function (sub) {
+                return fetch("/push/subscribe", {
+                  method: "POST",
+                  headers: { "content-type": "application/json" },
+                  body: JSON.stringify(sub)
+                }).then(function (r) {
+                  if (!r.ok) throw new Error("subscribe http " + r.status);
+                  setLabel(true);
+                });
+              });
+            });
+        });
+      });
+    }).catch(function (e) {
+      console.error("[push] activation failed:", e);
+      alert("Não foi possível ativar os alertas: " + (e && e.message ? e.message : e));
+    });
+  });
+})();
+</script>
 </body>
 </html>
