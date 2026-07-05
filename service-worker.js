@@ -4,7 +4,7 @@
  *
  * Bump CACHE_VERSION whenever you change cached assets so clients refresh.
  */
-const CACHE_VERSION = "stockgaide-v2";
+const CACHE_VERSION = "stockgaide-v3";
 const APP_SHELL = [
   "/",
   "/index.html",
@@ -83,7 +83,7 @@ self.addEventListener("fetch", (event) => {
 self.addEventListener("push", (event) => {
   event.waitUntil((async () => {
     let title = "Stockgaide";
-    let body = "Novo sinal disponível";
+    let body = "New signal available";
     let url = "https://stockgaide.com/dashboard?view=open";
     try {
       if (event.data) {
