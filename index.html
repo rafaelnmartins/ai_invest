@@ -2782,7 +2782,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
   document.body.appendChild(btn);
 
   function setLabel(on) {
-    btn.textContent = on ? "🔔 Alertas ativados" : "🔕 Ativar alertas";
+    btn.textContent = on ? "🔔 Alerts on" : "🔕 Enable alerts";
     btn.setAttribute("data-on", on ? "1" : "0");
   }
   setLabel(false);
@@ -2808,13 +2808,13 @@ document.addEventListener('DOMContentLoaded', ()=>{
         // Toggle ON: permission → VAPID key → subscribe → register with worker.
         return Notification.requestPermission().then(function (perm) {
           if (perm !== "granted") {
-            alert("Permissão de notificação negada. Ative nas configurações do navegador/app.");
+            alert("Notification permission denied. Enable it in your browser or app settings.");
             return;
           }
           return fetch("/push/vapid-public", { cache: "no-store" })
             .then(function (r) { return r.json(); })
             .then(function (kd) {
-              if (!kd || !kd.key) { alert("Push ainda não configurado no servidor."); return; }
+              if (!kd || !kd.key) { alert("Push is not configured on the server yet."); return; }
               return reg.pushManager.subscribe({
                 userVisibleOnly: true,
                 applicationServerKey: b64uToU8(kd.key)
@@ -2833,7 +2833,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
       });
     }).catch(function (e) {
       console.error("[push] activation failed:", e);
-      alert("Não foi possível ativar os alertas: " + (e && e.message ? e.message : e));
+      alert("Could not enable alerts: " + (e && e.message ? e.message : e));
     });
   });
 })();
