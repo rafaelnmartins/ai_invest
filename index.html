@@ -111,7 +111,7 @@
     .header-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:flex-end;align-self:center}
 
     .tabs{display:flex;gap:6px;flex-wrap:wrap;margin:14px 0 4px}
-    .tab-btn{cursor:pointer;border-radius:999px;border:1px solid rgba(255,255,255,0.10);background:rgba(8,14,26,0.7);color:var(--muted);padding:9px 18px;font-weight:600;font-size:13px;display:inline-flex;align-items:center;gap:7px;min-height:40px;font-family:inherit;transition:all .18s ease}
+    .tab-btn{cursor:pointer;border-radius:999px;border:1px solid rgba(255,255,255,0.10);background:rgba(8,14,26,0.7);color:var(--muted);padding:9px 18px;font-weight:600;font-size:13px;display:inline-flex;align-items:center;gap:7px;min-height:40px;font-family:inherit;transition:all .18s ease;text-decoration:none}
     .tab-btn:hover{border-color:rgba(0,200,255,0.3);color:#dde6f5}
     .tab-btn.active{background:linear-gradient(135deg,rgba(45,126,247,0.2),rgba(92,90,240,0.15));border-color:rgba(45,126,247,0.4);color:#eaf2ff;box-shadow:0 8px 24px rgba(45,126,247,0.12)}
     .tab-panel{display:none}
@@ -726,7 +726,6 @@
             </ul>
           </span>
         </li>
-        <li><span class="dot"></span><span data-i18n="tip3">Veja ações compradas do Rafael disponíveis em <span class="hl">Portfólio</span></span></li>
       </ul>
     </div>
     <div class="header-actions">
@@ -742,6 +741,10 @@
     <button class="tab-btn" data-tab="tab-portfolio" style="display:none">💼 <span data-i18n="tab_portfolio">Portfólio</span></button>
     <button class="tab-btn" data-tab="tab-mercados">🌍 <span data-i18n="tab_mercados">Mercados</span></button>
     <button class="tab-btn" data-tab="tab-about">👤 <span data-i18n="tab_about">Sobre</span></button>
+    <!-- Blog é servido pelo worker (rota /blog), não é um tab-panel desta página.
+         Por isso é um <a href> de verdade — e isso ajuda o SEO: passa autoridade
+         da home para o blog, coisa que os botões de aba (JS) não fazem. -->
+    <a class="tab-btn" href="/blog" data-i18n-title="tab_blog">📰 <span data-i18n="tab_blog">Blog</span></a>
   </nav>
 
   <!-- DASHBOARD TAB -->
@@ -1107,9 +1110,8 @@ const I18N = {
     tip2:'Veja os <span class="hl">Sinais</span> gerados após o fechamento de Wall Street em <span class="hl">Sinais & Histórico</span>',
     tip2a:'Ganho esperado de <span class="hl">5%</span> em até <span class="hl">20 dias</span>',
     tip2b:"Objetivo atingido? Posição segue para Histórico",
-    tip3:'Veja ações compradas do Rafael disponíveis em <span class="hl">Portfólio</span>',
     btn_alerts_live:"Feed de Sinais",
-    tab_dashboard:"Sinais & Histórico",tab_analise:"Análise AI",tab_portfolio:"Portfólio",tab_mercados:"Mercados",tab_about:"Sobre",
+    tab_dashboard:"Sinais & Histórico",tab_analise:"Análise AI",tab_portfolio:"Portfólio",tab_mercados:"Mercados",tab_about:"Sobre",tab_blog:"Blog",
     // About section
     about_eyebrow:"Sobre",
     about_hero_title:"Sobre mim &amp; como a AI escolhe as ações",
@@ -1273,9 +1275,8 @@ const I18N = {
     tip2:'See <span class="hl">Signals</span> generated after Wall Street close in <span class="hl">Signals & History</span>',
     tip2a:'Expected gain of <span class="hl">5%</span> within <span class="hl">20 days</span>',
     tip2b:"Target reached? Position moves to History",
-    tip3:'See Rafael\'s purchased stocks available in <span class="hl">Portfolio</span>',
     btn_alerts_live:"Signal Feed",
-    tab_dashboard:"Signals & History",tab_analise:"AI Analysis",tab_portfolio:"Portfolio",tab_mercados:"Markets",tab_about:"About",
+    tab_dashboard:"Signals & History",tab_analise:"AI Analysis",tab_portfolio:"Portfolio",tab_mercados:"Markets",tab_about:"About",tab_blog:"Blog",
     // About section
     about_eyebrow:"About",
     about_hero_title:"About me &amp; how AI picks the stocks",
@@ -1929,19 +1930,28 @@ document.addEventListener('DOMContentLoaded', ()=>{
         stepDo('s1','done',`${dict.ai_data_br_ok} R$ ${price}`);
       }else{
         price = await fetchQuote(ticker);
-        // ── Ticker validation: if no price found, the ticker likely doesn't exist.
-        // Block before calling the LLM to avoid wasting a token on garbage input.
+        // ── v2.36: mensagem HONESTA. Antes, qualquer falha de cotação virava
+        // "verifique o ticker" — e o site acusava o usuário de erro que era
+        // dele mesmo (IBM e MSFT davam "não encontrado" quando o Yahoo
+        // retornava 401). Agora distinguimos: ticker com formato plausível
+        // (1-5 letras) que falha = provável indisponibilidade de fonte;
+        // formato estranho = provável erro de digitação.
         if(price === null){
-          const notFoundMsg = currentLang==='en'
-            ? `"${ticker}" not found — check the ticker symbol (e.g. AVGO, not AVG; MSFT, not MSFTT).`
-            : `"${ticker}" não encontrado — verifique o ticker (ex: AVGO e não AVG; MSFT e não MSFTT).`;
+          const looksValid = /^[A-Z]{1,5}$/.test(ticker);
+          const notFoundMsg = looksValid
+            ? (currentLang==='en'
+                ? `Could not fetch the quote for "${ticker}" right now — the data provider is temporarily unavailable. Please try again in a moment.`
+                : `Não foi possível obter a cotação de "${ticker}" agora — a fonte de dados está temporariamente indisponível. Tente novamente em instantes.`)
+            : (currentLang==='en'
+                ? `"${ticker}" not found — check the ticker symbol (e.g. AVGO, not AVG; MSFT, not MSFTT).`
+                : `"${ticker}" não encontrado — verifique o ticker (ex: AVGO e não AVG; MSFT e não MSFTT).`);
           stepDo('s1','fail', notFoundMsg);
           setAiStatus(notFoundMsg,'err');
           // Flash the input field red to draw attention
           const inp = document.getElementById('ticker');
           if(inp){ inp.style.borderColor='var(--danger)'; setTimeout(()=>{ inp.style.borderColor=''; },3000); }
           btn.disabled=false;spin.classList.remove('on');btnTxt.textContent=dict.ai_btn_analyze;
-          track('analyze_ticker_not_found',{ticker,market});
+          track(looksValid?'analyze_quote_unavailable':'analyze_ticker_not_found',{ticker,market});
           return;
         }
         stepDo('s1','done',`${dict.ai_price}: $${price}`);
