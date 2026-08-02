@@ -1,4 +1,35 @@
+# stockgaide.com — crawlers bem-vindos, incluindo os de IA (GEO).
+# Servido pelo GitHub Pages: este arquivo vai na RAIZ do repositório,
+# ao lado do index.html. As rotas do worker não interceptam /robots.txt.
+
 User-agent: *
+Allow: /
+# Áreas privadas/administrativas fora do índice:
+Disallow: /options-dashboard
+Disallow: /blog-admin
+Disallow: /push
+
+# Crawlers de IA explicitamente autorizados — é deles que vêm as citações
+# em ChatGPT/Gemini/Perplexity (o canal GEO das páginas /stock/*):
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-Web
 Allow: /
 
 Sitemap: https://stockgaide.com/sitemap.xml
