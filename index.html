@@ -1098,7 +1098,7 @@ const QUOTE_API = API_BASE + '/quotes';
 const POS_API   = API_BASE + '/positions';
 const WORKER    = API_BASE;
 const KIMI_EP   = API_BASE + '/kimi';
-const MODEL     = 'nvidia/nemotron-3-nano-30b-a3b:free';
+const MODEL     = 'nvidia/nemotron-3-ultra-550b-a55b:free';
 
 // ── i18n ──────────────────────────────────────────────────────────
 const I18N = {
@@ -1437,71 +1437,11 @@ const I18N = {
 // ══════════════════════════════════════════════════════════════
 // ── LLM SYSTEM PROMPTS (bilingual) ─────────────────────────
 // ══════════════════════════════════════════════════════════════
-const SYSTEM_PROMPT_PT = `Você é um analista financeiro experiente com foco em ações e mercado de capitais.
-Analise a ação fornecida e estruture sua resposta EXATAMENTE assim:
+// ⭐ Os system prompts saíram daqui (worker v2.55). Este arquivo é servido
+// ao navegador — qualquer visitante lia os prompts com "ver código-fonte".
+// Agora eles moram no worker, que nunca é servido publicamente, e o /kimi
+// os aplica pelo campo `lang` enviado abaixo.
 
-DECISÃO: [escreva SOMENTE UMA palavra: Comprar | Manter | Vender]
-
-## Conclusão Estratégica
-* Recomendação: [repita a mesma palavra acima: Comprar | Manter | Vender]
-* Por quê? Explique em 3-5 linhas o racional principal — seja direto e mencione os fatores mais decisivos (técnico, valuation, analistas, contexto macro)
-* Perfil ideal: (trader curto prazo, investidor longo prazo, ou evitar — seja específico)
-* Faixa de preço: (entrada e/ou saída com valores concretos, stop-loss sugerido se relevante)
-* Ação prática: (o que fazer agora — comprar em qual nível, aguardar correção até X, reduzir posição se Y, etc.)
-
-## 1. Preço e Momentum Recentes
-* Avalie o preço atual em relação à máxima e mínima de 52 semanas
-* Identifique se está próximo de topo, fundo ou lateral
-* Indique cenários prováveis de curto prazo
-
-## 2. Valoração (P/L)
-* Interprete o múltiplo P/L e compare com o setor
-* Avalie se o preço já precifica crescimento futuro
-
-## 3. Análise Técnica
-* SMA50 vs SMA200 · RSI · MACD · Score técnico
-
-## 4. Consenso de Analistas
-* Interprete a média de recomendação e aponte alinhamento ou divergência com os técnicos
-
-REGRAS ABSOLUTAS:
-* A PRIMEIRA linha da resposta DEVE ser "DECISÃO: Comprar" ou "DECISÃO: Manter" ou "DECISÃO: Vender" — nada mais
-* A linha "Recomendação:" na Conclusão deve conter a MESMA palavra que DECISÃO
-* Toda a resposta deve ser em PORTUGUÊS
-* Sem linguagem genérica. Não invente dados.`;
-
-const SYSTEM_PROMPT_EN = `You are an experienced financial analyst focused on stocks and capital markets.
-Analyze the stock provided and structure your response EXACTLY like this:
-
-DECISION: [write ONLY ONE word: Buy | Hold | Sell]
-
-## Strategic Conclusion
-* Recommendation: [repeat the same word above: Buy | Hold | Sell]
-* Why? Explain in 3-5 lines the main rationale — be direct and mention the most decisive factors (technicals, valuation, analysts, macro context)
-* Ideal profile: (short-term trader, long-term investor, or avoid — be specific)
-* Price range: (entry and/or exit with concrete values, suggested stop-loss if relevant)
-* Practical action: (what to do now — buy at what level, wait for correction to X, reduce position if Y, etc.)
-
-## 1. Recent Price & Momentum
-* Evaluate the current price relative to the 52-week high and low
-* Identify whether it is near the top, bottom, or sideways
-* Point out likely short-term scenarios
-
-## 2. Valuation (P/E)
-* Interpret the P/E multiple and compare with the sector
-* Assess whether the price already reflects future growth
-
-## 3. Technical Analysis
-* SMA50 vs SMA200 · RSI · MACD · Technical score
-
-## 4. Analyst Consensus
-* Interpret the recommendation average and point out alignment or divergence with the technicals
-
-ABSOLUTE RULES:
-* The FIRST line of the response MUST be "DECISION: Buy" or "DECISION: Hold" or "DECISION: Sell" — nothing more
-* The "Recommendation:" line in the Conclusion must contain the SAME word as DECISION
-* The entire response must be in ENGLISH
-* No generic language. Do not invent data.`;
 
 document.addEventListener('DOMContentLoaded', ()=>{
 
@@ -2075,14 +2015,13 @@ document.addEventListener('DOMContentLoaded', ()=>{
     // Start progress bar — keeps user engaged during the 15-25s LLM wait
     startProgress();
 
-    const SYSTEM = currentLang==='en' ? SYSTEM_PROMPT_EN : SYSTEM_PROMPT_PT;
     const userMsg = currentLang==='en' ? `Stock data:\n\n${rawData}` : `Dados da ação:\n\n${rawData}`;
 
     let fullText='';
     try{
       const resp=await fetch(`${KIMI_EP}?model=${encodeURIComponent(MODEL)}`,{
         method:'POST',headers:{'content-type':'application/json'},
-        body:JSON.stringify({model:MODEL,temperature:0.1,messages:[{role:'system',content:SYSTEM},{role:'user',content:userMsg}]}),
+        body:JSON.stringify({model:MODEL,temperature:0.1,lang:currentLang,messages:[{role:'user',content:userMsg}]}),
         mode:'cors',
       });
       if(!resp.ok){const t=await resp.text().catch(()=>'');throw new Error(`HTTP ${resp.status}: ${t}`);}
