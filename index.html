@@ -1098,7 +1098,9 @@ const QUOTE_API = API_BASE + '/quotes';
 const POS_API   = API_BASE + '/positions';
 const WORKER    = API_BASE;
 const KIMI_EP   = API_BASE + '/kimi';
-const MODEL     = 'nvidia/nemotron-3-ultra-550b-a55b:free';
+// v2.59: o modelo NAO e mais escolhido aqui. Quem decide e o worker, pela
+// variavel KIMI_MODEL (ou LLM_MODEL). Assim trocar de modelo nao exige
+// republicar este arquivo nem esperar o cache do navegador expirar.
 
 // ── i18n ──────────────────────────────────────────────────────────
 const I18N = {
@@ -2021,7 +2023,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
     try{
       const resp=await fetch(`${KIMI_EP}?model=${encodeURIComponent(MODEL)}`,{
         method:'POST',headers:{'content-type':'application/json'},
-        body:JSON.stringify({model:MODEL,temperature:0.1,lang:currentLang,messages:[{role:'user',content:userMsg}]}),
+        body:JSON.stringify({temperature:0.1,lang:currentLang,messages:[{role:'user',content:userMsg}]}),
         mode:'cors',
       });
       if(!resp.ok){const t=await resp.text().catch(()=>'');throw new Error(`HTTP ${resp.status}: ${t}`);}
