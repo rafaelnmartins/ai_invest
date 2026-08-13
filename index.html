@@ -2039,10 +2039,16 @@ document.addEventListener('DOMContentLoaded', ()=>{
           const lines=buf.split(/\r?\n/);buf=lines.pop()||'';
           for(const line of lines){
             const s=line.trim();if(!s||s==='[DONE]')continue;
-            const payload=s.startsWith('data:')?s.slice(5).trim():s;
-            if(payload==='[DONE]')continue;
+            // v2.57: linhas iniciadas por ':' sao COMENTARIOS de SSE (keep-alive
+            // do OpenRouter, ex.: ':OPENROUTER PROCESSING'). Devem ser ignoradas.
+            if(s.startsWith(':'))continue;
+            if(!s.startsWith('data:'))continue;
+            const payload=s.slice(5).trim();
+            if(!payload||payload==='[DONE]')continue;
+            // v2.57: nada de anexar payload nao-JSON como texto. Era isso que
+            // despejava o keep-alive na tela.
             try{const j=JSON.parse(payload);const delta=j.choices?.[0]?.delta?.content??j.choices?.[0]?.message?.content??'';if(delta)fullText+=delta;}
-            catch{if(payload&&!payload.startsWith('{'))fullText+=payload;}
+            catch{}
             cursor.remove();bodyEl.innerHTML=renderMD(fullText);bodyEl.appendChild(cursor);
           }
         }
