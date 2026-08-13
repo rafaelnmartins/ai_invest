@@ -2021,7 +2021,8 @@ document.addEventListener('DOMContentLoaded', ()=>{
 
     let fullText='';
     try{
-      const resp=await fetch(`${KIMI_EP}?model=${encodeURIComponent(MODEL)}`,{
+      // v2.60: sem ?model= — quem escolhe o modelo e o worker (KIMI_MODEL).
+      const resp=await fetch(KIMI_EP,{
         method:'POST',headers:{'content-type':'application/json'},
         body:JSON.stringify({temperature:0.1,lang:currentLang,messages:[{role:'user',content:userMsg}]}),
         mode:'cors',
