@@ -1098,9 +1098,7 @@ const QUOTE_API = API_BASE + '/quotes';
 const POS_API   = API_BASE + '/positions';
 const WORKER    = API_BASE;
 const KIMI_EP   = API_BASE + '/kimi';
-// v2.59: o modelo NAO e mais escolhido aqui. Quem decide e o worker, pela
-// variavel KIMI_MODEL (ou LLM_MODEL). Assim trocar de modelo nao exige
-// republicar este arquivo nem esperar o cache do navegador expirar.
+const MODEL     = 'nvidia/nemotron-3-ultra-550b-a55b:free';
 
 // ── i18n ──────────────────────────────────────────────────────────
 const I18N = {
@@ -2021,10 +2019,9 @@ document.addEventListener('DOMContentLoaded', ()=>{
 
     let fullText='';
     try{
-      // v2.60: sem ?model= — quem escolhe o modelo e o worker (KIMI_MODEL).
-      const resp=await fetch(KIMI_EP,{
+      const resp=await fetch(`${KIMI_EP}?model=${encodeURIComponent(MODEL)}`,{
         method:'POST',headers:{'content-type':'application/json'},
-        body:JSON.stringify({temperature:0.1,lang:currentLang,messages:[{role:'user',content:userMsg}]}),
+        body:JSON.stringify({model:MODEL,temperature:0.1,lang:currentLang,messages:[{role:'user',content:userMsg}]}),
         mode:'cors',
       });
       if(!resp.ok){const t=await resp.text().catch(()=>'');throw new Error(`HTTP ${resp.status}: ${t}`);}
@@ -2042,16 +2039,10 @@ document.addEventListener('DOMContentLoaded', ()=>{
           const lines=buf.split(/\r?\n/);buf=lines.pop()||'';
           for(const line of lines){
             const s=line.trim();if(!s||s==='[DONE]')continue;
-            // v2.57: linhas iniciadas por ':' sao COMENTARIOS de SSE (keep-alive
-            // do OpenRouter, ex.: ':OPENROUTER PROCESSING'). Devem ser ignoradas.
-            if(s.startsWith(':'))continue;
-            if(!s.startsWith('data:'))continue;
-            const payload=s.slice(5).trim();
-            if(!payload||payload==='[DONE]')continue;
-            // v2.57: nada de anexar payload nao-JSON como texto. Era isso que
-            // despejava o keep-alive na tela.
+            const payload=s.startsWith('data:')?s.slice(5).trim():s;
+            if(payload==='[DONE]')continue;
             try{const j=JSON.parse(payload);const delta=j.choices?.[0]?.delta?.content??j.choices?.[0]?.message?.content??'';if(delta)fullText+=delta;}
-            catch{}
+            catch{if(payload&&!payload.startsWith('{'))fullText+=payload;}
             cursor.remove();bodyEl.innerHTML=renderMD(fullText);bodyEl.appendChild(cursor);
           }
         }
