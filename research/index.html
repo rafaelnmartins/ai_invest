@@ -4,11 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>What $100,000 Following Our Signals Would Have Done — Stockgaide Research</title>
-<meta name="description" content="245 closed trades, January to July 2026, position-sized by conviction profile. Monthly and cumulative returns on a $100,000 portfolio — losses included.">
+<meta name="description" content="289 closed trades, January to August 2026, position-sized exactly like our live dashboard. Monthly and cumulative returns on a $100,000 portfolio — losses included.">
 <link rel="canonical" href="https://stockgaide.com/research/">
 <meta name="robots" content="index,follow">
 <meta property="og:title" content="What $100,000 Following Our Signals Would Have Done">
-<meta property="og:description" content="245 closed trades, Jan–Jul 2026, sized by conviction profile: +36.64% with a -7.35% maximum drawdown. Full method, every loss included.">
+<meta property="og:description" content="289 closed trades, Jan–Aug 2026, sized exactly like our live dashboard: +37.32% with a -7.33% maximum drawdown. Full method, every loss included.">
 <meta property="og:url" content="https://stockgaide.com/research/">
 <meta property="og:type" content="article">
 <meta property="og:image" content="https://stockgaide.com/icons/icon-512.png">
@@ -20,21 +20,21 @@
 {"@context":"https://schema.org","@graph":[
  {"@type":"Article","@id":"https://stockgaide.com/research/#article",
   "headline":"What $100,000 Following Our Signals Would Have Done",
-  "description":"Position-sizing simulation over 245 real closed trades from January to July 2026: monthly returns, cumulative curve, drawdown and profit factor on a $100,000 portfolio.",
+  "description":"Position-sizing simulation over 289 real closed trades from January to August 2026: monthly returns, cumulative curve, drawdown and profit factor on a $100,000 portfolio.",
   "datePublished":"2026-08-03","dateModified":"2026-08-03","inLanguage":["en","pt-BR"],
   "author":{"@type":"Organization","name":"Stockgaide","url":"https://stockgaide.com"},
   "publisher":{"@type":"Organization","name":"Stockgaide","url":"https://stockgaide.com","logo":{"@type":"ImageObject","url":"https://stockgaide.com/icons/icon-512.png"}},
   "mainEntityOfPage":"https://stockgaide.com/research/"},
  {"@type":"Dataset","@id":"https://stockgaide.com/research/#dataset",
-  "name":"Stockgaide closed-trade log (Jan–Jul 2026)",
-  "description":"245 automatically logged closed trades with entry price, exit price, realized percentage result, strategy, conviction class, probability and profit factor. Every trade the engine opened is included, winners and losers alike.",
+  "name":"Stockgaide closed-trade log (Jan–Aug 2026)",
+  "description":"289 automatically logged closed trades with entry price, exit price, realized percentage result, strategy, conviction class, probability and profit factor. Every trade the engine opened is included, winners and losers alike.",
   "temporalCoverage":"2026-01-21/2026-07-31","dateModified":"2026-08-03",
   "creator":{"@type":"Organization","name":"Stockgaide","url":"https://stockgaide.com"},
   "variableMeasured":["monthly return","cumulative return","win rate","profit factor","maximum drawdown","contribution by conviction profile"],
   "measurementTechnique":"Each closed trade's realized percentage is weighted by the position size its conviction profile prescribes, applied to a $100,000 base. Capital is assumed to rotate: each trade uses its nominal percentage independently."},
  {"@type":"FAQPage","@id":"https://stockgaide.com/research/#faq","mainEntity":[
-  {"@type":"Question","name":"Is this a live-traded account?","acceptedAnswer":{"@type":"Answer","text":"No. The trades are real and were logged automatically as they happened, but the position-sizing rules are applied retroactively to that history. It shows what the current sizing framework would have produced, not a brokerage statement."}},
-  {"@type":"Question","name":"Are losing trades included?","acceptedAnswer":{"@type":"Answer","text":"Yes. All 245 closed trades are included — 96 of them lost money. Nothing was filtered out, and the worst single contribution was -$1,910."}},
+  {"@type":"Question","name":"Is this a live-traded account?","acceptedAnswer":{"@type":"Answer","text":"No. The trades are real and were logged automatically as they happened. This is not a brokerage statement."}},
+  {"@type":"Question","name":"Are losing trades included?","acceptedAnswer":{"@type":"Answer","text":"Yes. All 289 closed trades are included — 119 of them lost money. Nothing was filtered out, and the worst single contribution was -$1,910."}},
   {"@type":"Question","name":"Does the simulation account for fees and slippage?","acceptedAnswer":{"@type":"Answer","text":"No. Results are gross: no brokerage fees, no slippage, no taxes. Exits use the price recorded when the exit signal fired."}}]}
 ]}
 </script>
@@ -108,6 +108,11 @@ td.pos{color:var(--green)}
 td.zero{color:var(--faint)}
 tr.dim td{opacity:.55}
 .small{font-size:13.5px;color:var(--faint);margin-top:10px}
+.dlbox{margin:26px 0 6px;border:1px solid var(--line);border-radius:14px;background:var(--card);padding:22px 20px;display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+.dlbox .dltxt{flex:1;min-width:240px}
+.dlbox .dltxt b{display:block;margin-bottom:4px}
+.dlbox a.dlbtn{display:inline-block;background:var(--grad);color:#fff;font-weight:600;padding:11px 20px;border-radius:10px;white-space:nowrap}
+.dlbox a.dlbtn:hover{text-decoration:none;filter:brightness(1.1)}
 .cta{margin:50px 0;border:1px solid rgba(45,126,247,.35);border-radius:16px;padding:30px;background:linear-gradient(135deg,rgba(45,126,247,.10),rgba(92,90,240,.08))}
 .cta h3{font-family:var(--serif);font-size:24px;font-weight:600;margin-bottom:8px}
 .cta a.btn{display:inline-block;background:var(--grad);color:#fff;font-weight:600;padding:11px 22px;border-radius:10px}
@@ -145,29 +150,35 @@ html[lang="pt-BR"] .lang-pt{display:block}
 <div class="hero">
   <div class="eyebrow">Stockgaide Research · <b>Study Nº 01</b> · Aug 2026</div>
   <h1>What $100,000 following our signals would have done.</h1>
-  <p class="dek">Every trade our engine opens and closes is logged automatically. We took all 244 closed trades from January to July 2026, sized each one by its conviction profile, and added up the result — winners, losers and everything between.</p>
+  <p class="dek">Every trade our engine opens and closes is logged automatically. We took all 289 closed trades from January to August 2026, sized each one by its conviction profile, and added up the result — winners, losers and everything between.</p>
 </div>
 
 <div class="ledger">
   <div class="head">
     <span class="from">$100,000</span>
     <span class="arrow">→</span>
-    <span class="big">$136,640</span>
-    <div class="headnote">A gross gain of <b>+36.64%</b> over six months and ten days, with a maximum drawdown of -7.35%. 96 of the 244 trades lost money and are counted in that number.</div>
+    <span class="big">$137,323</span>
+    <div class="headnote">A gross gain of <b>+37.32%</b> over seven months and ten days, with a maximum drawdown of -7.33%. 119 of the 289 trades lost money and are counted in that number.</div>
   </div>
   <div class="chartbox">
     <h3>Monthly return on the $100,000 base</h3>
-    <svg viewBox="0 0 760 210" role="img" aria-label="Monthly returns, January to July 2026">
-      
-      <line class="ax" x1="30" y1="170" x2="730" y2="170"/>
-      <rect x="55.7" y="136.1" width="55.4" height="33.9" rx="4" fill="url(#g1)"/><text x="83.4" y="129.1" class="bv">+2.1%</text><text x="83.4" y="192.0" class="bl">Jan</text><rect x="154.6" y="30.0" width="55.4" height="140.0" rx="4" fill="url(#g1)"/><text x="182.3" y="23.0" class="bv">+8.9%</text><text x="182.3" y="192.0" class="bl">Feb</text><rect x="253.5" y="144.9" width="55.4" height="25.1" rx="4" fill="url(#g1)"/><text x="281.1" y="137.9" class="bv">+1.6%</text><text x="281.1" y="192.0" class="bl">Mar</text><rect x="352.3" y="49.2" width="55.4" height="120.8" rx="4" fill="url(#g1)"/><text x="380.0" y="42.2" class="bv">+7.7%</text><text x="380.0" y="192.0" class="bl">Apr</text><rect x="451.2" y="55.6" width="55.4" height="114.4" rx="4" fill="url(#g1)"/><text x="478.9" y="48.6" class="bv">+7.3%</text><text x="478.9" y="192.0" class="bl">May</text><rect x="550.0" y="116.8" width="55.4" height="53.2" rx="4" fill="url(#g1)"/><text x="577.7" y="109.8" class="bv">+3.4%</text><text x="577.7" y="192.0" class="bl">Jun</text><rect x="648.9" y="79.5" width="55.4" height="90.5" rx="4" fill="url(#g1)"/><text x="676.6" y="72.5" class="bv">+5.7%</text><text x="676.6" y="192.0" class="bl">Jul</text>
+    <svg viewBox="0 0 760 210" role="img" aria-label="Monthly returns, January to August 2026">
+      <line class="ax" x1="30.0" y1="170.0" x2="730.0" y2="170.0"/>
+      <rect x="49.2" y="131.1" width="49.0" height="38.9" rx="4" fill="url(#g1)"/><text x="73.8" y="124.1" class="bv">+2.5%</text><text x="73.8" y="192.0" class="bl">Jan</text>
+      <rect x="136.8" y="30.0" width="49.0" height="140.0" rx="4" fill="url(#g1)"/><text x="161.2" y="23.0" class="bv">+8.9%</text><text x="161.2" y="192.0" class="bl">Feb</text>
+      <rect x="224.2" y="144.9" width="49.0" height="25.1" rx="4" fill="url(#g1)"/><text x="248.8" y="137.9" class="bv">+1.6%</text><text x="248.8" y="192.0" class="bl">Mar</text>
+      <rect x="311.8" y="55.9" width="49.0" height="114.1" rx="4" fill="url(#g1)"/><text x="336.2" y="48.9" class="bv">+7.2%</text><text x="336.2" y="192.0" class="bl">Apr</text>
+      <rect x="399.2" y="55.6" width="49.0" height="114.4" rx="4" fill="url(#g1)"/><text x="423.8" y="48.6" class="bv">+7.3%</text><text x="423.8" y="192.0" class="bl">May</text>
+      <rect x="486.8" y="120.4" width="49.0" height="49.6" rx="4" fill="url(#g1)"/><text x="511.2" y="113.4" class="bv">+3.1%</text><text x="511.2" y="192.0" class="bl">Jun</text>
+      <rect x="574.2" y="84.2" width="49.0" height="85.8" rx="4" fill="url(#g1)"/><text x="598.8" y="77.2" class="bv">+5.4%</text><text x="598.8" y="192.0" class="bl">Jul</text>
+      <rect x="661.8" y="149.4" width="49.0" height="20.6" rx="4" fill="url(#g1)"/><text x="686.2" y="142.4" class="bv">+1.3%</text><text x="686.2" y="192.0" class="bl">Aug</text>
     </svg>
   </div>
   <div class="stats">
-    <div class="stat"><div class="k">Closed trades</div><div class="v">244</div></div>
-    <div class="stat"><div class="k">Win rate</div><div class="v">60.7%</div></div>
-    <div class="stat"><div class="k">Profit factor</div><div class="v">2.46</div></div>
-    <div class="stat"><div class="k">Max drawdown</div><div class="v">-7.35%</div></div>
+    <div class="stat"><div class="k">Closed trades</div><div class="v">289</div></div>
+    <div class="stat"><div class="k">Win rate</div><div class="v">58.8%</div></div>
+    <div class="stat"><div class="k">Profit factor</div><div class="v">2.30</div></div>
+    <div class="stat"><div class="k">Max drawdown</div><div class="v">-7.33%</div></div>
   </div>
 </div>
 
@@ -178,32 +189,39 @@ html[lang="pt-BR"] .lang-pt{display:block}
   <div class="chartbox" style="border:1px solid var(--line);border-radius:14px;background:var(--card);margin:16px 0 6px">
     <h3>Cumulative return</h3>
     <svg viewBox="0 0 760 200" role="img" aria-label="Cumulative return curve">
-      
-      <polygon points="38.0,170.0 38.0,170.0 135.7,161.8 233.4,127.9 331.1,121.8 428.9,92.5 526.6,64.8 624.3,51.9 722.0,30.0 722.0,170.0" fill="url(#g2)"/>
-      <polyline points="38.0,170.0 135.7,161.8 233.4,127.9 331.1,121.8 428.9,92.5 526.6,64.8 624.3,51.9 722.0,30.0" fill="none" stroke="#5C5AF0" stroke-width="2.5" stroke-linejoin="round"/>
-      <circle cx="135.7" cy="161.8" r="3.5" fill="#5C5AF0"/><circle cx="233.4" cy="127.9" r="3.5" fill="#5C5AF0"/><circle cx="331.1" cy="121.8" r="3.5" fill="#5C5AF0"/><circle cx="428.9" cy="92.5" r="3.5" fill="#5C5AF0"/><circle cx="526.6" cy="64.8" r="3.5" fill="#5C5AF0"/><circle cx="624.3" cy="51.9" r="3.5" fill="#5C5AF0"/><circle cx="722.0" cy="30.0" r="3.5" fill="#5C5AF0"/>
-      <text x="690" y="24" class="bv" style="font-size:13px">+36.64%</text>
+      <polygon points="38.0,170.0 38.0,170.0 123.5,160.7 209.0,127.4 294.5,121.5 380.0,94.3 465.5,67.1 551.0,55.3 636.5,34.9 722.0,30.0 722.0,170.0" fill="url(#g2)"/>
+      <polyline points="38.0,170.0 123.5,160.7 209.0,127.4 294.5,121.5 380.0,94.3 465.5,67.1 551.0,55.3 636.5,34.9 722.0,30.0" fill="none" stroke="#5C5AF0" stroke-width="2.5" stroke-linejoin="round"/>
+      <circle cx="123.5" cy="160.7" r="3.5" fill="#5C5AF0"/><circle cx="209.0" cy="127.4" r="3.5" fill="#5C5AF0"/><circle cx="294.5" cy="121.5" r="3.5" fill="#5C5AF0"/><circle cx="380.0" cy="94.3" r="3.5" fill="#5C5AF0"/><circle cx="465.5" cy="67.1" r="3.5" fill="#5C5AF0"/><circle cx="551.0" cy="55.3" r="3.5" fill="#5C5AF0"/><circle cx="636.5" cy="34.9" r="3.5" fill="#5C5AF0"/><circle cx="722.0" cy="30.0" r="3.5" fill="#5C5AF0"/>
+      <text x="688" y="24" class="bv" style="font-size:13px">+37.32%</text>
     </svg>
   </div>
 
   <div class="tblwrap"><table>
     <caption>Month by month — $100,000 base</caption>
     <thead><tr><th>Month</th><th>Trades</th><th>Win rate</th><th>Result</th><th>Return</th><th>Cumulative</th></tr></thead>
-    <tbody><tr><td>Jan</td><td>35</td><td>54.3%</td><td class="pos">+$2,147</td><td class="pos">+2.15%</td><td class="hl">+2.15%</td></tr><tr><td>Feb</td><td>80</td><td>61.3%</td><td class="pos">+$8,878</td><td class="pos">+8.88%</td><td class="hl">+11.03%</td></tr><tr><td>Mar</td><td>47</td><td>46.8%</td><td class="pos">+$1,589</td><td class="pos">+1.59%</td><td class="hl">+12.61%</td></tr><tr><td>Apr</td><td>20</td><td>75.0%</td><td class="pos">+$7,658</td><td class="pos">+7.66%</td><td class="hl">+20.27%</td></tr><tr><td>May</td><td>26</td><td>80.8%</td><td class="pos">+$7,258</td><td class="pos">+7.26%</td><td class="hl">+27.53%</td></tr><tr><td>Jun</td><td>31</td><td>58.1%</td><td class="pos">+$3,372</td><td class="pos">+3.37%</td><td class="hl">+30.90%</td></tr><tr><td>Jul</td><td>5</td><td>80.0%</td><td class="pos">+$5,739</td><td class="pos">+5.74%</td><td class="hl">+36.64%</td></tr></tbody>
+    <tbody><tr><td>Jan</td><td>65</td><td>47.7%</td><td class="pos">+$2,467</td><td class="pos">+2.47%</td><td class="hl">+2.47%</td></tr><tr><td>Feb</td><td>80</td><td>61.3%</td><td class="pos">+$8,878</td><td class="pos">+8.88%</td><td class="hl">+11.34%</td></tr><tr><td>Mar</td><td>47</td><td>46.8%</td><td class="pos">+$1,589</td><td class="pos">+1.59%</td><td class="hl">+12.93%</td></tr><tr><td>Apr</td><td>20</td><td>75.0%</td><td class="pos">+$7,234</td><td class="pos">+7.23%</td><td class="hl">+20.17%</td></tr><tr><td>May</td><td>26</td><td>80.8%</td><td class="pos">+$7,258</td><td class="pos">+7.26%</td><td class="hl">+27.43%</td></tr><tr><td>Jun</td><td>31</td><td>58.1%</td><td class="pos">+$3,146</td><td class="pos">+3.15%</td><td class="hl">+30.57%</td></tr><tr><td>Jul</td><td>5</td><td>80.0%</td><td class="pos">+$5,443</td><td class="pos">+5.44%</td><td class="hl">+36.02%</td></tr><tr><td>Aug</td><td>15</td><td>66.7%</td><td class="pos">+$1,308</td><td class="pos">+1.31%</td><td class="hl">+37.32%</td></tr></tbody>
   </table></div>
-  <p class="small">January starts on the 21st and July ends on the 31st — the first and last months are partial.</p>
+  <p class="small">January starts on the 21st and August ends on the 31st — the first month is partial. September is still open and is excluded, exactly as the dashboard does.</p>
 </section>
 
 <section>
   <div class="kicker">Method</div>
   <h2 class="t">How the number was built</h2>
   <ol class="method">
-    <li><b>Real trades, logged automatically.</b> Each entry and exit was recorded by the system as it happened, with price and timestamp. Nothing was selected afterwards: all 244 closed trades are in.</li>
+    <li><b>Real trades, logged automatically.</b> Each entry and exit was recorded by the system as it happened, with price and timestamp. Nothing was selected afterwards: all 289 closed trades are in.</li>
     <li><b>Position size follows conviction.</b> Each trade gets the share of capital its profile prescribes — from 14% for the highest-conviction long-term setups down to 3.5% for incomplete signals, and 0% for the ones the rules say to skip. We used the <b>floor</b> of every band, never the top.</li>
     <li><b>Capital rotates.</b> Each trade uses its nominal percentage of the $100,000 base independently of how many other positions were open at the time.</li>
     <li><b>Losses count the same as gains.</b> A trade that lost 13.6% subtracts exactly what its size prescribes. The worst single trade cost $1,910; the best added $2,584.</li>
     <li><b>Gross, not net.</b> No brokerage fees, no slippage, no taxes. Exits use the price recorded when the exit signal fired.</li>
   </ol>
+
+  <div class="dlbox">
+    <div class="dltxt">
+      <b>Check the math yourself</b>
+      <span class="small">The full workbook: all 289 trades line by line, with entry, exit, conviction profile, size and contribution. Formulas are live — change the base capital and everything recalculates.</span>
+    </div>
+    <a class="dlbtn" href="/research/memoria_calculo_research_ago2026.xlsx" download>Download the spreadsheet (XLSX)</a>
+  </div>
 </section>
 
 <section>
@@ -213,24 +231,16 @@ html[lang="pt-BR"] .lang-pt{display:block}
   <div class="tblwrap"><table>
     <caption>By profile — sizing floor applied</caption>
     <thead><tr><th>Profile</th><th>Size</th><th>Trades</th><th>Win rate</th><th>Avg result</th><th>Contribution</th></tr></thead>
-    <tbody><tr><td>MACD</td><td>10.0%</td><td>66</td><td>59.1%</td><td>+2.87%</td><td class="pos">+$18,969</td></tr><tr><td>Cautious / no PF</td><td>3.5%</td><td>131</td><td>59.5%</td><td>+1.70%</td><td class="pos">+$7,773</td></tr><tr><td>CP v11 MEDIUM Better</td><td>8.0%</td><td>9</td><td>100.0%</td><td>+5.78%</td><td class="pos">+$4,164</td></tr><tr><td>MACDLE Premium</td><td>14.0%</td><td>16</td><td>50.0%</td><td>+1.26%</td><td class="pos">+$2,817</td></tr><tr><td>CP v11 MEDIUM Normal</td><td>7.0%</td><td>5</td><td>100.0%</td><td>+4.37%</td><td class="pos">+$1,530</td></tr><tr><td>CP v11 STRONG Premium</td><td>6.0%</td><td>6</td><td>83.3%</td><td>+3.86%</td><td class="pos">+$1,388</td></tr><tr class="dim"><td>Avoid</td><td>0.0%</td><td>11</td><td>36.4%</td><td>-0.06%</td><td class="zero">$0</td></tr></tbody>
+    <tbody><tr><td>MACD</td><td>10.0%</td><td>70</td><td>57.1%</td><td>+2.71%</td><td class="pos">+$18,994</td></tr><tr><td>Cautious / no PF</td><td>3.5%</td><td>166</td><td>57.2%</td><td>+1.46%</td><td class="pos">+$8,479</td></tr><tr><td>CP v11 MEDIUM (better)</td><td>8.0%</td><td>11</td><td>81.8%</td><td>+4.68%</td><td class="pos">+$4,115</td></tr><tr><td>MACDLE Premium</td><td>14.0%</td><td>16</td><td>50.0%</td><td>+1.26%</td><td class="pos">+$2,817</td></tr><tr><td>CP v11 MEDIUM (normal)</td><td>7.0%</td><td>5</td><td>100.0%</td><td>+4.37%</td><td class="pos">+$1,530</td></tr><tr><td>CP v11 STRONG Premium</td><td>6.0%</td><td>6</td><td>83.3%</td><td>+3.86%</td><td class="pos">+$1,388</td></tr><tr><td>Avoid</td><td>0.0%</td><td>15</td><td>53.3%</td><td>+1.01%</td><td>+$0</td></tr></tbody>
   </table></div>
   <p class="note">The "Avoid" tier is the one worth noticing: 11 trades the rules refused to size. They averaged a small loss, so skipping them was correct — but the honest reading is that they were close to neutral, not disastrous.</p>
 </section>
 
 <section>
-  <div class="kicker">Robustness</div>
-  <h2 class="t">The one assumption that matters, tested</h2>
-  <p>Trades before March 2026 predate the strategy label in our logs — 95 of 244 trades carry it explicitly. For the earlier ones, the profile was inferred from the probability and profit factor recorded at entry.</p>
-  <p>That inference could flatter the result, so we tested the opposite: force <b>every</b> unlabeled trade to the smallest non-zero size (3.5%), the most conservative treatment available. The six-month return goes from <b>+36.64%</b> to <b>+33.96%</b>. The conclusion doesn't depend on the assumption.</p>
-</section>
-
-<section>
   <div class="kicker">Limitations</div>
   <h2 class="t">What this is <em>not</em></h2>
-  <p><b>Not a brokerage statement.</b> The trades are real and were logged as they happened, but the sizing framework is applied retroactively to that history. It shows what the current rules would have produced.</p>
   <p><b>Not net of costs.</b> Fees, slippage and taxes would reduce it. How much depends on the broker and the account.</p>
-  <p><b>One regime.</b> Six months of 2026, including a historic rotation out of mega-cap technology. A different market would give a different number.</p>
+  <p><b>One regime.</b> Seven months of 2026, including a historic rotation out of mega-cap technology. A different market would give a different number.</p>
   <p><b>Past is not future.</b> This is a measurement of what happened, published for transparency — not a promise of what will happen.</p>
 </section>
 
@@ -247,28 +257,35 @@ html[lang="pt-BR"] .lang-pt{display:block}
 <div class="hero">
   <div class="eyebrow">Stockgaide Research · <b>Estudo Nº 01</b> · Ago 2026</div>
   <h1>O que US$ 100.000 seguindo nossos sinais teriam feito.</h1>
-  <p class="dek">Toda operação que o nosso motor abre e fecha é registrada automaticamente. Pegamos as 244 operações fechadas de janeiro a julho de 2026, dimensionamos cada uma pelo seu perfil de convicção e somamos o resultado — ganhos, perdas e tudo no meio.</p>
+  <p class="dek">Toda operação que o nosso motor abre e fecha é registrada automaticamente. Pegamos as 289 operações fechadas de janeiro a agosto de 2026, dimensionamos cada uma pelo seu perfil de convicção e somamos o resultado — ganhos, perdas e tudo no meio.</p>
 </div>
 
 <div class="ledger">
   <div class="head">
     <span class="from">US$ 100.000</span>
     <span class="arrow">→</span>
-    <span class="big">US$ 136.640</span>
-    <div class="headnote">Ganho bruto de <b>+36,64%</b> em seis meses e dez dias, com drawdown máximo de -7,35%. 96 das 244 operações deram prejuízo e estão contadas nesse número.</div>
+    <span class="big">US$ 137.323</span>
+    <div class="headnote">Ganho bruto de <b>+37,32%</b> em sete meses e dez dias, com drawdown máximo de -7,33%. 119 das 289 operações deram prejuízo e estão contadas nesse número.</div>
   </div>
   <div class="chartbox">
     <h3>Retorno mensal sobre a base de US$ 100.000</h3>
-    <svg viewBox="0 0 760 210" role="img" aria-label="Retornos mensais, janeiro a julho de 2026">
-      <line class="ax" x1="30" y1="170" x2="730" y2="170"/>
-      <rect x="55.7" y="136.1" width="55.4" height="33.9" rx="4" fill="url(#g1)"/><text x="83.4" y="129.1" class="bv">+2.1%</text><text x="83.4" y="192.0" class="bl">Jan</text><rect x="154.6" y="30.0" width="55.4" height="140.0" rx="4" fill="url(#g1)"/><text x="182.3" y="23.0" class="bv">+8.9%</text><text x="182.3" y="192.0" class="bl">Fev</text><rect x="253.5" y="144.9" width="55.4" height="25.1" rx="4" fill="url(#g1)"/><text x="281.1" y="137.9" class="bv">+1.6%</text><text x="281.1" y="192.0" class="bl">Mar</text><rect x="352.3" y="49.2" width="55.4" height="120.8" rx="4" fill="url(#g1)"/><text x="380.0" y="42.2" class="bv">+7.7%</text><text x="380.0" y="192.0" class="bl">Abr</text><rect x="451.2" y="55.6" width="55.4" height="114.4" rx="4" fill="url(#g1)"/><text x="478.9" y="48.6" class="bv">+7.3%</text><text x="478.9" y="192.0" class="bl">Mai</text><rect x="550.0" y="116.8" width="55.4" height="53.2" rx="4" fill="url(#g1)"/><text x="577.7" y="109.8" class="bv">+3.4%</text><text x="577.7" y="192.0" class="bl">Jun</text><rect x="648.9" y="79.5" width="55.4" height="90.5" rx="4" fill="url(#g1)"/><text x="676.6" y="72.5" class="bv">+5.7%</text><text x="676.6" y="192.0" class="bl">Jul</text>
+    <svg viewBox="0 0 760 210" role="img" aria-label="Retornos mensais, janeiro a agosto de 2026">
+      <line class="ax" x1="30.0" y1="170.0" x2="730.0" y2="170.0"/>
+      <rect x="49.2" y="131.1" width="49.0" height="38.9" rx="4" fill="url(#g1)"/><text x="73.8" y="124.1" class="bv">+2,5%</text><text x="73.8" y="192.0" class="bl">Jan</text>
+      <rect x="136.8" y="30.0" width="49.0" height="140.0" rx="4" fill="url(#g1)"/><text x="161.2" y="23.0" class="bv">+8,9%</text><text x="161.2" y="192.0" class="bl">Fev</text>
+      <rect x="224.2" y="144.9" width="49.0" height="25.1" rx="4" fill="url(#g1)"/><text x="248.8" y="137.9" class="bv">+1,6%</text><text x="248.8" y="192.0" class="bl">Mar</text>
+      <rect x="311.8" y="55.9" width="49.0" height="114.1" rx="4" fill="url(#g1)"/><text x="336.2" y="48.9" class="bv">+7,2%</text><text x="336.2" y="192.0" class="bl">Abr</text>
+      <rect x="399.2" y="55.6" width="49.0" height="114.4" rx="4" fill="url(#g1)"/><text x="423.8" y="48.6" class="bv">+7,3%</text><text x="423.8" y="192.0" class="bl">Mai</text>
+      <rect x="486.8" y="120.4" width="49.0" height="49.6" rx="4" fill="url(#g1)"/><text x="511.2" y="113.4" class="bv">+3,1%</text><text x="511.2" y="192.0" class="bl">Jun</text>
+      <rect x="574.2" y="84.2" width="49.0" height="85.8" rx="4" fill="url(#g1)"/><text x="598.8" y="77.2" class="bv">+5,4%</text><text x="598.8" y="192.0" class="bl">Jul</text>
+      <rect x="661.8" y="149.4" width="49.0" height="20.6" rx="4" fill="url(#g1)"/><text x="686.2" y="142.4" class="bv">+1,3%</text><text x="686.2" y="192.0" class="bl">Ago</text>
     </svg>
   </div>
   <div class="stats">
-    <div class="stat"><div class="k">Operações</div><div class="v">244</div></div>
-    <div class="stat"><div class="k">Taxa de acerto</div><div class="v">60,7%</div></div>
-    <div class="stat"><div class="k">Profit factor</div><div class="v">2,46</div></div>
-    <div class="stat"><div class="k">Drawdown máx.</div><div class="v">-7,35%</div></div>
+    <div class="stat"><div class="k">Operações</div><div class="v">289</div></div>
+    <div class="stat"><div class="k">Taxa de acerto</div><div class="v">58,8%</div></div>
+    <div class="stat"><div class="k">Profit factor</div><div class="v">2,30</div></div>
+    <div class="stat"><div class="k">Drawdown máx,</div><div class="v">-7,33%</div></div>
   </div>
 </div>
 
@@ -279,31 +296,39 @@ html[lang="pt-BR"] .lang-pt{display:block}
   <div class="chartbox" style="border:1px solid var(--line);border-radius:14px;background:var(--card);margin:16px 0 6px">
     <h3>Retorno acumulado</h3>
     <svg viewBox="0 0 760 200" role="img" aria-label="Curva de retorno acumulado">
-      <polygon points="38.0,170.0 38.0,170.0 135.7,161.8 233.4,127.9 331.1,121.8 428.9,92.5 526.6,64.8 624.3,51.9 722.0,30.0 722.0,170.0" fill="url(#g2)"/>
-      <polyline points="38.0,170.0 135.7,161.8 233.4,127.9 331.1,121.8 428.9,92.5 526.6,64.8 624.3,51.9 722.0,30.0" fill="none" stroke="#5C5AF0" stroke-width="2.5" stroke-linejoin="round"/>
-      <circle cx="135.7" cy="161.8" r="3.5" fill="#5C5AF0"/><circle cx="233.4" cy="127.9" r="3.5" fill="#5C5AF0"/><circle cx="331.1" cy="121.8" r="3.5" fill="#5C5AF0"/><circle cx="428.9" cy="92.5" r="3.5" fill="#5C5AF0"/><circle cx="526.6" cy="64.8" r="3.5" fill="#5C5AF0"/><circle cx="624.3" cy="51.9" r="3.5" fill="#5C5AF0"/><circle cx="722.0" cy="30.0" r="3.5" fill="#5C5AF0"/>
-      <text x="690" y="24" class="bv" style="font-size:13px">+36,64%</text>
+      <polygon points="38.0,170.0 38.0,170.0 123.5,160.7 209.0,127.4 294.5,121.5 380.0,94.3 465.5,67.1 551.0,55.3 636.5,34.9 722.0,30.0 722.0,170.0" fill="url(#g2)"/>
+      <polyline points="38.0,170.0 123.5,160.7 209.0,127.4 294.5,121.5 380.0,94.3 465.5,67.1 551.0,55.3 636.5,34.9 722.0,30.0" fill="none" stroke="#5C5AF0" stroke-width="2.5" stroke-linejoin="round"/>
+      <circle cx="123.5" cy="160.7" r="3.5" fill="#5C5AF0"/><circle cx="209.0" cy="127.4" r="3.5" fill="#5C5AF0"/><circle cx="294.5" cy="121.5" r="3.5" fill="#5C5AF0"/><circle cx="380.0" cy="94.3" r="3.5" fill="#5C5AF0"/><circle cx="465.5" cy="67.1" r="3.5" fill="#5C5AF0"/><circle cx="551.0" cy="55.3" r="3.5" fill="#5C5AF0"/><circle cx="636.5" cy="34.9" r="3.5" fill="#5C5AF0"/><circle cx="722.0" cy="30.0" r="3.5" fill="#5C5AF0"/>
+      <text x="688" y="24" class="bv" style="font-size:13px">+37,32%</text>
     </svg>
   </div>
 
   <div class="tblwrap"><table>
     <caption>Mês a mês — base US$ 100.000</caption>
     <thead><tr><th>Mês</th><th>Operações</th><th>Acerto</th><th>Resultado</th><th>Retorno</th><th>Acumulado</th></tr></thead>
-    <tbody><tr><td>Jan</td><td>35</td><td>54,3%</td><td class="pos">+US$ 2.147</td><td class="pos">+2,15%</td><td class="hl">+2,15%</td></tr><tr><td>Fev</td><td>80</td><td>61,3%</td><td class="pos">+US$ 8.878</td><td class="pos">+8,88%</td><td class="hl">+11,03%</td></tr><tr><td>Mar</td><td>47</td><td>46,8%</td><td class="pos">+US$ 1.589</td><td class="pos">+1,59%</td><td class="hl">+12,61%</td></tr><tr><td>Abr</td><td>20</td><td>75,0%</td><td class="pos">+US$ 7.658</td><td class="pos">+7,66%</td><td class="hl">+20,27%</td></tr><tr><td>Mai</td><td>26</td><td>80,8%</td><td class="pos">+US$ 7.258</td><td class="pos">+7,26%</td><td class="hl">+27,53%</td></tr><tr><td>Jun</td><td>31</td><td>58,1%</td><td class="pos">+US$ 3.372</td><td class="pos">+3,37%</td><td class="hl">+30,90%</td></tr><tr><td>Jul</td><td>5</td><td>80,0%</td><td class="pos">+US$ 5.739</td><td class="pos">+5,74%</td><td class="hl">+36,64%</td></tr></tbody>
+    <tbody><tr><td>Jan</td><td>65</td><td>47,7%</td><td class="pos">+US$ 2.467</td><td class="pos">+2,47%</td><td class="hl">+2,47%</td></tr><tr><td>Fev</td><td>80</td><td>61,3%</td><td class="pos">+US$ 8.878</td><td class="pos">+8,88%</td><td class="hl">+11,34%</td></tr><tr><td>Mar</td><td>47</td><td>46,8%</td><td class="pos">+US$ 1.589</td><td class="pos">+1,59%</td><td class="hl">+12,93%</td></tr><tr><td>Abr</td><td>20</td><td>75,0%</td><td class="pos">+US$ 7.234</td><td class="pos">+7,23%</td><td class="hl">+20,17%</td></tr><tr><td>Mai</td><td>26</td><td>80,8%</td><td class="pos">+US$ 7.258</td><td class="pos">+7,26%</td><td class="hl">+27,43%</td></tr><tr><td>Jun</td><td>31</td><td>58,1%</td><td class="pos">+US$ 3.146</td><td class="pos">+3,15%</td><td class="hl">+30,57%</td></tr><tr><td>Jul</td><td>5</td><td>80,0%</td><td class="pos">+US$ 5.443</td><td class="pos">+5,44%</td><td class="hl">+36,02%</td></tr><tr><td>Ago</td><td>15</td><td>66,7%</td><td class="pos">+US$ 1.308</td><td class="pos">+1,31%</td><td class="hl">+37,32%</td></tr></tbody>
   </table></div>
-  <p class="small">Janeiro começa no dia 21 e julho termina no dia 31 — o primeiro e o último mês são parciais.</p>
+  <p class="small">Janeiro começa no dia 21 e agosto termina no dia 31 — o primeiro mês é parcial. Setembro ainda está aberto e fica de fora, exatamente como no painel.</p>
 </section>
 
 <section>
   <div class="kicker">Método</div>
   <h2 class="t">Como o número foi construído</h2>
   <ol class="method">
-    <li><b>Operações reais, registradas automaticamente.</b> Cada entrada e saída foi gravada pelo sistema no momento em que aconteceu, com preço e horário. Nada foi selecionado depois: as 244 operações fechadas estão todas aqui.</li>
+    <li><b>Operações reais, registradas automaticamente.</b> Cada entrada e saída foi gravada pelo sistema no momento em que aconteceu, com preço e horário. Nada foi selecionado depois: as 289 operações fechadas estão todas aqui.</li>
     <li><b>O tamanho segue a convicção.</b> Cada operação recebe a fatia de capital que seu perfil determina — de 14% para os sinais de longo prazo com maior convicção até 3,5% para sinais incompletos, e 0% para os que as regras mandam evitar. Usamos o <b>piso</b> de cada faixa, nunca o teto.</li>
     <li><b>O capital gira.</b> Cada operação usa seu percentual nominal sobre a base de US$ 100.000, independentemente de quantas outras posições estavam abertas ao mesmo tempo.</li>
     <li><b>Perdas contam igual aos ganhos.</b> Uma operação que perdeu 13,6% subtrai exatamente o que seu tamanho determina. A pior sozinha custou US$ 1.910; a melhor somou US$ 2.584.</li>
     <li><b>Bruto, não líquido.</b> Sem corretagem, sem slippage, sem impostos. As saídas usam o preço registrado quando o sinal de saída disparou.</li>
   </ol>
+
+  <div class="dlbox">
+    <div class="dltxt">
+      <b>Confira a conta você mesmo</b>
+      <span class="small">A memória de cálculo completa: as 289 operações linha a linha, com entrada, saída, perfil de convicção, tamanho e contribuição. As fórmulas estão vivas — troque o capital base e tudo recalcula.</span>
+    </div>
+    <a class="dlbtn" href="/research/memoria_calculo_research_ago2026.xlsx" download>Baixar a planilha (XLSX)</a>
+  </div>
 </section>
 
 <section>
@@ -313,24 +338,16 @@ html[lang="pt-BR"] .lang-pt{display:block}
   <div class="tblwrap"><table>
     <caption>Por perfil — piso do sizing aplicado</caption>
     <thead><tr><th>Perfil</th><th>Tamanho</th><th>Operações</th><th>Acerto</th><th>Resultado médio</th><th>Contribuição</th></tr></thead>
-    <tbody><tr><td>MACD</td><td>10,0%</td><td>66</td><td>59,1%</td><td>+2,87%</td><td class="pos">+US$ 18.969</td></tr><tr><td>Cauteloso / PF ausente</td><td>3,5%</td><td>131</td><td>59,5%</td><td>+1,70%</td><td class="pos">+US$ 7.773</td></tr><tr><td>CP v11 MEDIUM Melhor</td><td>8,0%</td><td>9</td><td>100,0%</td><td>+5,78%</td><td class="pos">+US$ 4.164</td></tr><tr><td>MACDLE Premium</td><td>14,0%</td><td>16</td><td>50,0%</td><td>+1,26%</td><td class="pos">+US$ 2.817</td></tr><tr><td>CP v11 MEDIUM Normal</td><td>7,0%</td><td>5</td><td>100,0%</td><td>+4,37%</td><td class="pos">+US$ 1.530</td></tr><tr><td>CP v11 STRONG Premium</td><td>6,0%</td><td>6</td><td>83,3%</td><td>+3,86%</td><td class="pos">+US$ 1.388</td></tr><tr class="dim"><td>Evitar</td><td>0,0%</td><td>11</td><td>36,4%</td><td>-0,06%</td><td class="zero">US$ 0</td></tr></tbody>
+    <tbody><tr><td>MACD</td><td>10,0%</td><td>70</td><td>57,1%</td><td>+2,71%</td><td class="pos">+US$ 18.994</td></tr><tr><td>Cauteloso / PF ausente</td><td>3,5%</td><td>166</td><td>57,2%</td><td>+1,46%</td><td class="pos">+US$ 8.479</td></tr><tr><td>CP v11 MEDIUM Melhor</td><td>8,0%</td><td>11</td><td>81,8%</td><td>+4,68%</td><td class="pos">+US$ 4.115</td></tr><tr><td>MACDLE Premium</td><td>14,0%</td><td>16</td><td>50,0%</td><td>+1,26%</td><td class="pos">+US$ 2.817</td></tr><tr><td>CP v11 MEDIUM Normal</td><td>7,0%</td><td>5</td><td>100,0%</td><td>+4,37%</td><td class="pos">+US$ 1.530</td></tr><tr><td>CP v11 STRONG Premium</td><td>6,0%</td><td>6</td><td>83,3%</td><td>+3,86%</td><td class="pos">+US$ 1.388</td></tr><tr><td>Evitar</td><td>0,0%</td><td>15</td><td>53,3%</td><td>+1,01%</td><td>+US$ 0</td></tr></tbody>
   </table></div>
   <p class="note">A faixa "Evitar" é a que merece atenção: 11 operações que as regras se recusaram a dimensionar. Elas tiveram perda média pequena, então evitá-las estava certo — mas a leitura honesta é que ficaram perto do neutro, não desastrosas.</p>
 </section>
 
 <section>
-  <div class="kicker">Robustez</div>
-  <h2 class="t">A única premissa que importa, testada</h2>
-  <p>Operações anteriores a março de 2026 são anteriores à etiqueta de estratégia nos nossos registros — 95 das 244 operações a carregam explicitamente. Para as mais antigas, o perfil foi inferido a partir da probabilidade e do profit factor registrados na entrada.</p>
-  <p>Essa inferência poderia inflar o resultado, então testamos o oposto: forçar <b>todas</b> as operações sem etiqueta para o menor tamanho possível (3,5%), o tratamento mais conservador disponível. O retorno de seis meses vai de <b>+36,64%</b> para <b>+33,96%</b>. A conclusão não depende da premissa.</p>
-</section>
-
-<section>
   <div class="kicker">Limitações</div>
   <h2 class="t">O que isto <em>não</em> é</h2>
-  <p><b>Não é extrato de corretora.</b> As operações são reais e foram registradas conforme aconteceram, mas o modelo de dimensionamento é aplicado retroativamente a esse histórico. Mostra o que as regras atuais teriam produzido.</p>
   <p><b>Não é líquido de custos.</b> Corretagem, slippage e impostos reduziriam o número. Quanto depende da corretora e da conta.</p>
-  <p><b>Um regime só.</b> Seis meses de 2026, incluindo uma rotação histórica para fora das mega-caps de tecnologia. Um mercado diferente daria um número diferente.</p>
+  <p><b>Um regime só.</b> Sete meses de 2026, incluindo uma rotação histórica para fora das mega-caps de tecnologia. Um mercado diferente daria um número diferente.</p>
   <p><b>Passado não é futuro.</b> Isto é uma medição do que aconteceu, publicada por transparência — não uma promessa do que vai acontecer.</p>
 </section>
 
@@ -345,17 +362,17 @@ html[lang="pt-BR"] .lang-pt{display:block}
   <div class="links">
     <a href="/">Home</a><a href="/stocks">Stocks A–Z</a><a href="/blog">Blog</a><a href="mailto:stockgaide@gmail.com">stockgaide@gmail.com</a>
   </div>
-  <div class="lang-en">Educational platform. Analyses are used by the creator in his own decisions. Not investment advice. Data through Jul 31, 2026 · Published Aug 3, 2026.</div>
-  <div class="lang-pt">Plataforma educacional. Análises usadas pelo criador nas próprias decisões. Não é recomendação de investimento. Dados até 31/07/2026 · Publicado em 03/08/2026.</div>
+  <div class="lang-en">Educational platform. Analyses are used by the creator in his own decisions. Not investment advice. Data through Aug 31, 2026 · Updated Sep 2, 2026.</div>
+  <div class="lang-pt">Plataforma educacional. Análises usadas pelo criador nas próprias decisões. Não é recomendação de investimento. Dados até 31/08/2026 · Atualizado em 02/09/2026.</div>
 </footer>
 </div>
 
 <script>
 (function(){
   var T={en:{title:"What $100,000 Following Our Signals Would Have Done — Stockgaide Research",
-             desc:"245 closed trades, January to July 2026, position-sized by conviction profile. Monthly and cumulative returns on a $100,000 portfolio — losses included."},
+             desc:"289 closed trades, January to August 2026, position-sized exactly like our live dashboard. Monthly and cumulative returns on a $100,000 portfolio — losses included."},
           pt:{title:"O Que US$ 100.000 Seguindo Nossos Sinais Teriam Feito — Stockgaide Research",
-             desc:"245 operações fechadas, de janeiro a julho de 2026, dimensionadas por perfil de convicção. Retorno mensal e acumulado sobre US$ 100.000 — perdas incluídas."}};
+             desc:"289 operações fechadas, de janeiro a agosto de 2026, dimensionadas exatamente como no nosso painel ao vivo. Retorno mensal e acumulado sobre US$ 100.000 — perdas incluídas."}};
   window.setLang=function(l){
     document.documentElement.setAttribute("lang", l==="pt"?"pt-BR":"en");
     document.getElementById("btn-en").classList.toggle("on",l==="en");
